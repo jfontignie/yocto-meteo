@@ -4,13 +4,12 @@ import org.junit.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 
 /**
-* Created by: Jacques Fontignie
-* Date: 4/8/12
-* Time: 12:03 AM
-*/
+ * Created by: Jacques Fontignie
+ * Date: 4/8/12
+ * Time: 12:03 AM
+ */
 public class YoctoHubTest {
 
     private YoctoHub hub;
@@ -28,6 +27,7 @@ public class YoctoHubTest {
 
     @Test
     public void testRefresh() throws Exception {
-        EasyMock.expect(yoctoTemplate.refreshRelays(url)).andReturn(new HashMap<String,YoctoRelay>());
+
+        EasyMock.expect(yoctoTemplate.refreshAll(url)).andReturn(new YoctoList());
     }
 }

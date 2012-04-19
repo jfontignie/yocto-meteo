@@ -1,5 +1,4 @@
 import java.net.URL;
-import java.util.HashMap;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,13 +10,12 @@ import java.util.HashMap;
 class YoctoHub {
     private URL url ;
 
-    private HashMap<String, YoctoRelay> relays;
+    private YoctoList yoctoList;
 
     private YoctoTemplate yoctoTemplate;
 
     public YoctoHub(URL url) {
         this.url = url;
-        relays = new HashMap<String, YoctoRelay>();
     }
 
     public void setYoctoTemplate(YoctoTemplate yoctoTemplate){
@@ -26,16 +24,19 @@ class YoctoHub {
     }
 
     public YoctoRelay findRelay(String name) {
-        return relays.get(name);
+        return (YoctoRelay) yoctoList.get(YoctoProduct.YOCTO_RELAY,name);
+    }
+
+    public YoctoMeteo findMeteo(String name){
+        return (YoctoMeteo) yoctoList.get(YoctoProduct.YOCTO_METEO,name);
     }
 
     public void refresh(){
-        refreshRelays();
-        refreshColor();
+
     }
 
-    protected void refreshRelays() {
-        relays = yoctoTemplate.refreshRelays(url);
+    protected void refreshAll() {
+
     }
 
     protected void refreshColor() {

@@ -13,4 +13,6 @@ public interface YoctoObject {
     public String getLogicalName();
 
     public String setLogicalName(String name);
+
+    YoctoProduct getProduct();
 }

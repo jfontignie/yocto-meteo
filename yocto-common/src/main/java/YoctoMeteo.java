@@ -1,11 +1,26 @@
+import java.util.Map;
+
 /**
  * Created by: Jacques Fontignie
  * Date: 4/7/12
  * Time: 11:41 PM
  */
-public class YoctoRelay implements YoctoObject{
+public class YoctoMeteo implements YoctoObject{
 
+    private String relativeURL;
 
+    public YoctoMeteo(Map<String, Object> service) {
+        setLogicalName(service.get("logicalName").toString());
+        setRelativeUrl(service.get("networkUrl")+".json");
+    }
+
+    public String getRelativeURL() {
+        return relativeURL;
+    }
+
+    public void setRelativeUrl(String relativeUrl) {
+        this.relativeURL = relativeUrl;
+    }
 
     public String describe() {
         throw new IllegalStateException("Not IMplemented yet");
@@ -28,6 +43,6 @@ public class YoctoRelay implements YoctoObject{
     }
 
     public YoctoProduct getProduct() {
-        return YoctoProduct.YOCTO_RELAY;
+        return YoctoProduct.YOCTO_METEO;
     }
 }

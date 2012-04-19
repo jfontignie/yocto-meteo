@@ -1,5 +1,6 @@
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 
 /**
  * Created by: Jacques Fontignie
@@ -7,5 +8,5 @@ import java.util.HashMap;
  * Time: 11:59 PM
  */
 public interface YoctoTemplate {
-    public HashMap<String,YoctoRelay> refreshRelays(URL url);
+    public YoctoList refreshAll(URL url) throws IOException;
 }
