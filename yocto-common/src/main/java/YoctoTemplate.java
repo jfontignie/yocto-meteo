@@ -1,6 +1,5 @@
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.Map;
 
 /**
  * Created by: Jacques Fontignie
@@ -8,5 +7,5 @@ import java.net.URL;
  * Time: 11:59 PM
  */
 public interface YoctoTemplate {
-    public YoctoList refreshAll(URL url) throws IOException;
+    public Map<String, Object> query(String relativePath) throws IOException;
 }

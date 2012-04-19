@@ -12,7 +12,10 @@ public interface YoctoObject {
 
     public String getLogicalName();
 
-    public String setLogicalName(String name);
+    //public void setLogicalName(String name);
 
-    YoctoProduct getProduct();
+    public YoctoProduct getProduct();
+
+    public String getSerialNumber();
+
 }

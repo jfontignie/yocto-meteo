@@ -4,9 +4,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 
-import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 /**
  * Created by: Jacques Fontignie
@@ -22,19 +21,15 @@ public class StandaloneYoctoTemplateTest {
 
     @Before
     public void setUp() throws MalformedURLException {
-        yoctoTemplate = new StandaloneYoctoTemplate();
         url = new URL("http://127.0.0.1:4444");
-        fullUrl = new URL(url,"api.json");
+        yoctoTemplate = new StandaloneYoctoTemplate(url);
+        fullUrl = new URL(url, "api.json");
     }
 
     @Test
     public void testQuery() throws IOException {
-        System.out.println(yoctoTemplate.query(fullUrl));
+        assertNotNull(yoctoTemplate.query("api.json"));
     }
 
-    @Test public void testRefreshAll() throws IOException {
-        YoctoList list = yoctoTemplate.refreshAll(url);
-        HashMap<String,YoctoObject> meteos =list.findAll(YoctoProduct.YOCTO_METEO);
-        assertEquals(meteos.size(),1);
-    }
+
 }

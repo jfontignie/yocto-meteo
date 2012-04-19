@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -5,21 +6,13 @@ import java.util.Map;
  * Date: 4/7/12
  * Time: 11:41 PM
  */
-public class YoctoMeteo implements YoctoObject{
+public class YoctoMeteo extends YoctoObjectImpl implements YoctoObject {
 
-    private String relativeURL;
+    private YoctoValue temperature;
+    private YoctoValue humidity;
 
-    public YoctoMeteo(Map<String, Object> service) {
-        setLogicalName(service.get("logicalName").toString());
-        setRelativeUrl(service.get("networkUrl")+".json");
-    }
-
-    public String getRelativeURL() {
-        return relativeURL;
-    }
-
-    public void setRelativeUrl(String relativeUrl) {
-        this.relativeURL = relativeUrl;
+    public YoctoMeteo(YoctoTemplate template, String relativePath) throws IOException {
+        super(YoctoProduct.YOCTO_METEO, template, relativePath + ".json");
     }
 
     public String describe() {
@@ -34,15 +27,24 @@ public class YoctoMeteo implements YoctoObject{
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public String getLogicalName() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+
+    public YoctoValue getTemperature() {
+        return temperature;
     }
 
-    public String setLogicalName(String name) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public YoctoValue getHumidity() {
+        return humidity;
     }
 
-    public YoctoProduct getProduct() {
-        return YoctoProduct.YOCTO_METEO;
+
+    @Override
+    protected void refreshObject(Map<String, Object> result) {
+        temperature = createValue(result, "temperature");
+        humidity = createValue(result, "humidity");
+    }
+
+    private YoctoValue createValue(Map<String, Object> result, String name) {
+        Map<String, Object> value = (Map<String, Object>) result.get(name);
+        return new YoctoValue(value);
     }
 }
