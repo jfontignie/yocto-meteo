@@ -9,7 +9,7 @@ import java.util.HashMap;
  * To change this template use File | Settings | File Templates.
  */
 class YoctoHub {
-    private URL url;
+    private URL url ;
 
     private HashMap<String, YoctoRelay> relays;
 
