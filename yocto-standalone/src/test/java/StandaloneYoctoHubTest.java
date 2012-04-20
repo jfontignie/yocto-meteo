@@ -35,12 +35,40 @@ public class StandaloneYoctoHubTest {
     }
 
     @Test
-    public void test() throws IOException {
+    public void testMeteo() throws IOException {
         Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
         for (YoctoObject object : objects) {
             YoctoMeteo meteo = (YoctoMeteo) object;
             meteo.refresh();
             assertTrue(meteo.getTemperature().getCurrentValue() > 0);
+        }
+    }
+
+    @Test
+    public void testLoop() throws IOException, InterruptedException {
+        for (int i = 0; i < 10; i++) {
+            Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
+            for (YoctoObject object : objects) {
+                YoctoMeteo meteo = (YoctoMeteo) object;
+                meteo.refresh();
+                assertTrue(meteo.getTemperature().getCurrentValue() > 0);
+                System.out.println(meteo.getTemperature());
+            }
+            Thread.sleep(1000);
+        }
+    }
+
+    @Test
+    public void testLoop2() throws IOException, InterruptedException {
+        Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
+        for (int i = 0; i < 10; i++) {
+            for (YoctoObject object : objects) {
+                YoctoMeteo meteo = (YoctoMeteo) object;
+                meteo.refresh();
+                assertTrue(meteo.getTemperature().getCurrentValue() > 0);
+                System.out.println(meteo.getTemperature());
+            }
+            Thread.sleep(1000);
         }
     }
 

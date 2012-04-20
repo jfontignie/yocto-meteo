@@ -25,8 +25,8 @@ public class YoctoValue {
         this.service = service;
     }
 
-    public float getLogicalName() {
-        return Float.valueOf(service.get("logicalName").toString());
+    public String getLogicalName() {
+        return service.get("logicalName").toString();
     }
 
     public float getAdvertisedValue() {
@@ -43,5 +43,9 @@ public class YoctoValue {
 
     public float getHighestValue() {
         return Float.valueOf(service.get("highestValue").toString());
+    }
+
+    public String toString() {
+        return "name: '" + getLogicalName() + "' advertised:" + getAdvertisedValue();
     }
 }

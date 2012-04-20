@@ -12,6 +12,7 @@
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,25 +50,42 @@ class YoctoHub extends YoctoObjectImpl implements YoctoObject {
 
         Map<String, Object> services = (Map<String, Object>) result.get("services");
         List<Map<String, Object>> whitePages = (List) services.get("whitePages");
-        System.out.println(whitePages);
+
+        HashMap<String, String> serials = new HashMap<String, String>();
 
         for (Map<String, Object> service : whitePages) {
-            System.out.println(service);
             YoctoProduct product = YoctoProduct.getFromProductId((Integer) service.get("productId"));
-            yoctoList.add(createObject(product, service));
+            YoctoObject object = createObject(product, service);
+            serials.put(object.getSerialNumber(), "");
+        }
+
+        for (YoctoObject object : yoctoList) {
+            if (!serials.containsKey(object.getSerialNumber())) {
+                yoctoList.remove(object);
+            }
         }
     }
 
     private YoctoObject createObject(YoctoProduct product, Map<String, Object> service) throws IOException {
         String networkUrl = service.get("networkUrl").toString();
-        switch (product) {
-            case YOCTO_HUB:
-                return this;
-            case YOCTO_METEO:
-                return new YoctoMeteo(template, networkUrl);
-            default:
-                throw new IllegalStateException("Not implemented yet");
+        String serialNumber = service.get("serialNumber").toString();
+        YoctoObject result = yoctoList.findBySerialNumber(serialNumber);
+
+
+        if (result == null) {
+            switch (product) {
+                case YOCTO_HUB:
+                    result = this;
+                    break;
+                case YOCTO_METEO:
+                    result = new YoctoMeteo(template, networkUrl);
+                    break;
+                default:
+                    throw new IllegalStateException("Not implemented yet");
+            }
+            yoctoList.add(result);
         }
+        return result;
     }
 
     public String describe() {
@@ -81,4 +99,5 @@ class YoctoHub extends YoctoObjectImpl implements YoctoObject {
     public void load(int ms) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
+
 }

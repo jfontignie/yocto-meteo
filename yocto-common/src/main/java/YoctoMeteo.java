@@ -22,6 +22,7 @@ public class YoctoMeteo extends YoctoObjectImpl implements YoctoObject {
 
     private YoctoValue temperature;
     private YoctoValue humidity;
+    private YoctoValue pressure;
 
     public YoctoMeteo(YoctoTemplate template, String relativePath) throws IOException {
         super(YoctoProduct.YOCTO_METEO, template, relativePath + ".json");
@@ -48,11 +49,16 @@ public class YoctoMeteo extends YoctoObjectImpl implements YoctoObject {
         return humidity;
     }
 
+    public YoctoValue getPressure() {
+        return pressure;
+    }
+
 
     @Override
     protected void refreshObject(Map<String, Object> result) {
         temperature = createValue(result, "temperature");
         humidity = createValue(result, "humidity");
+        pressure = createValue(result, "pressure");
     }
 
     private YoctoValue createValue(Map<String, Object> result, String name) {

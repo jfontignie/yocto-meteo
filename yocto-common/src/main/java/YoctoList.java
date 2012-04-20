@@ -11,17 +11,20 @@
  */
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by: Jacques Fontignie
  * Date: 4/19/12
  * Time: 10:16 AM
  */
-public class YoctoList {
+public class YoctoList implements Iterable<YoctoObject> {
     private HashMap<YoctoProduct, HashMap<String, YoctoObject>> map;
+    private HashMap<String, YoctoObject> serials;
 
     public YoctoList() {
-        clear();
+        map = new HashMap<YoctoProduct, HashMap<String, YoctoObject>>();
+        serials = new HashMap<String, YoctoObject>();
     }
 
 
@@ -32,6 +35,7 @@ public class YoctoList {
     }
 
     protected void add(YoctoObject object) {
+        serials.put(object.getSerialNumber(), object);
         HashMap<String, YoctoObject> objects = map.get(object.getProduct());
         if (objects == null) {
             objects = new HashMap<String, YoctoObject>();
@@ -40,11 +44,22 @@ public class YoctoList {
         objects.put(object.getLogicalName(), object);
     }
 
-    protected void clear() {
-        map = new HashMap<YoctoProduct, HashMap<String, YoctoObject>>();
-    }
 
     public HashMap<String, YoctoObject> findAll(YoctoProduct product) {
         return map.get(product);
+    }
+
+    public YoctoObject findBySerialNumber(String serialNumber) {
+        return serials.get(serialNumber);
+    }
+
+    public Iterator<YoctoObject> iterator() {
+        return serials.values().iterator();
+    }
+
+    public void remove(YoctoObject object) {
+        serials.remove(object.getSerialNumber());
+        HashMap<String, YoctoObject> objects = map.get(object.getProduct());
+        objects.remove(object.getLogicalName());
     }
 }
