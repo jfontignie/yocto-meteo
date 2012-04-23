@@ -27,6 +27,9 @@ class YoctoHub extends YoctoObjectImpl implements YoctoObject {
 
     public YoctoHub(YoctoTemplate template) throws IOException {
         super(YoctoProduct.YOCTO_HUB, template, "api.json");
+        if (template == null) {
+            throw new IllegalStateException("Template is null");
+        }
         refresh();
     }
 

@@ -10,6 +10,8 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
+import org.junit.Test;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
@@ -69,4 +71,11 @@ public class StandaloneYoctoHubTest {
         }
     }
 
+    @Test
+    public void testHub() throws IOException {
+        try {
+            new YoctoHub(null);
+        } catch (IllegalStateException e) {
+        }
+    }
 }
