@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
 
 import static junit.framework.Assert.assertNotNull;
 
@@ -49,21 +48,22 @@ public class StandaloneYoctoTemplateTest {
 
     @Test
     public void testAsyncQuery() throws IOException, InterruptedException {
-        final Semaphore semaphore = new Semaphore(1);
-
+        final boolean[] success = {false};
         yoctoTemplate.aSyncQuery("api.json", new StandaloneYoctoTemplate.QueryListener() {
             public void resultEvent(Map<String, Object> result) {
-                semaphore.release();
+                success[0] = true;
             }
 
             public void exceptionEvent(IOException e) {
                 //To change body of implemented methods use File | Settings | File Templates.
             }
         });
-        semaphore.acquire();
 
-        semaphore.acquire();
-        System.out.println("success");
+        Thread.sleep(3000);
+        if (success[0])
+            System.out.println("success");
+        else
+            throw new IllegalStateException("Wrong result");
     }
 
 
