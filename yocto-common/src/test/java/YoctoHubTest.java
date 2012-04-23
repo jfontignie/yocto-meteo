@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -60,6 +61,10 @@ public class YoctoHubTest {
         EasyMock.replay(yoctoTemplate);
         YoctoHub hub = new YoctoHub(yoctoTemplate);
         hub.isOnline();
+
+        Collection<YoctoObject> list = hub.findAll(YoctoProduct.YOCTO_METEO);
+        for (YoctoObject object : list)
+            System.out.println(object);
     }
 
 }

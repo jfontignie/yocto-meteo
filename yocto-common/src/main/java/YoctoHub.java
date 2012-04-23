@@ -44,7 +44,9 @@ class YoctoHub extends YoctoObjectImpl implements YoctoObject {
 
 
     public Collection<YoctoObject> findAll(YoctoProduct product) {
-        return yoctoList.findAll(product).values();
+        Map<String, YoctoObject> result = yoctoList.findAll(product);
+        if (result == null) return null;
+        return result.values();
     }
 
     @Override
@@ -62,11 +64,7 @@ class YoctoHub extends YoctoObjectImpl implements YoctoObject {
             serials.put(object.getSerialNumber(), "");
         }
 
-        for (YoctoObject object : yoctoList) {
-            if (!serials.containsKey(object.getSerialNumber())) {
-                yoctoList.remove(object);
-            }
-        }
+        //TODO remove the objects which are in yoctoList but not in serials...
     }
 
     private YoctoObject createObject(YoctoProduct product, Map<String, Object> service) throws IOException {
@@ -74,14 +72,13 @@ class YoctoHub extends YoctoObjectImpl implements YoctoObject {
         String serialNumber = service.get("serialNumber").toString();
         YoctoObject result = yoctoList.findBySerialNumber(serialNumber);
 
-
         if (result == null) {
             switch (product) {
                 case YOCTO_HUB:
                     result = this;
                     break;
                 case YOCTO_METEO:
-                    result = new YoctoMeteo(template, networkUrl);
+                    result = new YoctoMeteo(serialNumber, template, networkUrl);
                     break;
                 default:
                     throw new IllegalStateException("Not implemented yet");

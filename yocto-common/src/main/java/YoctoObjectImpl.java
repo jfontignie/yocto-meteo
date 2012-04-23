@@ -32,9 +32,14 @@ abstract class YoctoObjectImpl implements YoctoObject {
         this.product = product;
     }
 
+    public YoctoObjectImpl(String serialNumber, YoctoProduct product, YoctoTemplate template, String relativePath) throws IOException {
+        this(product, template, relativePath);
+        this.serialNumber = serialNumber;
+    }
+
+
     private Map<String, Object> query() throws IOException {
         Map<String, Object> result = template.query(relativePath);
-        System.out.println(result);
         return result;
     }
 
@@ -54,7 +59,12 @@ abstract class YoctoObjectImpl implements YoctoObject {
         Map<String, Object> result = query();
         Map<String, Object> module = (Map<String, Object>) result.get("module");
         logicalName = module.get("logicalName").toString();
-        serialNumber = module.get("serialNumber").toString();
+        String newSerialNumber = module.get("serialNumber").toString();
+        if (serialNumber == null || serialNumber.equals(""))
+            serialNumber = newSerialNumber;
+        else if (!serialNumber.equals(newSerialNumber))
+            throw new IllegalStateException("Internal error");
+
         refreshObject(result);
     }
 

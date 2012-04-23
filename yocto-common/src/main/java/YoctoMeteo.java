@@ -24,8 +24,8 @@ public class YoctoMeteo extends YoctoObjectImpl implements YoctoObject {
     private YoctoValue humidity;
     private YoctoValue pressure;
 
-    public YoctoMeteo(YoctoTemplate template, String relativePath) throws IOException {
-        super(YoctoProduct.YOCTO_METEO, template, relativePath + ".json");
+    public YoctoMeteo(String serialNumber, YoctoTemplate template, String relativePath) throws IOException {
+        super(serialNumber, YoctoProduct.YOCTO_METEO, template, relativePath + ".json");
     }
 
     public String describe() {
