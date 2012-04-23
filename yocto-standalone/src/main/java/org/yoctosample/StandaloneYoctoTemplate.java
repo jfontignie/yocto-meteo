@@ -34,13 +34,6 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
         this.url = url;
     }
 
-
-    private Map<String, Object> query(URL url) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String content = URLConnectionReader.getContent(url);
-        return (Map<String, Object>) mapper.readValue(content, Map.class);
-    }
-
     public void aSyncQuery(String relativePath, QueryListener listener) throws IOException {
         Thread thread = new Thread(new BackgroundQuerier(relativePath, listener));
         thread.start();
