@@ -10,38 +10,24 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import static junit.framework.Assert.assertNotNull;
-
-/**
+package org.yoctosample;/**
  * Created by: Jacques Fontignie
- * Date: 4/19/12
- * Time: 10:05 AM
+ * Date: 4/7/12
+ * Time: 11:41 PM
  */
-public class StandaloneYoctoTemplateTest {
+public interface YoctoObject {
+    public String describe();
 
-    private StandaloneYoctoTemplate yoctoTemplate;
-    private URL fullUrl;
-    private URL url;
+    public boolean isOnline();
 
+    public void load(int ms);
 
-    @Before
-    public void setUp() throws MalformedURLException {
-        url = new URL("http://127.0.0.1:4444");
-        yoctoTemplate = new StandaloneYoctoTemplate(url);
-        fullUrl = new URL(url, "api.json");
-    }
+    public String getLogicalName();
 
-    @Test
-    public void testQuery() throws IOException {
-        assertNotNull(yoctoTemplate.query("api.json"));
-    }
+    //public void setLogicalName(String name);
 
+    public YoctoProduct getProduct();
+
+    public String getSerialNumber();
 
 }

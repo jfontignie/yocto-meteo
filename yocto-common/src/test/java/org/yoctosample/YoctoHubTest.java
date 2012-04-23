@@ -10,7 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-import org.codehaus.jackson.map.ObjectMapper;
+package org.yoctosample;import org.codehaus.jackson.map.ObjectMapper;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
