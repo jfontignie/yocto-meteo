@@ -42,7 +42,7 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
 
     public void aSyncQuery(URL url, QueryListener listener) throws IOException {
         Thread thread = new Thread(new BackgroundQuerier(url, listener));
-        thread.run();
+        thread.start();
     }
 
     public Map<String, Object> query(String relativePath) throws IOException {
