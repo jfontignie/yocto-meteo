@@ -10,7 +10,9 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;import java.io.IOException;
+package org.yoctosample;
+
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -26,13 +28,13 @@ abstract class YoctoObjectImpl implements YoctoObject {
     private YoctoProduct product;
     private String serialNumber;
 
-    public YoctoObjectImpl(YoctoProduct product, YoctoTemplate template, String relativePath) throws IOException {
+    public YoctoObjectImpl(YoctoProduct product, YoctoTemplate template, String relativePath) {
         this.template = template;
         this.relativePath = relativePath;
         this.product = product;
     }
 
-    public YoctoObjectImpl(String serialNumber, YoctoProduct product, YoctoTemplate template, String relativePath) throws IOException {
+    public YoctoObjectImpl(String serialNumber, YoctoProduct product, YoctoTemplate template, String relativePath) {
         this(product, template, relativePath);
         this.serialNumber = serialNumber;
     }

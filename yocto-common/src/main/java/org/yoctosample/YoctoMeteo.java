@@ -10,7 +10,8 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;import java.io.IOException;
+package org.yoctosample;
+
 import java.util.Map;
 
 /**
@@ -20,11 +21,11 @@ import java.util.Map;
  */
 public class YoctoMeteo extends YoctoObjectImpl implements YoctoObject {
 
-    private YoctoValue temperature;
-    private YoctoValue humidity;
-    private YoctoValue pressure;
+    private YoctoMeteoValue temperature;
+    private YoctoMeteoValue humidity;
+    private YoctoMeteoValue pressure;
 
-    public YoctoMeteo(String serialNumber, YoctoTemplate template, String relativePath) throws IOException {
+    public YoctoMeteo(String serialNumber, YoctoTemplate template, String relativePath) {
         super(serialNumber, YoctoProduct.YOCTO_METEO, template, relativePath + ".json");
     }
 
@@ -41,15 +42,15 @@ public class YoctoMeteo extends YoctoObjectImpl implements YoctoObject {
     }
 
 
-    public YoctoValue getTemperature() {
+    public YoctoMeteoValue getTemperature() {
         return temperature;
     }
 
-    public YoctoValue getHumidity() {
+    public YoctoMeteoValue getHumidity() {
         return humidity;
     }
 
-    public YoctoValue getPressure() {
+    public YoctoMeteoValue getPressure() {
         return pressure;
     }
 
@@ -61,8 +62,8 @@ public class YoctoMeteo extends YoctoObjectImpl implements YoctoObject {
         pressure = createValue(result, "pressure");
     }
 
-    private YoctoValue createValue(Map<String, Object> result, String name) {
+    private YoctoMeteoValue createValue(Map<String, Object> result, String name) {
         Map<String, Object> value = (Map<String, Object>) result.get(name);
-        return new YoctoValue(value);
+        return new YoctoMeteoValue(value);
     }
 }

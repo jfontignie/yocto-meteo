@@ -10,7 +10,9 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;/**
+package org.yoctosample;
+
+/**
  * Created by: Jacques Fontignie
  * Date: 4/19/12
  * Time: 10:10 AM
@@ -19,7 +21,7 @@ public enum YoctoProduct {
 
     YOCTO_HUB(0, "VirtualHub"),
     YOCTO_METEO(24, "Yocto-meteo"),
-    YOCTO_RELAY(-1, "???");
+    YOCTO_RELAY(-1, "???"), YOCTO_COLOR(20, "Yocto-color");
 
 
     private int productId;

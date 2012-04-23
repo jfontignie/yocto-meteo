@@ -10,18 +10,20 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;import java.util.Map;
+package org.yoctosample;
+
+import java.util.Map;
 
 /**
  * Created by: Jacques Fontignie
  * Date: 4/19/12
  * Time: 12:32 PM
  */
-public class YoctoValue {
+public class YoctoMeteoValue {
 
     private Map<String, Object> service;
 
-    public YoctoValue(Map<String, Object> service) {
+    public YoctoMeteoValue(Map<String, Object> service) {
         this.service = service;
     }
 

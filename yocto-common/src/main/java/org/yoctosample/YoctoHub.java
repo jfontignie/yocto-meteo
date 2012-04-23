@@ -10,7 +10,9 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;import java.io.IOException;
+package org.yoctosample;
+
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +42,10 @@ class YoctoHub extends YoctoObjectImpl implements YoctoObject {
 
     public YoctoMeteo findMeteo(String name) {
         return (YoctoMeteo) yoctoList.get(YoctoProduct.YOCTO_METEO, name);
+    }
+
+    public YoctoColor findColor(String name) {
+        return (YoctoColor) yoctoList.get(YoctoProduct.YOCTO_COLOR, name);
     }
 
 
@@ -79,6 +85,9 @@ class YoctoHub extends YoctoObjectImpl implements YoctoObject {
                     break;
                 case YOCTO_METEO:
                     result = new YoctoMeteo(serialNumber, template, networkUrl);
+                    break;
+                case YOCTO_COLOR:
+                    result = new YoctoColor(serialNumber, template, networkUrl);
                     break;
                 default:
                     throw new IllegalStateException("Not implemented yet");
