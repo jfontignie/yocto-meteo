@@ -22,6 +22,8 @@ import java.util.Map;
  */
 public class YoctoColor extends YoctoObjectImpl implements YoctoObject {
 
+    //api?ctx=colorLed1&rgbColor=0x000000
+
     private YoctoColorValue colorLed1;
     private YoctoColorValue colorLed2;
 
