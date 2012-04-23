@@ -76,6 +76,7 @@ public class StandaloneYoctoHubTest {
         try {
             new YoctoHub(null);
         } catch (IllegalStateException e) {
+            System.out.println("Normal state");
         }
     }
 }
