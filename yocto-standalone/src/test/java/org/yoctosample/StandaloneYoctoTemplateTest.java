@@ -10,12 +10,16 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;import org.junit.Before;
+package org.yoctosample;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import static junit.framework.Assert.assertNotNull;
 
@@ -41,6 +45,25 @@ public class StandaloneYoctoTemplateTest {
     @Test
     public void testQuery() throws IOException {
         assertNotNull(yoctoTemplate.query("api.json"));
+    }
+
+    @Test
+    public void testAsyncQuery() throws IOException, InterruptedException {
+        final Semaphore semaphore = new Semaphore(1);
+
+        yoctoTemplate.aSyncQuery("api.json", new StandaloneYoctoTemplate.QueryListener() {
+            public void resultEvent(Map<String, Object> result) {
+                semaphore.release();
+            }
+
+            public void exceptionEvent(IOException e) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
+        semaphore.acquire();
+
+        semaphore.acquire();
+        System.out.println("success");
     }
 
 

@@ -10,7 +10,9 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;import org.junit.Before;
+package org.yoctosample;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -54,7 +56,7 @@ public class StandaloneYoctoHubTest {
                 assertTrue(meteo.getTemperature().getCurrentValue() > 0);
                 System.out.println(meteo.getTemperature());
             }
-            Thread.sleep(1000);
+            Thread.sleep(10);
         }
     }
 
@@ -68,7 +70,7 @@ public class StandaloneYoctoHubTest {
                 assertTrue(meteo.getTemperature().getCurrentValue() > 0);
                 System.out.println(meteo.getTemperature());
             }
-            Thread.sleep(1000);
+            Thread.sleep(10);
         }
     }
 

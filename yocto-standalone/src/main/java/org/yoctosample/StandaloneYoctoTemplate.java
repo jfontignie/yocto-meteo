@@ -10,7 +10,9 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;import org.codehaus.jackson.map.ObjectMapper;
+package org.yoctosample;
+
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,12 +38,11 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
     private Map<String, Object> query(URL url) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         String content = URLConnectionReader.getContent(url);
-
         return (Map<String, Object>) mapper.readValue(content, Map.class);
     }
 
-    public void aSyncQuery(URL url, QueryListener listener) throws IOException {
-        Thread thread = new Thread(new BackgroundQuerier(url, listener));
+    public void aSyncQuery(String relativePath, QueryListener listener) throws IOException {
+        Thread thread = new Thread(new BackgroundQuerier(relativePath, listener));
         thread.start();
     }
 
@@ -54,16 +55,16 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
     private class BackgroundQuerier implements Runnable {
 
         private QueryListener listener;
-        private URL url;
+        private String relativePath;
 
-        public BackgroundQuerier(URL url, QueryListener listener) {
-            this.url = url;
+        public BackgroundQuerier(String relativePath, QueryListener listener) {
+            this.relativePath = relativePath;
             this.listener = listener;
         }
 
         public void run() {
             try {
-                listener.resultEvent(query(url));
+                listener.resultEvent(query(relativePath));
             } catch (IOException e) {
                 listener.exceptionEvent(e);
             }

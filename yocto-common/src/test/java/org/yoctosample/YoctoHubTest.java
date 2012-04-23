@@ -10,7 +10,9 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;import org.codehaus.jackson.map.ObjectMapper;
+package org.yoctosample;
+
+import org.codehaus.jackson.map.ObjectMapper;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +20,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by: Jacques Fontignie
@@ -45,18 +49,21 @@ public class YoctoHubTest {
             "\"Humidity\":[\n" +
             "{\"hardwareId\":\"METEOMK1-0268C.humidity\",\"logicalName\":\"\",\"advertisedValue\":\"53.0\",\"index\":3}]}}}";
 
+    private Map<String, Object> content;
+
     @Before
     public void setUp() throws IOException {
         yoctoTemplate = EasyMock.createMock(YoctoTemplate.class);
+        ObjectMapper mapper = new ObjectMapper();
+
+        content = mapper.readValue(CONTENT, Map.class);
+        EasyMock.expect(yoctoTemplate.query("api.json")).andReturn(
+                content);
+
     }
 
     @Test
     public void testRefresh() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> content = mapper.readValue(CONTENT, Map.class);
-
-        EasyMock.expect(yoctoTemplate.query("api.json")).andReturn(
-                content);
 
         EasyMock.replay(yoctoTemplate);
         YoctoHub hub = new YoctoHub(yoctoTemplate);
@@ -65,6 +72,28 @@ public class YoctoHubTest {
         Collection<YoctoObject> list = hub.findAll(YoctoProduct.YOCTO_METEO);
         for (YoctoObject object : list)
             System.out.println(object);
+
+    }
+
+    @Test
+    public void testFindAllMeteo() throws IOException {
+        EasyMock.replay(yoctoTemplate);
+        YoctoHub hub = new YoctoHub(yoctoTemplate);
+        Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
+        if (objects != null)
+            for (YoctoObject object : objects)
+                assertNotNull(hub.findMeteo(object.getLogicalName()));
+    }
+
+
+    @Test
+    public void testFindAllRelay() throws IOException {
+        EasyMock.replay(yoctoTemplate);
+        YoctoHub hub = new YoctoHub(yoctoTemplate);
+        Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_RELAY);
+        if (objects != null)
+            for (YoctoObject object : objects)
+                assertNotNull(hub.findRelay(object.getLogicalName()));
     }
 
 }
