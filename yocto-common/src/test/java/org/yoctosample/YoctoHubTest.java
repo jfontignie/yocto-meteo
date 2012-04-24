@@ -16,6 +16,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.yoctosample.common.StandaloneYoctoMap;
+import org.yoctosample.common.YoctoMap;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -34,7 +36,7 @@ public class YoctoHubTest {
 
 
     private final static String CONTENT = "{\n" +
-            "\"module\":{\"productName\":\"VirtualHub\",\"serialNumber\":\"VIRTHUB0-480741bdd3\",\"logicalName\":\"\",\"productId\":0,\"productRelease\":1,\"firmwareRelease\":\"6019\",\"persistentSettings\":0,\"luminosity\":50,\"beacon\":0,\"upTime\":3402559538,\"usbCurrent\":0,\"realmHTTP\":\"YoctoDevices\",\"adminPassword\":\"\",\"userPassword\":\"\",\"rebootCountdown\":0,\"usbBandwidth\":0},\n" +
+            "\"module\":{\"productName\":\"VirtualHub\",\"serialNumber\":\"VIRTHUB0-480741bdd3\",\"logicalName\":\"\",\"productId\":0,\"productRelease\":1,\"firmwareRelease\":\"6019\",\"persistentSettings\":0,\"luminosity\":50,\"beacon\":0,\"upTime\":3402559538,\"usbCurrent\":0,\"realmHTTP\":\"YoctoDeviceList\",\"adminPassword\":\"\",\"userPassword\":\"\",\"rebootCountdown\":0,\"usbBandwidth\":0},\n" +
             "\"services\":{\n" +
             "\"whitePages\":[\n" +
             "{\"serialNumber\":\"VIRTHUB0-480741bdd3\",\"logicalName\":\"\",\"productName\":\"VirtualHub\",\"productId\":0,\"networkUrl\":\"/api\",\"beacon\":0,\"index\":0},\n" +
@@ -49,14 +51,14 @@ public class YoctoHubTest {
             "\"Humidity\":[\n" +
             "{\"hardwareId\":\"METEOMK1-0268C.humidity\",\"logicalName\":\"\",\"advertisedValue\":\"53.0\",\"index\":3}]}}}";
 
-    private Map<String, Object> content;
+    private YoctoMap content;
 
     @Before
     public void setUp() throws IOException {
         yoctoTemplate = EasyMock.createMock(YoctoTemplate.class);
         ObjectMapper mapper = new ObjectMapper();
 
-        content = mapper.readValue(CONTENT, Map.class);
+        content = new StandaloneYoctoMap(mapper.readValue(CONTENT, Map.class));
         EasyMock.expect(yoctoTemplate.query("api.json")).andReturn(
                 content);
 

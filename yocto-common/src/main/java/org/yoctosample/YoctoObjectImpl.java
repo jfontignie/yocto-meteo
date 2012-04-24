@@ -12,8 +12,9 @@
 
 package org.yoctosample;
 
+import org.yoctosample.common.YoctoMap;
+
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Created by: Jacques Fontignie
@@ -40,9 +41,8 @@ abstract class YoctoObjectImpl implements YoctoObject {
     }
 
 
-    private Map<String, Object> query() throws IOException {
-        Map<String, Object> result = template.query(relativePath);
-        return result;
+    private YoctoMap query() throws IOException {
+        return template.query(relativePath);
     }
 
     public String getLogicalName() {
@@ -58,19 +58,19 @@ abstract class YoctoObjectImpl implements YoctoObject {
     }
 
     public void refresh() throws IOException {
-        Map<String, Object> result = query();
-        Map<String, Object> module = (Map<String, Object>) result.get("module");
-        logicalName = module.get("logicalName").toString();
-        String newSerialNumber = module.get("serialNumber").toString();
+        YoctoMap map = query();
+        YoctoMap module = map.getMap("module");
+        logicalName = module.getValue("logicalName").toString();
+        String newSerialNumber = module.getValue("serialNumber").toString();
         if (serialNumber == null || serialNumber.equals(""))
             serialNumber = newSerialNumber;
         else if (!serialNumber.equals(newSerialNumber))
             throw new IllegalStateException("Internal error");
 
-        refreshObject(result);
+        refreshObject(map);
     }
 
-    protected abstract void refreshObject(Map<String, Object> result) throws IOException;
+    protected abstract void refreshObject(YoctoMap map) throws IOException;
 
 
 }

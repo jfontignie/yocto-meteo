@@ -12,7 +12,7 @@
 
 package org.yoctosample;
 
-import java.util.Map;
+import org.yoctosample.common.YoctoMap;
 
 /**
  * Created by: Jacques Fontignie
@@ -56,14 +56,14 @@ public class YoctoMeteo extends YoctoObjectImpl implements YoctoObject {
 
 
     @Override
-    protected void refreshObject(Map<String, Object> result) {
+    protected void refreshObject(YoctoMap result) {
         temperature = createValue(result, "temperature");
         humidity = createValue(result, "humidity");
         pressure = createValue(result, "pressure");
     }
 
-    private YoctoMeteoValue createValue(Map<String, Object> result, String name) {
-        Map<String, Object> value = (Map<String, Object>) result.get(name);
+    private YoctoMeteoValue createValue(YoctoMap result, String name) {
+        YoctoMap value = result.getMap(name);
         return new YoctoMeteoValue(value);
     }
 }

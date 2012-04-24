@@ -10,20 +10,33 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;
+package org.yoctosample.common;
 
-import org.yoctosample.common.YoctoMap;
-
-import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Created by: Jacques Fontignie
- * Date: 4/7/12
- * Time: 11:59 PM
+ * Author: Jacques Fontignie
+ * Date: 4/24/12
+ * Time: 9:57 PM
  */
-public interface YoctoTemplate {
-    public YoctoMap query(String relativePath) throws IOException;
+public class StandaloneYoctoMap implements YoctoMap {
 
-    public void aSyncQuery(String relativePath, QueryListener listener) throws IOException;
+    private Map<String, Object> map;
 
+    public StandaloneYoctoMap(Map<String, Object> stringObjectMap) {
+        this.map = stringObjectMap;
+    }
+
+    public YoctoMap getMap(String name) {
+        return new StandaloneYoctoMap((Map<String, Object>) map.get(name));
+    }
+
+    public Object getValue(String name) {
+        return map.get(name);
+    }
+
+    public YoctoList getList(String name) {
+        return new StandaloneYoctoList((List) map.get(name));
+    }
 }

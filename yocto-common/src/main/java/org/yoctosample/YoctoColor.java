@@ -12,8 +12,9 @@
 
 package org.yoctosample;
 
+import org.yoctosample.common.YoctoMap;
+
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Author: Jacques Fontignie
@@ -32,9 +33,9 @@ public class YoctoColor extends YoctoObjectImpl implements YoctoObject {
     }
 
     @Override
-    protected void refreshObject(Map<String, Object> result) throws IOException {
-        colorLed1 = new YoctoColorValue((Map<String, Object>) result.get("colorLed1"));
-        colorLed2 = new YoctoColorValue((Map<String, Object>) result.get("colorLed2"));
+    protected void refreshObject(YoctoMap map) throws IOException {
+        colorLed1 = new YoctoColorValue(map.getMap("colorLed1"));
+        colorLed2 = new YoctoColorValue(map.getMap("colorLed2"));
     }
 
     public YoctoColorValue getColorLed1() {

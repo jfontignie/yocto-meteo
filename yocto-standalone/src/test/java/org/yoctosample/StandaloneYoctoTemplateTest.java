@@ -14,11 +14,11 @@ package org.yoctosample;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yoctosample.common.YoctoMap;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
 
 import static junit.framework.Assert.assertNotNull;
 
@@ -49,8 +49,8 @@ public class StandaloneYoctoTemplateTest {
     @Test
     public void testAsyncQuery() throws IOException, InterruptedException {
         final boolean[] success = {false};
-        yoctoTemplate.aSyncQuery("api.json", new StandaloneYoctoTemplate.QueryListener() {
-            public void resultEvent(Map<String, Object> result) {
+        yoctoTemplate.aSyncQuery("api.json", new QueryListener() {
+            public void resultEvent(YoctoMap map) {
                 success[0] = true;
             }
 

@@ -13,6 +13,8 @@
 package org.yoctosample;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.yoctosample.common.StandaloneYoctoMap;
+import org.yoctosample.common.YoctoMap;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,10 +42,15 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
         thread.start();
     }
 
-    public Map<String, Object> query(String relativePath) throws IOException {
+    public YoctoMap query(String relativePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         String content = URLConnectionReader.getContent(new URL(url, relativePath));
-        return (Map<String, Object>) mapper.readValue(content, Map.class);
+        try {
+            return new StandaloneYoctoMap((Map<String, Object>) mapper.readValue(content, Map.class));
+        } catch (IOException e) {
+            System.out.println("Error while reading " + new URL(url, relativePath));
+            throw e;
+        }
     }
 
     private class BackgroundQuerier implements Runnable {
@@ -63,12 +70,6 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
                 listener.exceptionEvent(e);
             }
         }
-    }
-
-    public interface QueryListener {
-        public void resultEvent(Map<String, Object> result);
-
-        public void exceptionEvent(IOException e);
     }
 
     private static class URLConnectionReader {

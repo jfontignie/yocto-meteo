@@ -10,8 +10,11 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;import java.io.IOException;
-import java.util.Map;
+package org.yoctosample;
+
+import org.yoctosample.common.YoctoMap;
+
+import java.io.IOException;
 
 /**
  * Created by: Jacques Fontignie
@@ -43,7 +46,7 @@ public class YoctoRelay extends YoctoObjectImpl implements YoctoObject {
     }
 
     @Override
-    protected void refreshObject(Map<String, Object> result) {
+    protected void refreshObject(YoctoMap result) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

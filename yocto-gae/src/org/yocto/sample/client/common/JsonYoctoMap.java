@@ -10,20 +10,31 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;
+package org.yocto.sample.client.common;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import org.yoctosample.common.YoctoMap;
 
-import java.io.IOException;
-
 /**
- * Created by: Jacques Fontignie
- * Date: 4/7/12
- * Time: 11:59 PM
+ * Author: Jacques Fontignie
+ * Date: 4/24/12
+ * Time: 10:25 PM
  */
-public interface YoctoTemplate {
-    public YoctoMap query(String relativePath) throws IOException;
+public class JsonYoctoMap extends JavaScriptObject implements YoctoMap {
 
-    public void aSyncQuery(String relativePath, QueryListener listener) throws IOException;
 
+    protected JsonYoctoMap() {
+    }
+
+    public final native JsonYoctoMap getMap(String name) /*-{
+        return this.name;
+    }-*/;
+
+    public final native Object getValue(String name) /*-{
+        return this.name;
+    }-*/;
+
+    public final native JsonYoctoList getList(String name) /*-{
+        return this.name;
+    }-*/;
 }

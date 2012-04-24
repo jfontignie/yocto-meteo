@@ -10,20 +10,13 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;
-
-import org.yoctosample.common.YoctoMap;
-
-import java.io.IOException;
+package org.yocto.sample.client;
 
 /**
- * Created by: Jacques Fontignie
- * Date: 4/7/12
- * Time: 11:59 PM
+ * Author: Jacques Fontignie
+ * Date: 4/24/12
+ * Time: 7:19 PM
  */
-public interface YoctoTemplate {
-    public YoctoMap query(String relativePath) throws IOException;
-
-    public void aSyncQuery(String relativePath, QueryListener listener) throws IOException;
-
+public interface JSONRequestHandler<T> {
+    public void onRequestComplete(T json);
 }

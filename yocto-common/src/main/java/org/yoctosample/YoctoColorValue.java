@@ -12,7 +12,7 @@
 
 package org.yoctosample;
 
-import java.util.Map;
+import org.yoctosample.common.YoctoMap;
 
 /**
  * Author: Jacques Fontignie
@@ -21,30 +21,30 @@ import java.util.Map;
  */
 public class YoctoColorValue {
 
-    private Map<String, Object> service;
+    private YoctoMap service;
     private ColorMove rgbMove;
     private ColorMove hslMove;
 
-    public YoctoColorValue(Map<String, Object> service) {
+    public YoctoColorValue(YoctoMap service) {
         this.service = service;
-        this.rgbMove = new ColorMove((Map<String, Object>) service.get("rgbMove"));
-        this.hslMove = new ColorMove((Map<String, Object>) service.get("hslMove"));
+        this.rgbMove = new ColorMove(service.getMap("rgbMove"));
+        this.hslMove = new ColorMove(service.getMap("hslMove"));
     }
 
     public String getLogicalName() {
-        return service.get("logicalName").toString();
+        return service.getValue("logicalName").toString();
     }
 
     public String getAdvertisedValue() {
-        return service.get("advertisedValue").toString();
+        return service.getValue("advertisedValue").toString();
     }
 
     public int getRgbColor() {
-        return Integer.valueOf(service.get("rgbColor").toString());
+        return Integer.valueOf(service.getValue("rgbColor").toString());
     }
 
     public int getHslColor() {
-        return Integer.valueOf(service.get("hslColor").toString());
+        return Integer.valueOf(service.getValue("hslColor").toString());
     }
 
     public ColorMove getRgbMove() {
@@ -56,26 +56,26 @@ public class YoctoColorValue {
     }
 
     public boolean getRgbColorAtPowerOn() {
-        return Boolean.valueOf(service.get("rgbColorAtPowerOn").toString());
+        return Boolean.valueOf(service.getValue("rgbColorAtPowerOn").toString());
     }
 
     public static class ColorMove {
-        private Map<String, Object> service;
+        private YoctoMap service;
 
-        public ColorMove(Map<String, Object> service) {
+        public ColorMove(YoctoMap service) {
             this.service = service;
         }
 
         public boolean isMoving() {
-            return Boolean.valueOf(service.get("moving").toString());
+            return Boolean.valueOf(service.getValue("moving").toString());
         }
 
         public int getTarget() {
-            return Integer.valueOf(service.get("target").toString());
+            return Integer.valueOf(service.getValue("target").toString());
         }
 
         public int getMs() {
-            return Integer.valueOf(service.get("ms").toString());
+            return Integer.valueOf(service.getValue("ms").toString());
         }
     }
 

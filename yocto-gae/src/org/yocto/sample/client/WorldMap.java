@@ -46,6 +46,13 @@ public class WorldMap implements EntryPoint {
                 buildUi();
             }
         });
+
+        //Prepare the JSONP
+
+        String url = "http://127.0.0.1:4444/";
+        GWTYoctoTemplate template = new GWTYoctoTemplate(url);
+
+
     }
 
     private void buildUi() {

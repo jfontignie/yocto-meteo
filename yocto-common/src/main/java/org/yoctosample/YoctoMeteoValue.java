@@ -12,7 +12,7 @@
 
 package org.yoctosample;
 
-import java.util.Map;
+import org.yoctosample.common.YoctoMap;
 
 /**
  * Created by: Jacques Fontignie
@@ -21,30 +21,30 @@ import java.util.Map;
  */
 public class YoctoMeteoValue {
 
-    private Map<String, Object> service;
+    private YoctoMap service;
 
-    public YoctoMeteoValue(Map<String, Object> service) {
+    public YoctoMeteoValue(YoctoMap service) {
         this.service = service;
     }
 
     public String getLogicalName() {
-        return service.get("logicalName").toString();
+        return service.getValue("logicalName").toString();
     }
 
     public float getAdvertisedValue() {
-        return Float.valueOf(service.get("advertisedValue").toString());
+        return Float.valueOf(service.getValue("advertisedValue").toString());
     }
 
     public float getCurrentValue() {
-        return Float.valueOf(service.get("currentValue").toString());
+        return Float.valueOf(service.getValue("currentValue").toString());
     }
 
     public float getLowestValue() {
-        return Float.valueOf(service.get("lowestValue").toString());
+        return Float.valueOf(service.getValue("lowestValue").toString());
     }
 
     public float getHighestValue() {
-        return Float.valueOf(service.get("highestValue").toString());
+        return Float.valueOf(service.getValue("highestValue").toString());
     }
 
     public String toString() {

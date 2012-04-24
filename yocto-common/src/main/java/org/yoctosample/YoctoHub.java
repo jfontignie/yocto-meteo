@@ -12,10 +12,13 @@
 
 package org.yoctosample;
 
+import org.yoctosample.common.YoctoDeviceList;
+import org.yoctosample.common.YoctoList;
+import org.yoctosample.common.YoctoMap;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,7 +28,7 @@ import java.util.Map;
  */
 class YoctoHub extends YoctoObjectImpl implements YoctoObject {
 
-    private YoctoList yoctoList;
+    private YoctoDeviceList yoctoDeviceList;
 
     public YoctoHub(YoctoTemplate template) throws IOException {
         super(YoctoProduct.YOCTO_HUB, template, "api.json");
@@ -37,46 +40,47 @@ class YoctoHub extends YoctoObjectImpl implements YoctoObject {
 
 
     public YoctoRelay findRelay(String name) {
-        return (YoctoRelay) yoctoList.get(YoctoProduct.YOCTO_RELAY, name);
+        return (YoctoRelay) yoctoDeviceList.get(YoctoProduct.YOCTO_RELAY, name);
     }
 
     public YoctoMeteo findMeteo(String name) {
-        return (YoctoMeteo) yoctoList.get(YoctoProduct.YOCTO_METEO, name);
+        return (YoctoMeteo) yoctoDeviceList.get(YoctoProduct.YOCTO_METEO, name);
     }
 
     public YoctoColor findColor(String name) {
-        return (YoctoColor) yoctoList.get(YoctoProduct.YOCTO_COLOR, name);
+        return (YoctoColor) yoctoDeviceList.get(YoctoProduct.YOCTO_COLOR, name);
     }
 
 
     public Collection<YoctoObject> findAll(YoctoProduct product) {
-        Map<String, YoctoObject> result = yoctoList.findAll(product);
+        Map<String, YoctoObject> result = yoctoDeviceList.findAll(product);
         if (result == null) return null;
         return result.values();
     }
 
     @Override
-    protected void refreshObject(Map<String, Object> result) throws IOException {
-        yoctoList = new YoctoList();
+    protected void refreshObject(YoctoMap map) throws IOException {
+        yoctoDeviceList = new YoctoDeviceList();
 
-        Map<String, Object> services = (Map<String, Object>) result.get("services");
-        List<Map<String, Object>> whitePages = (List) services.get("whitePages");
+        YoctoMap services = map.getMap("services");
+        YoctoList whitePages = services.getList("whitePages");
 
         HashMap<String, String> serials = new HashMap<String, String>();
 
-        for (Map<String, Object> service : whitePages) {
-            YoctoProduct product = YoctoProduct.getFromProductId((Integer) service.get("productId"));
+        for (int i = 0; i < whitePages.size(); i++) {
+            YoctoMap service = whitePages.getMap(i);
+            YoctoProduct product = YoctoProduct.getFromProductId((Integer) service.getValue("productId"));
             YoctoObject object = createObject(product, service);
             serials.put(object.getSerialNumber(), "");
         }
 
-        //TODO remove the objects which are in yoctoList but not in serials...
+        //TODO remove the objects which are in yoctoDeviceList but not in serials...
     }
 
-    private YoctoObject createObject(YoctoProduct product, Map<String, Object> service) throws IOException {
-        String networkUrl = service.get("networkUrl").toString();
-        String serialNumber = service.get("serialNumber").toString();
-        YoctoObject result = yoctoList.findBySerialNumber(serialNumber);
+    private YoctoObject createObject(YoctoProduct product, YoctoMap service) throws IOException {
+        String networkUrl = service.getValue("networkUrl").toString();
+        String serialNumber = service.getValue("serialNumber").toString();
+        YoctoObject result = yoctoDeviceList.findBySerialNumber(serialNumber);
 
         if (result == null) {
             switch (product) {
@@ -92,7 +96,7 @@ class YoctoHub extends YoctoObjectImpl implements YoctoObject {
                 default:
                     throw new IllegalStateException("Not implemented yet");
             }
-            yoctoList.add(result);
+            yoctoDeviceList.add(result);
         }
         return result;
     }

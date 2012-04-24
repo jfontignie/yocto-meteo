@@ -10,7 +10,12 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yoctosample;import java.util.HashMap;
+package org.yoctosample.common;
+
+import org.yoctosample.YoctoObject;
+import org.yoctosample.YoctoProduct;
+
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -18,11 +23,11 @@ import java.util.Iterator;
  * Date: 4/19/12
  * Time: 10:16 AM
  */
-public class YoctoList implements Iterable<YoctoObject> {
+public class YoctoDeviceList implements Iterable<YoctoObject> {
     private HashMap<YoctoProduct, HashMap<String, YoctoObject>> map;
     private HashMap<String, YoctoObject> serials;
 
-    public YoctoList() {
+    public YoctoDeviceList() {
         map = new HashMap<YoctoProduct, HashMap<String, YoctoObject>>();
         serials = new HashMap<String, YoctoObject>();
     }
@@ -34,7 +39,7 @@ public class YoctoList implements Iterable<YoctoObject> {
         return objects.get(name);
     }
 
-    protected void add(YoctoObject object) {
+    public void add(YoctoObject object) {
         serials.put(object.getSerialNumber(), object);
         HashMap<String, YoctoObject> objects = map.get(object.getProduct());
         if (objects == null) {

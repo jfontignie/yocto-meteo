@@ -17,13 +17,12 @@ import org.yoctosample.common.YoctoMap;
 import java.io.IOException;
 
 /**
- * Created by: Jacques Fontignie
- * Date: 4/7/12
- * Time: 11:59 PM
+ * Author: Jacques Fontignie
+ * Date: 4/24/12
+ * Time: 10:47 PM
  */
-public interface YoctoTemplate {
-    public YoctoMap query(String relativePath) throws IOException;
+public interface QueryListener {
+    public void resultEvent(YoctoMap map);
 
-    public void aSyncQuery(String relativePath, QueryListener listener) throws IOException;
-
+    public void exceptionEvent(IOException e);
 }
