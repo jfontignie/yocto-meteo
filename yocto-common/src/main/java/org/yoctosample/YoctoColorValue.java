@@ -59,7 +59,7 @@ public class YoctoColorValue {
         return Boolean.valueOf(service.get("rgbColorAtPowerOn").toString());
     }
 
-    public class ColorMove {
+    public static class ColorMove {
         private Map<String, Object> service;
 
         public ColorMove(Map<String, Object> service) {
