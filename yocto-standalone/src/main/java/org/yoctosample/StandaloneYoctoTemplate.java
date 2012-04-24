@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
@@ -74,8 +75,9 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
         public static String getContent(URL url) throws IOException {
             StringBuilder buffer = new StringBuilder();
             URLConnection yc = url.openConnection();
+
             BufferedReader in = new BufferedReader(new InputStreamReader(
-                    yc.getInputStream()));
+                    yc.getInputStream(), Charset.defaultCharset()));
             String inputLine;
             while ((inputLine = in.readLine()) != null)
                 buffer.append(inputLine);
