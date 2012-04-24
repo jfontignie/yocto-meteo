@@ -16,8 +16,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
-import org.yoctosample.common.StandaloneYoctoMap;
 import org.yoctosample.common.YoctoMap;
+import org.yoctosample.common.YoctoTemplate;
+import org.yoctosample.utils.StandaloneYoctoMap;
 
 import java.io.IOException;
 import java.util.Collection;

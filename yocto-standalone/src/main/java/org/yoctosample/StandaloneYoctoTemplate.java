@@ -13,8 +13,9 @@
 package org.yoctosample;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.yoctosample.common.StandaloneYoctoMap;
 import org.yoctosample.common.YoctoMap;
+import org.yoctosample.common.YoctoTemplate;
+import org.yoctosample.utils.StandaloneYoctoMap;
 
 import java.io.BufferedReader;
 import java.io.IOException;

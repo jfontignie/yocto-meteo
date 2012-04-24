@@ -12,10 +12,10 @@
 
 package org.yocto.sample.client;
 
-import org.yocto.sample.client.common.JsonYoctoMap;
+import org.yocto.sample.client.common.JavascriptYoctoMap;
 import org.yoctosample.QueryListener;
-import org.yoctosample.YoctoTemplate;
 import org.yoctosample.common.YoctoMap;
+import org.yoctosample.common.YoctoTemplate;
 
 import java.io.IOException;
 
@@ -33,8 +33,8 @@ public class GWTYoctoTemplate implements YoctoTemplate {
     }
 
     public YoctoMap query(String relativePath) throws IOException {
-        JSONRequest.get(url, new JSONRequestHandler<JsonYoctoMap>() {
-            public void onRequestComplete(JsonYoctoMap object) {
+        JSONRequest.get(url, new JSONRequestHandler<JavascriptYoctoMap>() {
+            public void onRequestComplete(JavascriptYoctoMap object) {
 
             }
         });
@@ -42,9 +42,9 @@ public class GWTYoctoTemplate implements YoctoTemplate {
     }
 
     public void aSyncQuery(String relativePath, final QueryListener listener) throws IOException {
-        JSONRequest.get(url, new JSONRequestHandler<JsonYoctoMap>() {
-            public void onRequestComplete(JsonYoctoMap object) {
-                listener.resultEvent(object);
+        JSONRequest.get(url, new JSONRequestHandler<JavascriptYoctoMap>() {
+            public void onRequestComplete(JavascriptYoctoMap object) {
+                //listener.resultEvent(object);
             }
         });
     }

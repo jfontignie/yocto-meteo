@@ -12,11 +12,13 @@
 
 package org.yocto.sample.client;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 /**
  * Author: Jacques Fontignie
  * Date: 4/24/12
  * Time: 7:19 PM
  */
-public interface JSONRequestHandler<T> {
+public interface JSONRequestHandler<T extends JavaScriptObject> {
     public void onRequestComplete(T json);
 }

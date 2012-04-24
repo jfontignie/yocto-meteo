@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="yocto-gae:war exploded3">
+    <output-path>$PROJECT_DIR$/out/artifacts/yocto_gae_war_exploded3</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="yocto-gae/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="yocto-gae" />
+          <element id="module-output" name="yocto-common" />
+        </element>
+      </element>
+      <element id="gwt-compiler-output" facet="yocto-gae/gwt/GWT" />
+    </root>
+  </artifact>
+</component>

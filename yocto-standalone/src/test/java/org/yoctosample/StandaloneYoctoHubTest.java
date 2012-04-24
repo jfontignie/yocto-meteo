@@ -14,6 +14,7 @@ package org.yoctosample;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yoctosample.common.YoctoTemplate;
 
 import java.io.IOException;
 import java.net.URL;

@@ -27,6 +27,7 @@ import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class WorldMap implements EntryPoint {
@@ -72,6 +73,8 @@ public class WorldMap implements EntryPoint {
 
         dock.addNorth(map, 500);
 
+        Label label = new Label("Hello world");
+        RootPanel.get("comment").add(label);
 
         RootPanel.get("worldMap").add(dock);
         // Add the map to the HTML host page

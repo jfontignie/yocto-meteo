@@ -12,9 +12,10 @@
 
 package org.yoctosample;
 
-import org.yoctosample.common.YoctoDeviceList;
 import org.yoctosample.common.YoctoList;
 import org.yoctosample.common.YoctoMap;
+import org.yoctosample.common.YoctoTemplate;
+import org.yoctosample.utils.YoctoDeviceList;
 
 import java.io.IOException;
 import java.util.Collection;

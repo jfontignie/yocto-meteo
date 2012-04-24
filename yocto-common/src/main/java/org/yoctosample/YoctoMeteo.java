@@ -13,6 +13,7 @@
 package org.yoctosample;
 
 import org.yoctosample.common.YoctoMap;
+import org.yoctosample.common.YoctoTemplate;
 
 /**
  * Created by: Jacques Fontignie

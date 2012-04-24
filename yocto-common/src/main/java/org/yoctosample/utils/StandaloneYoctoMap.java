@@ -10,35 +10,36 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  */
 
-package org.yocto.sample.client.common;
+package org.yoctosample.utils;
 
-import com.google.gwt.core.client.JavaScriptObject;
-import org.yoctosample.common.StandaloneYoctoList;
-import org.yoctosample.common.StandaloneYoctoMap;
 import org.yoctosample.common.YoctoList;
+import org.yoctosample.common.YoctoMap;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Jacques Fontignie
  * Date: 4/24/12
- * Time: 10:37 PM
+ * Time: 9:57 PM
  */
-public class JsonYoctoList extends JavaScriptObject implements YoctoList {
-    protected JsonYoctoList() {
+public class StandaloneYoctoMap implements YoctoMap {
+
+    private Map<String, Object> map;
+
+    public StandaloneYoctoMap(Map<String, Object> stringObjectMap) {
+        this.map = stringObjectMap;
     }
 
-    public final native int size() /*-{
-        return this.length;
-    }-*/;
+    public YoctoMap getMap(String name) {
+        return new StandaloneYoctoMap((Map<String, Object>) map.get(name));
+    }
 
-    public final native Object getValue(int index) /*-{
-        return this[index];
-    }-*/;
+    public Object getValue(String name) {
+        return map.get(name);
+    }
 
-    public final native StandaloneYoctoMap getMap(int index) /*-{
-        return this[index];
-    }-*/;
-
-    public final native StandaloneYoctoList getList(int index) /*-{
-        return this[index];
-    }-*/;
+    public YoctoList getList(String name) {
+        return new StandaloneYoctoList((List) map.get(name));
+    }
 }
