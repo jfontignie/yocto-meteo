@@ -22,7 +22,7 @@ import java.io.IOException;
  * Time: 1:38 PM
  */
 public interface RefreshCallback<T extends YoctoObject> {
-    public void onRefresh(T yoctoObject);
+    public void onRefresh(T yoctoObject) throws IOException;
 
     public void onError(T yoctoObject, IOException e);
 }

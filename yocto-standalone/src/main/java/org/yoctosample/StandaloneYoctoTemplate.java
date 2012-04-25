@@ -83,8 +83,9 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
             try {
                 listener.resultEvent(query(relativePath));
             } catch (IOException e) {
-                listener.exceptionEvent(e);
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
+
         }
     }
 

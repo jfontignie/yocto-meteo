@@ -60,7 +60,11 @@ abstract class YoctoObjectImpl implements YoctoObject {
         template.aSyncQuery(relativePath, new QueryListener() {
             public void resultEvent(YoctoMap map) {
                 internalRefresh(map);
-                callback.onRefresh(YoctoObjectImpl.this);
+                try {
+                    callback.onRefresh(YoctoObjectImpl.this);
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
             }
 
             public void exceptionEvent(IOException e) {

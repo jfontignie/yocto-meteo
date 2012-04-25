@@ -28,8 +28,7 @@ import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.*;
 import org.yoctosample.*;
 
 import java.io.IOException;
@@ -39,6 +38,7 @@ import java.util.logging.Logger;
 public class WorldMap implements EntryPoint {
 
     private Logger logger;
+    private YoctoHub hub;
 
     public void onModuleLoad() {
         /*
@@ -49,16 +49,17 @@ public class WorldMap implements EntryPoint {
     * application served from localhost.
    */
         logger = Logger.getLogger("main");
+
+        //Prepare the JSONP
+        GWTYoctoTemplate template = new GWTYoctoTemplate("http://localhost:8001");
+
+        hub = new YoctoHub(template);
+
         Maps.loadMapsApi("", "2", false, new Runnable() {
             public void run() {
                 buildUi();
             }
         });
-
-        //Prepare the JSONP
-
-        String url = "http://localhost/";
-        GWTYoctoTemplate template = new GWTYoctoTemplate(url);
 
 
     }
@@ -67,7 +68,6 @@ public class WorldMap implements EntryPoint {
 
         logger.info("Build UI");
         Geolocation location = Geolocation.getIfSupported();
-
 
         // Open a map centered on Cawker City, KS USA
         LatLng cartigny = LatLng.newInstance(46.1833, 6.0167);
@@ -83,62 +83,6 @@ public class WorldMap implements EntryPoint {
         dock.addNorth(map, 500);
 
 
-        GWTYoctoTemplate template = new GWTYoctoTemplate("http://localhost:8001");
-        try {
-            YoctoHub hub = new YoctoHub(template);
-            logger.info("hub created");
-            hub.refresh(new RefreshCallback<YoctoHub>() {
-                public void onRefresh(YoctoHub hub) {
-                    logger.info("refresh successful");
-                    try {
-                        Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
-                        logger.info("All the meteo objects are" + objects);
-                        for (YoctoObject object : objects) {
-                            final YoctoMeteo meteo = (YoctoMeteo) object;
-                            meteo.refresh(new RefreshCallback() {
-                                public void onRefresh(YoctoObject yoctoObject) {
-                                    logger.info("The current temperature is: " + meteo.getTemperature().getAdvertisedValue());
-                                }
-
-                                public void onError(YoctoObject yoctoObject, IOException e) {
-                                    //To change body of implemented methods use File | Settings | File Templates.
-                                }
-                            });
-
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    }
-
-                }
-
-                public void onError(YoctoHub hub, IOException e) {
-                    //To change body of implemented methods use File | Settings | File Templates.
-                }
-            });
-            logger.info("hub refresh performed");
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-//
-//        try {
-//            logger.info("Query api.json");
-//            template.aSyncQuery("api.json", new QueryListener() {
-//                public void resultEvent(YoctoMap map) {
-//                    logger.info("result received");
-//                }
-//
-//                public void exceptionEvent(IOException e) {
-//                    logger.info("exception received");
-//                }
-//            });
-//        } catch (IOException e) {
-//            logger.severe(e.toString());
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//        }
-
-        //YoctoHub hub = new YoctoHub(new GWTYoctoTemplate("http://127.0.0.1"));
-
         RootPanel.get("worldMap").add(dock);
         // Add the map to the HTML host page
 
@@ -150,19 +94,84 @@ public class WorldMap implements EntryPoint {
             public void onSuccess(Position result) {
                 Position.Coordinates coordinates = result.getCoordinates();
                 final LatLng lng = LatLng.newInstance(coordinates.getLatitude(), coordinates.getLongitude());
-                final Marker marker = new Marker(lng);
+                try {
+                    Marker marker = createMarker(map, lng);
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
 
-                marker.addMarkerClickHandler(new MarkerClickHandler() {
-                    public void onClick(MarkerClickEvent event) {
-                        map.getInfoWindow().open(marker, new InfoWindowContent("You are here!"));
-                    }
-                });
-
-                map.setCenter(lng);
-                map.addOverlay(marker);
 
             }
         });
+
+    }
+
+    private Marker createMarker(final MapWidget map, LatLng lng) throws IOException {
+        final Marker marker = new Marker(lng);
+        map.setCenter(lng);
+        map.addOverlay(marker);
+
+        createYoctoHub(map, marker);
+        return marker;
+    }
+
+    private void createYoctoHub(final MapWidget map, final Marker marker) throws IOException {
+
+        logger.fine("hub created");
+        hub.refresh(new RefreshCallback<YoctoHub>() {
+            public void onRefresh(YoctoHub hub) throws IOException {
+                logger.fine("refresh successful");
+
+                Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
+                logger.fine("All the meteo objects are" + objects);
+                for (YoctoObject object : objects) {
+                    final YoctoMeteo meteo = (YoctoMeteo) object;
+                    meteo.refresh(new RefreshCallback() {
+                        public void onRefresh(YoctoObject yoctoObject) {
+                            marker.addMarkerClickHandler(new MarkerClickHandler() {
+
+                                public void onClick(MarkerClickEvent event) {
+                                    Widget html = createWidget(meteo);
+
+                                    map.getInfoWindow().open(marker,
+
+                                            new InfoWindowContent(html));
+                                }
+                            });
+                            logger.info("The current temperature is: " + meteo.getTemperature().getAdvertisedValue());
+                            logger.info("The current humidity is: " + meteo.getHumidity().getAdvertisedValue());
+                            logger.info("The current pressure is: " + meteo.getPressure().getAdvertisedValue());
+                        }
+
+                        public void onError(YoctoObject yoctoObject, IOException e) {
+                            //To change body of implemented methods use File | Settings | File Templates.
+                        }
+                    });
+
+                }
+
+
+            }
+
+            public void onError(YoctoHub yoctoObject, IOException e) {
+
+            }
+        });
+        logger.info("hub refresh performed");
+
+    }
+
+    private Widget createWidget(YoctoMeteo meteo) {
+        TreeItem root = new TreeItem();
+        root.setText("Yocto-meteo: " + meteo.getSerialNumber());
+        root.addTextItem("Temperature: " + meteo.getTemperature().getAdvertisedValue());
+        root.addTextItem("Humidity: " + meteo.getHumidity().getAdvertisedValue());
+        root.addTextItem("Pressure: " + meteo.getPressure().getAdvertisedValue());
+
+        root.setState(true);
+        Tree t = new Tree();
+        t.addItem(root);
+        return t;
 
     }
 

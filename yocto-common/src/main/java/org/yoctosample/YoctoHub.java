@@ -34,7 +34,7 @@ public class YoctoHub extends YoctoObjectImpl implements YoctoObject {
     private YoctoDeviceList yoctoDeviceList;
     private boolean needRefresh;
 
-    public YoctoHub(YoctoTemplate template) throws IOException {
+    public YoctoHub(YoctoTemplate template) {
         super(YoctoProduct.YOCTO_HUB, template, "/api.json");
         if (template == null) {
             throw new IllegalStateException("Template is null");
