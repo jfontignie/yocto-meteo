@@ -17,6 +17,7 @@ package org.yocto.sample.client;
 
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
@@ -28,7 +29,9 @@ import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
+import org.yocto.sample.client.common.DataMeteo;
 import org.yoctosample.*;
 
 import java.io.IOException;
@@ -39,6 +42,8 @@ public class WorldMap implements EntryPoint {
 
     private Logger logger;
     private YoctoHub hub;
+
+    private final WorldMapServiceAsync worldMapService = GWT.create(WorldMapService.class);
 
     public void onModuleLoad() {
         /*
@@ -131,7 +136,7 @@ public class WorldMap implements EntryPoint {
                             marker.addMarkerClickHandler(new MarkerClickHandler() {
 
                                 public void onClick(MarkerClickEvent event) {
-                                    Widget html = createWidget(meteo);
+                                    Widget html = createWidget(marker, meteo);
 
                                     map.getInfoWindow().open(marker,
 
@@ -161,13 +166,20 @@ public class WorldMap implements EntryPoint {
 
     }
 
-    private Widget createWidget(YoctoMeteo meteo) {
+    private Widget createWidget(Marker marker, YoctoMeteo meteo) {
         TreeItem root = new TreeItem();
         root.setText("Yocto-meteo: " + meteo.getSerialNumber());
-        root.addTextItem("Temperature: " + meteo.getTemperature().getAdvertisedValue());
-        root.addTextItem("Humidity: " + meteo.getHumidity().getAdvertisedValue());
-        root.addTextItem("Pressure: " + meteo.getPressure().getAdvertisedValue());
+        root.addTextItem("Temperature: " + meteo.getTemperature().getAdvertisedValue() + " °C");
+        root.addTextItem("Humidity: " + meteo.getHumidity().getAdvertisedValue() + "%");
+        root.addTextItem("Pressure: " + meteo.getPressure().getAdvertisedValue() + " hPA");
 
+        worldMapService.addMeteo(new DataMeteo(marker, meteo), new AsyncCallback<Void>() {
+            public void onFailure(Throwable caught) {
+            }
+
+            public void onSuccess(Void result) {
+            }
+        });
         root.setState(true);
         Tree t = new Tree();
         t.addItem(root);
