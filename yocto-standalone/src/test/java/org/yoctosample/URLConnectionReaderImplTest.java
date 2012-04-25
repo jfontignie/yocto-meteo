@@ -19,6 +19,8 @@ import org.junit.Test;
 
 import java.net.URL;
 
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Author: Jacques Fontignie
  * Date: 4/25/12
@@ -35,7 +37,6 @@ public class URLConnectionReaderImplTest {
 
     @Test
     public void testGetContent() throws Exception {
-
-        reader.getContent(new URL("http://www.google.com"));
+        assertNotNull(reader.getContent(new URL("http://www.google.com")));
     }
 }

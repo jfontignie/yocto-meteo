@@ -14,12 +14,15 @@
 
 package org.yocto.sample.client;
 
+import com.google.gwt.jsonp.client.JsonpRequestBuilder;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.yocto.sample.client.common.JavascriptYoctoMap;
 import org.yoctosample.QueryListener;
 import org.yoctosample.common.YoctoMap;
 import org.yoctosample.common.YoctoTemplate;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * Author: Jacques Fontignie
@@ -28,26 +31,45 @@ import java.io.IOException;
  */
 public class GWTYoctoTemplate implements YoctoTemplate {
 
+    Logger logger = Logger.getLogger("yoctoTemplate");
+
     private String url;
+    private JsonpRequestBuilder jsonp;
 
     public GWTYoctoTemplate(String url) {
         this.url = url;
+        jsonp = new JsonpRequestBuilder();
     }
 
     public YoctoMap query(String relativePath) throws IOException {
-        JSONRequest.get(url, new JSONRequestHandler<JavascriptYoctoMap>() {
-            public void onRequestComplete(JavascriptYoctoMap object) {
+        aSyncQuery(relativePath, new QueryListener() {
+            public void resultEvent(YoctoMap map) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
 
+            public void exceptionEvent(IOException e) {
+                //To change body of implemented methods use File | Settings | File Templates.
             }
         });
+
         throw new IllegalStateException("Not implemented yet");
     }
 
     public void aSyncQuery(String relativePath, final QueryListener listener) throws IOException {
-        JSONRequest.get(url, new JSONRequestHandler<JavascriptYoctoMap>() {
-            public void onRequestComplete(JavascriptYoctoMap object) {
-                listener.resultEvent(object);
+
+        logger.info("querying the url: " + url + relativePath);
+        String newUrl = url + relativePath;
+
+        jsonp.requestObject(newUrl, new AsyncCallback<JavascriptYoctoMap>() {
+            public void onFailure(Throwable caught) {
+                logger.severe("Impossible to get json object: " + caught);
             }
+
+            public void onSuccess(JavascriptYoctoMap result) {
+                logger.info("Received the result from json");
+                listener.resultEvent(result);
+            }
+
         });
     }
 }

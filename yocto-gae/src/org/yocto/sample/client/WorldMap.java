@@ -29,10 +29,10 @@ import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
-import org.yoctosample.QueryListener;
-import org.yoctosample.common.YoctoMap;
+import org.yoctosample.RefreshCallback;
+import org.yoctosample.YoctoHub;
+import org.yoctosample.YoctoProduct;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -58,7 +58,7 @@ public class WorldMap implements EntryPoint {
 
         //Prepare the JSONP
 
-        String url = "http://127.0.0.1:4444/";
+        String url = "http://localhost/";
         GWTYoctoTemplate template = new GWTYoctoTemplate(url);
 
 
@@ -83,28 +83,46 @@ public class WorldMap implements EntryPoint {
 
         dock.addNorth(map, 500);
 
-        logger.info("Creating component");
-        final HTML html = new HTML("Hello world");
-        RootPanel.get("comment").add(html);
 
-        GWTYoctoTemplate template = new GWTYoctoTemplate("http://127.0.0.1:4444/");
+        GWTYoctoTemplate template = new GWTYoctoTemplate("http://localhost:8001/");
         try {
-            logger.info("Query api.json");
-            template.aSyncQuery("api.json", new QueryListener() {
-                public void resultEvent(YoctoMap map) {
-                    logger.info("result received");
-                    html.setText("Ca marche");
+            YoctoHub hub = new YoctoHub(template);
+            logger.info("hub created");
+            hub.refresh(new RefreshCallback<YoctoHub>() {
+                public void onRefresh(YoctoHub hub) {
+                    logger.info("refresh successful");
+                    try {
+                        logger.info("All the meteo objects are" + hub.findAll(YoctoProduct.YOCTO_METEO));
+                    } catch (IOException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    }
+
                 }
 
-                public void exceptionEvent(IOException e) {
-                    logger.info("exception received");
-                    html.setText(e.toString());
+                public void onError(YoctoHub hub, IOException e) {
+                    //To change body of implemented methods use File | Settings | File Templates.
                 }
             });
+            logger.info("hub refresh performed");
         } catch (IOException e) {
-            logger.severe(e.toString());
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+//
+//        try {
+//            logger.info("Query api.json");
+//            template.aSyncQuery("api.json", new QueryListener() {
+//                public void resultEvent(YoctoMap map) {
+//                    logger.info("result received");
+//                }
+//
+//                public void exceptionEvent(IOException e) {
+//                    logger.info("exception received");
+//                }
+//            });
+//        } catch (IOException e) {
+//            logger.severe(e.toString());
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
 
         //YoctoHub hub = new YoctoHub(new GWTYoctoTemplate("http://127.0.0.1"));
 

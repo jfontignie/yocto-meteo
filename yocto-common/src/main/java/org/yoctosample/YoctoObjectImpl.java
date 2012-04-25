@@ -8,6 +8,8 @@
  * yocto-meteo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
+ *
+ * For more information: go on http://yocto-meteo.blogspot.com
  */
 
 package org.yoctosample;
@@ -42,10 +44,6 @@ abstract class YoctoObjectImpl implements YoctoObject {
     }
 
 
-    private YoctoMap query() throws IOException {
-        return template.query(relativePath);
-    }
-
     public String getLogicalName() {
         return logicalName;
     }
@@ -58,8 +56,26 @@ abstract class YoctoObjectImpl implements YoctoObject {
         return serialNumber;
     }
 
+    public void refresh(final RefreshCallback callback) throws IOException {
+        template.aSyncQuery(relativePath, new QueryListener() {
+            public void resultEvent(YoctoMap map) {
+                internalRefresh(map);
+                callback.onRefresh(YoctoObjectImpl.this);
+            }
+
+            public void exceptionEvent(IOException e) {
+                callback.onError(YoctoObjectImpl.this, e);
+            }
+        });
+
+    }
+
     public void refresh() throws IOException {
-        YoctoMap map = query();
+        YoctoMap map = template.query(relativePath);
+        internalRefresh(map);
+    }
+
+    private void internalRefresh(YoctoMap map) {
         YoctoMap module = map.getMap("module");
         logicalName = module.getValue("logicalName").toString();
         String newSerialNumber = module.getValue("serialNumber").toString();
@@ -71,7 +87,7 @@ abstract class YoctoObjectImpl implements YoctoObject {
         refreshObject(map);
     }
 
-    protected abstract void refreshObject(YoctoMap map) throws IOException;
+    protected abstract void refreshObject(YoctoMap map);
 
 
 }

@@ -67,7 +67,7 @@ public class YoctoHub extends YoctoObjectImpl implements YoctoObject {
     }
 
     @Override
-    protected void refreshObject(YoctoMap map) throws IOException {
+    protected void refreshObject(YoctoMap map) {
         needRefresh = false;
         yoctoDeviceList = new YoctoDeviceList();
 
@@ -86,7 +86,7 @@ public class YoctoHub extends YoctoObjectImpl implements YoctoObject {
         //TODO remove the objects which are in yoctoDeviceList but not in serials...
     }
 
-    private YoctoObject createObject(YoctoProduct product, YoctoMap service) throws IOException {
+    private YoctoObject createObject(YoctoProduct product, YoctoMap service) {
         String networkUrl = service.getValue("networkUrl").toString();
         String serialNumber = service.getValue("serialNumber").toString();
         YoctoObject result = yoctoDeviceList.findBySerialNumber(serialNumber);

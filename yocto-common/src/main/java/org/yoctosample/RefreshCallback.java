@@ -8,17 +8,21 @@
  * yocto-meteo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
+ *
+ * For more information: go on http://yocto-meteo.blogspot.com
  */
 
-package org.yocto.sample.client;
+package org.yoctosample;
 
-import com.google.gwt.core.client.JavaScriptObject;
+import java.io.IOException;
 
 /**
  * Author: Jacques Fontignie
- * Date: 4/24/12
- * Time: 7:19 PM
+ * Date: 4/25/12
+ * Time: 1:38 PM
  */
-public interface JSONRequestHandler<T extends JavaScriptObject> {
-    public void onRequestComplete(T json);
+public interface RefreshCallback<T extends YoctoObject> {
+    public void onRefresh(T yoctoObject);
+
+    public void onError(T yoctoObject, IOException e);
 }
