@@ -77,8 +77,8 @@ abstract class YoctoObjectImpl implements YoctoObject {
 
     private void internalRefresh(YoctoMap map) {
         YoctoMap module = map.getMap("module");
-        logicalName = module.getValue("logicalName").toString();
-        String newSerialNumber = module.getValue("serialNumber").toString();
+        logicalName = module.getString("logicalName");
+        String newSerialNumber = module.getString("serialNumber");
         if (serialNumber == null || serialNumber.equals(""))
             serialNumber = newSerialNumber;
         else if (!serialNumber.equals(newSerialNumber))

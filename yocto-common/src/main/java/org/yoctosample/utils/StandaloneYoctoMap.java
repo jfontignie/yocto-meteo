@@ -38,8 +38,12 @@ public class StandaloneYoctoMap implements YoctoMap {
         return new StandaloneYoctoMap((Map<String, Object>) map.get(name));
     }
 
-    public Object getValue(String name) {
-        return map.get(name);
+    public String getString(String name) {
+        return map.get(name).toString();
+    }
+
+    public int getInt(String name) {
+        return Integer.valueOf(map.get(name).toString());
     }
 
     public YoctoList getList(String name) {

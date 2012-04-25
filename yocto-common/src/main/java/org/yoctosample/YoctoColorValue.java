@@ -8,6 +8,8 @@
  * yocto-meteo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
+ *
+ * For more information: go on http://yocto-meteo.blogspot.com
  */
 
 package org.yoctosample;
@@ -32,19 +34,19 @@ public class YoctoColorValue {
     }
 
     public String getLogicalName() {
-        return service.getValue("logicalName").toString();
+        return service.getString("logicalName");
     }
 
     public String getAdvertisedValue() {
-        return service.getValue("advertisedValue").toString();
+        return service.getString("advertisedValue");
     }
 
     public int getRgbColor() {
-        return Integer.valueOf(service.getValue("rgbColor").toString());
+        return Integer.valueOf(service.getString("rgbColor"));
     }
 
     public int getHslColor() {
-        return Integer.valueOf(service.getValue("hslColor").toString());
+        return Integer.valueOf(service.getString("hslColor"));
     }
 
     public ColorMove getRgbMove() {
@@ -56,7 +58,7 @@ public class YoctoColorValue {
     }
 
     public boolean getRgbColorAtPowerOn() {
-        return Boolean.valueOf(service.getValue("rgbColorAtPowerOn").toString());
+        return Boolean.valueOf(service.getString("rgbColorAtPowerOn"));
     }
 
     public static class ColorMove {
@@ -67,15 +69,15 @@ public class YoctoColorValue {
         }
 
         public boolean isMoving() {
-            return Boolean.valueOf(service.getValue("moving").toString());
+            return Boolean.valueOf(service.getString("moving"));
         }
 
         public int getTarget() {
-            return Integer.valueOf(service.getValue("target").toString());
+            return Integer.valueOf(service.getString("target"));
         }
 
         public int getMs() {
-            return Integer.valueOf(service.getValue("ms").toString());
+            return Integer.valueOf(service.getString("ms"));
         }
     }
 

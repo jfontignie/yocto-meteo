@@ -8,6 +8,8 @@
  * yocto-meteo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
+ *
+ * For more information: go on http://yocto-meteo.blogspot.com
  */
 
 package org.yoctosample.utils;
@@ -35,8 +37,12 @@ public class StandaloneYoctoList implements YoctoList {
         return list.size();
     }
 
-    public Object getValue(int index) {
-        return list.get(index);
+    public String getString(int index) {
+        return list.get(index).toString();
+    }
+
+    public int getInt(int index) {
+        return Integer.valueOf(list.get(index).toString());
     }
 
     public YoctoMap getMap(int index) {

@@ -30,11 +30,10 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import org.yoctosample.RefreshCallback;
-import org.yoctosample.YoctoHub;
-import org.yoctosample.YoctoProduct;
+import org.yoctosample.*;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 public class WorldMap implements EntryPoint {
@@ -84,7 +83,7 @@ public class WorldMap implements EntryPoint {
         dock.addNorth(map, 500);
 
 
-        GWTYoctoTemplate template = new GWTYoctoTemplate("http://localhost:8001/");
+        GWTYoctoTemplate template = new GWTYoctoTemplate("http://localhost:8001");
         try {
             YoctoHub hub = new YoctoHub(template);
             logger.info("hub created");
@@ -92,7 +91,21 @@ public class WorldMap implements EntryPoint {
                 public void onRefresh(YoctoHub hub) {
                     logger.info("refresh successful");
                     try {
-                        logger.info("All the meteo objects are" + hub.findAll(YoctoProduct.YOCTO_METEO));
+                        Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
+                        logger.info("All the meteo objects are" + objects);
+                        for (YoctoObject object : objects) {
+                            final YoctoMeteo meteo = (YoctoMeteo) object;
+                            meteo.refresh(new RefreshCallback() {
+                                public void onRefresh(YoctoObject yoctoObject) {
+                                    logger.info("The current temperature is: " + meteo.getTemperature().getAdvertisedValue());
+                                }
+
+                                public void onError(YoctoObject yoctoObject, IOException e) {
+                                    //To change body of implemented methods use File | Settings | File Templates.
+                                }
+                            });
+
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                     }

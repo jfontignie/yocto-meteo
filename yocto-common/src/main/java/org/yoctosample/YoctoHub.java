@@ -35,7 +35,7 @@ public class YoctoHub extends YoctoObjectImpl implements YoctoObject {
     private boolean needRefresh;
 
     public YoctoHub(YoctoTemplate template) throws IOException {
-        super(YoctoProduct.YOCTO_HUB, template, "api.json");
+        super(YoctoProduct.YOCTO_HUB, template, "/api.json");
         if (template == null) {
             throw new IllegalStateException("Template is null");
         }
@@ -76,9 +76,11 @@ public class YoctoHub extends YoctoObjectImpl implements YoctoObject {
 
         HashMap<String, String> serials = new HashMap<String, String>();
 
-        for (int i = 0; i < whitePages.size(); i++) {
+        int size = whitePages.size();
+        for (int i = 0; i < size; i++) {
             YoctoMap service = whitePages.getMap(i);
-            YoctoProduct product = YoctoProduct.getFromProductId((Integer) service.getValue("productId"));
+            int productId = service.getInt("productId");
+            YoctoProduct product = YoctoProduct.getFromProductId(productId);
             YoctoObject object = createObject(product, service);
             serials.put(object.getSerialNumber(), "");
         }
@@ -87,8 +89,8 @@ public class YoctoHub extends YoctoObjectImpl implements YoctoObject {
     }
 
     private YoctoObject createObject(YoctoProduct product, YoctoMap service) {
-        String networkUrl = service.getValue("networkUrl").toString();
-        String serialNumber = service.getValue("serialNumber").toString();
+        String networkUrl = service.getString("networkUrl");
+        String serialNumber = service.getString("serialNumber");
         YoctoObject result = yoctoDeviceList.findBySerialNumber(serialNumber);
 
         if (result == null) {

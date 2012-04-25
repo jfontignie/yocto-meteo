@@ -8,6 +8,8 @@
  * yocto-meteo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
+ *
+ * For more information: go on http://yocto-meteo.blogspot.com
  */
 
 package org.yocto.sample.client.common;
@@ -27,14 +29,18 @@ public class JavascriptYoctoMap extends JavaScriptObject implements YoctoMap {
     }
 
     public final native JavascriptYoctoMap getMap(String name) /*-{
-        return this.name;
+        return this[name];
     }-*/;
 
-    public final native Object getValue(String name) /*-{
-        return this.name;
+    public final native String getString(String name) /*-{
+        return this[name];
+    }-*/;
+
+    public final native int getInt(String name) /*-{
+        return this[name];
     }-*/;
 
     public final native JavascriptYoctoList getList(String name) /*-{
-        return this.name;
+        return this[name];
     }-*/;
 }
