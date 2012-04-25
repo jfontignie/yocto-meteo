@@ -8,6 +8,8 @@
  * yocto-meteo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
+ *
+ * For more information: go on http://yocto-meteo.blogspot.com
  */
 
 package org.yocto.sample.client;
@@ -44,7 +46,7 @@ public class GWTYoctoTemplate implements YoctoTemplate {
     public void aSyncQuery(String relativePath, final QueryListener listener) throws IOException {
         JSONRequest.get(url, new JSONRequestHandler<JavascriptYoctoMap>() {
             public void onRequestComplete(JavascriptYoctoMap object) {
-                //listener.resultEvent(object);
+                listener.resultEvent(object);
             }
         });
     }

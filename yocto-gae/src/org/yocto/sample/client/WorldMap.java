@@ -8,6 +8,8 @@
  * yocto-meteo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
+ *
+ * For more information: go on http://yocto-meteo.blogspot.com
  */
 
 package org.yocto.sample.client;
@@ -27,11 +29,17 @@ import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
+import org.yoctosample.QueryListener;
+import org.yoctosample.common.YoctoMap;
+
+import java.io.IOException;
+import java.util.logging.Logger;
 
 public class WorldMap implements EntryPoint {
 
+    private Logger logger;
 
     public void onModuleLoad() {
         /*
@@ -41,7 +49,7 @@ public class WorldMap implements EntryPoint {
     * application on a public server, but a blank key will work for an
     * application served from localhost.
    */
-
+        logger = Logger.getLogger("main");
         Maps.loadMapsApi("", "2", false, new Runnable() {
             public void run() {
                 buildUi();
@@ -57,6 +65,8 @@ public class WorldMap implements EntryPoint {
     }
 
     private void buildUi() {
+
+        logger.info("Build UI");
         Geolocation location = Geolocation.getIfSupported();
 
 
@@ -73,8 +83,30 @@ public class WorldMap implements EntryPoint {
 
         dock.addNorth(map, 500);
 
-        Label label = new Label("Hello world");
-        RootPanel.get("comment").add(label);
+        logger.info("Creating component");
+        final HTML html = new HTML("Hello world");
+        RootPanel.get("comment").add(html);
+
+        GWTYoctoTemplate template = new GWTYoctoTemplate("http://127.0.0.1:4444/");
+        try {
+            logger.info("Query api.json");
+            template.aSyncQuery("api.json", new QueryListener() {
+                public void resultEvent(YoctoMap map) {
+                    logger.info("result received");
+                    html.setText("Ca marche");
+                }
+
+                public void exceptionEvent(IOException e) {
+                    logger.info("exception received");
+                    html.setText(e.toString());
+                }
+            });
+        } catch (IOException e) {
+            logger.severe(e.toString());
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        //YoctoHub hub = new YoctoHub(new GWTYoctoTemplate("http://127.0.0.1"));
 
         RootPanel.get("worldMap").add(dock);
         // Add the map to the HTML host page

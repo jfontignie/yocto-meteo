@@ -8,6 +8,8 @@
  * yocto-meteo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
+ *
+ * For more information: go on http://yocto-meteo.blogspot.com
  */
 
 package org.yoctosample;
@@ -27,33 +29,38 @@ import java.util.Map;
  * Date: 4/7/12
  * Time: 11:22 PM
  */
-class YoctoHub extends YoctoObjectImpl implements YoctoObject {
+public class YoctoHub extends YoctoObjectImpl implements YoctoObject {
 
     private YoctoDeviceList yoctoDeviceList;
+    private boolean needRefresh;
 
     public YoctoHub(YoctoTemplate template) throws IOException {
         super(YoctoProduct.YOCTO_HUB, template, "api.json");
         if (template == null) {
             throw new IllegalStateException("Template is null");
         }
-        refresh();
+        needRefresh = true;
     }
 
 
-    public YoctoRelay findRelay(String name) {
+    public YoctoRelay findRelay(String name) throws IOException {
+        if (needRefresh) refresh();
         return (YoctoRelay) yoctoDeviceList.get(YoctoProduct.YOCTO_RELAY, name);
     }
 
-    public YoctoMeteo findMeteo(String name) {
+    public YoctoMeteo findMeteo(String name) throws IOException {
+        if (needRefresh) refresh();
         return (YoctoMeteo) yoctoDeviceList.get(YoctoProduct.YOCTO_METEO, name);
     }
 
-    public YoctoColor findColor(String name) {
+    public YoctoColor findColor(String name) throws IOException {
+        if (needRefresh) refresh();
         return (YoctoColor) yoctoDeviceList.get(YoctoProduct.YOCTO_COLOR, name);
     }
 
 
-    public Collection<YoctoObject> findAll(YoctoProduct product) {
+    public Collection<YoctoObject> findAll(YoctoProduct product) throws IOException {
+        if (needRefresh) refresh();
         Map<String, YoctoObject> result = yoctoDeviceList.findAll(product);
         if (result == null) return null;
         return result.values();
@@ -61,6 +68,7 @@ class YoctoHub extends YoctoObjectImpl implements YoctoObject {
 
     @Override
     protected void refreshObject(YoctoMap map) throws IOException {
+        needRefresh = false;
         yoctoDeviceList = new YoctoDeviceList();
 
         YoctoMap services = map.getMap("services");

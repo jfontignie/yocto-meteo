@@ -8,6 +8,8 @@
  * yocto-meteo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
+ *
+ * For more information: go on http://yocto-meteo.blogspot.com
  */
 
 package org.yoctosample;
@@ -17,12 +19,8 @@ import org.yoctosample.common.YoctoMap;
 import org.yoctosample.common.YoctoTemplate;
 import org.yoctosample.utils.StandaloneYoctoMap;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
@@ -33,9 +31,19 @@ import java.util.Map;
 public class StandaloneYoctoTemplate implements YoctoTemplate {
 
     private URL url;
+    private URLConnectionReader reader;
 
     public StandaloneYoctoTemplate(URL url) {
+        this(url, new URLConnectionReaderImpl());
+    }
+
+    public StandaloneYoctoTemplate(URL url, URLConnectionReader reader) {
         this.url = url;
+        this.reader = reader;
+    }
+
+    public void setURLConnectionReader(URLConnectionReader reader) {
+        this.reader = reader;
     }
 
     public void aSyncQuery(String relativePath, QueryListener listener) throws IOException {
@@ -45,13 +53,20 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
 
     public YoctoMap query(String relativePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        String content = URLConnectionReader.getContent(new URL(url, relativePath));
+        URL newUrl = new URL(url, relativePath);
+        String content = reader.getContent(newUrl);
+        if (content == null) throw new IllegalStateException("Content is empty");
         try {
             return new StandaloneYoctoMap((Map<String, Object>) mapper.readValue(content, Map.class));
         } catch (IOException e) {
             System.out.println("Error while reading " + new URL(url, relativePath));
             throw e;
+        } catch (Exception e) {
+            System.out.println("Error while reading " + new URL(url, relativePath));
+            e.printStackTrace();
+            throw new IOException(e);
         }
+
     }
 
     private class BackgroundQuerier implements Runnable {
@@ -73,18 +88,5 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
         }
     }
 
-    private static class URLConnectionReader {
-        public static String getContent(URL url) throws IOException {
-            StringBuilder buffer = new StringBuilder();
-            URLConnection yc = url.openConnection();
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    yc.getInputStream(), Charset.defaultCharset()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null)
-                buffer.append(inputLine);
-            in.close();
-            return buffer.toString();
-        }
-    }
 }

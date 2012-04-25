@@ -12,37 +12,33 @@
  * For more information: go on http://yocto-meteo.blogspot.com
  */
 
-package org.yoctosample.utils;
+package org.yoctosample;
 
-import org.yoctosample.common.YoctoList;
-import org.yoctosample.common.YoctoMap;
-
-import java.util.List;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
 
 /**
  * Author: Jacques Fontignie
- * Date: 4/24/12
- * Time: 9:57 PM
+ * Date: 4/25/12
+ * Time: 7:46 AM
  */
-public class StandaloneYoctoMap implements YoctoMap {
+public class URLConnectionReaderImpl implements URLConnectionReader {
 
-    private Map<String, Object> map;
+    public String getContent(URL url) throws IOException {
+        StringBuilder buffer = new StringBuilder();
+        URLConnection yc = url.openConnection();
 
-    public StandaloneYoctoMap(Map<String, Object> stringObjectMap) {
-        if (stringObjectMap == null) throw new IllegalStateException("the content is empty");
-        this.map = stringObjectMap;
+        BufferedReader in = new BufferedReader(new InputStreamReader(
+                yc.getInputStream(), Charset.defaultCharset()));
+        String inputLine;
+        while ((inputLine = in.readLine()) != null)
+            buffer.append(inputLine);
+        in.close();
+        return buffer.toString();
     }
 
-    public YoctoMap getMap(String name) {
-        return new StandaloneYoctoMap((Map<String, Object>) map.get(name));
-    }
-
-    public Object getValue(String name) {
-        return map.get(name);
-    }
-
-    public YoctoList getList(String name) {
-        return new StandaloneYoctoList((List) map.get(name));
-    }
 }

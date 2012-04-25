@@ -12,37 +12,16 @@
  * For more information: go on http://yocto-meteo.blogspot.com
  */
 
-package org.yoctosample.utils;
+package org.yoctosample;
 
-import org.yoctosample.common.YoctoList;
-import org.yoctosample.common.YoctoMap;
-
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * Author: Jacques Fontignie
- * Date: 4/24/12
- * Time: 9:57 PM
+ * Date: 4/25/12
+ * Time: 9:47 AM
  */
-public class StandaloneYoctoMap implements YoctoMap {
-
-    private Map<String, Object> map;
-
-    public StandaloneYoctoMap(Map<String, Object> stringObjectMap) {
-        if (stringObjectMap == null) throw new IllegalStateException("the content is empty");
-        this.map = stringObjectMap;
-    }
-
-    public YoctoMap getMap(String name) {
-        return new StandaloneYoctoMap((Map<String, Object>) map.get(name));
-    }
-
-    public Object getValue(String name) {
-        return map.get(name);
-    }
-
-    public YoctoList getList(String name) {
-        return new StandaloneYoctoList((List) map.get(name));
-    }
+public interface URLConnectionReader {
+    String getContent(URL url) throws IOException;
 }
