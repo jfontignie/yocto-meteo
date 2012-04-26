@@ -42,6 +42,7 @@ public class WorldMap implements EntryPoint {
     private YoctoHub hub;
 
     private final WorldMapServiceAsync worldMapService = GWT.create(WorldMapService.class);
+    private CurrentYoctoMarker currentMarker;
 
 
     public void onModuleLoad() {
@@ -85,11 +86,9 @@ public class WorldMap implements EntryPoint {
         // Add some controls for the zoom level
         map.addControl(new LargeMapControl());
 
-
         final DockLayoutPanel dock = new DockLayoutPanel(Style.Unit.PX);
 
         dock.addNorth(map, 500);
-
 
         RootPanel.get("worldMap").add(dock);
         // Add the map to the HTML host page
@@ -113,7 +112,6 @@ public class WorldMap implements EntryPoint {
     private void listMeteos(final MapWidget map, final DataMeteo current) {
         worldMapService.listMeteos(new AsyncCallback<List<DataMeteo>>() {
             public void onFailure(Throwable caught) {
-                new CurrentYoctoMarker(map, current);
                 displayMap();
             }
 
@@ -145,7 +143,7 @@ public class WorldMap implements EntryPoint {
                                     meteo.getTemperature().getAdvertisedValue(),
                                     meteo.getPressure().getAdvertisedValue(),
                                     meteo.getHumidity().getAdvertisedValue());
-                            new CurrentYoctoMarker(map, dataMeteo);
+                            currentMarker = new CurrentYoctoMarker(map, dataMeteo);
                             logger.info("The current temperature is: " + meteo.getTemperature().getAdvertisedValue());
                             logger.info("The current humidity is: " + meteo.getHumidity().getAdvertisedValue());
                             logger.info("The current pressure is: " + meteo.getPressure().getAdvertisedValue());
@@ -185,7 +183,7 @@ public class WorldMap implements EntryPoint {
     private void displayMap() {
         DOM.removeChild(RootPanel.getBodyElement(), DOM.getElementById("loading"));
         //DOM.setStyleAttribute(RootPanel.get("worldMap").getElement(), "display", "block");
-
+        currentMarker.display();
     }
 
 }

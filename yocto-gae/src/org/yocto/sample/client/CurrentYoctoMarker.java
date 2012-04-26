@@ -37,6 +37,5 @@ class CurrentYoctoMarker extends YoctoMarker {
 
     public CurrentYoctoMarker(final MapWidget map, DataMeteo meteo) {
         super(map, meteo, createOptions());
-        display();
     }
 }
