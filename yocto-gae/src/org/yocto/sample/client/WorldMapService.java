@@ -15,6 +15,7 @@
 package org.yocto.sample.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import org.yocto.sample.client.common.DataMeteo;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
  * Date: 4/25/12
  * Time: 9:19 PM
  */
+@RemoteServiceRelativePath("worldmap")
 public interface WorldMapService extends RemoteService {
 
     public void addMeteo(DataMeteo dataMeteo);

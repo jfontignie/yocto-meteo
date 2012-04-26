@@ -25,11 +25,11 @@
     <inherits name='com.google.gwt.user.theme.standard.Standard'/>
     <inherits name='com.google.gwt.maps.GoogleMaps'/>
     <inherits name="com.google.gwt.logging.Logging"/>
+    <inherits name="com.google.gwt.logging.Logging"/>
     <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
     <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
     <inherits name="yoctopuce"/>
-    <inherits name="com.google.gwt.logging.Logging"/>
 
 
     <!-- Other module inherits                                      -->

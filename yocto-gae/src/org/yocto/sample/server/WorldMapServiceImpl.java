@@ -23,6 +23,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Author: Jacques Fontignie
@@ -31,10 +32,14 @@ import java.util.List;
  */
 public class WorldMapServiceImpl extends RemoteServiceServlet implements WorldMapService {
 
+    //
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
+
     private static final PersistenceManagerFactory PMF =
             JDOHelper.getPersistenceManagerFactory("transactions-optional");
 
     public void addMeteo(DataMeteo dataMeteo) {
+        logger.info("Adding a new meteo in the Database");
         PersistenceManager pm = getPersistenceManager();
         try {
             pm.makePersistent(dataMeteo);
@@ -44,7 +49,7 @@ public class WorldMapServiceImpl extends RemoteServiceServlet implements WorldMa
     }
 
     public List<DataMeteo> listMeteos() {
-
+        logger.info("Listing all the meteos");
         PersistenceManager pm = getPersistenceManager();
         List<DataMeteo> list;
         try {

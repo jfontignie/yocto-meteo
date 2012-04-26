@@ -53,6 +53,7 @@ public class WorldMap implements EntryPoint {
     * application on a public server, but a blank key will work for an
     * application served from localhost.
    */
+        //
         logger = Logger.getLogger("main");
 
         //Prepare the JSONP
@@ -137,15 +138,23 @@ public class WorldMap implements EntryPoint {
 
                                 public void onClick(MarkerClickEvent event) {
                                     Widget html = createWidget(marker, meteo);
-
                                     map.getInfoWindow().open(marker,
-
                                             new InfoWindowContent(html));
                                 }
                             });
                             logger.info("The current temperature is: " + meteo.getTemperature().getAdvertisedValue());
                             logger.info("The current humidity is: " + meteo.getHumidity().getAdvertisedValue());
                             logger.info("The current pressure is: " + meteo.getPressure().getAdvertisedValue());
+                            logger.info("Calling the RPC");
+                            worldMapService.addMeteo(new DataMeteo(marker, meteo), new AsyncCallback<Void>() {
+                                public void onFailure(Throwable caught) {
+                                    logger.info("Impossible to store");
+                                }
+
+                                public void onSuccess(Void result) {
+                                    logger.info("succesfully stored");
+                                }
+                            });
                         }
 
                         public void onError(YoctoObject yoctoObject, IOException e) {
@@ -173,13 +182,7 @@ public class WorldMap implements EntryPoint {
         root.addTextItem("Humidity: " + meteo.getHumidity().getAdvertisedValue() + "%");
         root.addTextItem("Pressure: " + meteo.getPressure().getAdvertisedValue() + " hPA");
 
-        worldMapService.addMeteo(new DataMeteo(marker, meteo), new AsyncCallback<Void>() {
-            public void onFailure(Throwable caught) {
-            }
 
-            public void onSuccess(Void result) {
-            }
-        });
         root.setState(true);
         Tree t = new Tree();
         t.addItem(root);

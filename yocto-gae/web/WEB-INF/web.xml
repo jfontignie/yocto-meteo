@@ -29,7 +29,7 @@
 
     <servlet-mapping>
         <servlet-name>worldMapService</servlet-name>
-        <url-pattern>/stockwatcher/login</url-pattern>
+        <url-pattern>/worldmap/worldmap</url-pattern>
     </servlet-mapping>
     <!--
 <servlet>
