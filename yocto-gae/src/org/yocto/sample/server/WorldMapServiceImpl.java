@@ -22,6 +22,7 @@ import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -56,10 +57,16 @@ public class WorldMapServiceImpl extends RemoteServiceServlet implements WorldMa
         try {
             Query q = pm.newQuery(DataMeteo.class);
             list = (List<DataMeteo>) q.execute();
+
+            List<DataMeteo> result = new ArrayList<DataMeteo>();
+            for (DataMeteo dm : list)
+                result.add(dm);
+            logger.info("Server has fetched: " + list.size());
+            return result;
         } finally {
             pm.close();
         }
-        return list;
+
     }
 
     private PersistenceManager getPersistenceManager() {
