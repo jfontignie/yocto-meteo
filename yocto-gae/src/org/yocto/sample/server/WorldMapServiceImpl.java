@@ -24,6 +24,7 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
 /**
@@ -61,12 +62,27 @@ public class WorldMapServiceImpl extends RemoteServiceServlet implements WorldMa
             List<DataMeteo> result = new ArrayList<DataMeteo>();
             for (DataMeteo dm : list)
                 result.add(dm);
+
+            createStubValues(result);
             logger.info("Server has fetched: " + list.size());
             return result;
         } finally {
             pm.close();
         }
 
+    }
+
+    private void createStubValues(List<DataMeteo> result) {
+        Random random = new Random(1);
+        for (int i = 0; i < 3; i++) {
+            String serialNumber = "stub " + i;
+            double longitude = random.nextDouble() * 360 - 180;
+            double latitude = random.nextDouble() * 180 - 90;
+            double temperature = random.nextDouble() * 30;
+            double pressure = random.nextDouble() * 200 + 800;
+            double humidity = random.nextDouble() * 100;
+            result.add(new DataMeteo(serialNumber, longitude, latitude, temperature, pressure, humidity));
+        }
     }
 
     private PersistenceManager getPersistenceManager() {

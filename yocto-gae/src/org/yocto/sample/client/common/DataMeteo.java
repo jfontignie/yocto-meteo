@@ -25,6 +25,7 @@ import java.util.Date;
  * Date: 4/25/12
  * Time: 9:25 PM
  */
+//(identityType = IdentityType.APPLICATION, detachable="true")
 @PersistenceCapable
 public class DataMeteo implements Serializable {
 
@@ -111,5 +112,23 @@ public class DataMeteo implements Serializable {
 
     public void setHumidity(double humidity) {
         this.humidity = humidity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DataMeteo dataMeteo = (DataMeteo) o;
+
+        if (serialNumber != null ? !serialNumber.equals(dataMeteo.serialNumber) : dataMeteo.serialNumber != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return serialNumber != null ? serialNumber.hashCode() : 0;
     }
 }

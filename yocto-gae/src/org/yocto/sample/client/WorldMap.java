@@ -22,22 +22,19 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.geolocation.client.Geolocation;
 import com.google.gwt.geolocation.client.Position;
 import com.google.gwt.geolocation.client.PositionError;
-import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl;
-import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
-import com.google.gwt.maps.client.overlay.Icon;
-import com.google.gwt.maps.client.overlay.Marker;
-import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import org.yocto.sample.client.common.DataMeteo;
 import org.yoctosample.*;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class WorldMap implements EntryPoint {
@@ -96,14 +93,15 @@ public class WorldMap implements EntryPoint {
 
         location.getCurrentPosition(new Callback<Position, PositionError>() {
             public void onFailure(PositionError reason) {
-
+                listMeteos(map, null);
             }
 
             public void onSuccess(Position result) {
                 Position.Coordinates coordinates = result.getCoordinates();
                 final LatLng lng = LatLng.newInstance(coordinates.getLatitude(), coordinates.getLongitude());
+                map.setCenter(LatLng.newInstance(lng.getLatitude(), lng.getLongitude()));
                 try {
-                    Marker marker = createMarker(map, lng);
+                    findYoctoHub(map, lng);
                 } catch (IOException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
@@ -114,52 +112,49 @@ public class WorldMap implements EntryPoint {
 
     }
 
-    private Marker createMarker(final MapWidget map, LatLng lng) throws IOException {
-        MarkerOptions options = MarkerOptions.newInstance();
-        Icon icon = Icon.newInstance();
-        icon.setImageURL("http://www.google.com/mapfiles/ms/micons/blue-dot.png");
-        //TODO: the url is not at the correct location
-        options.setIcon(icon);
-        final Marker marker = new Marker(lng, options);
 
-        map.setCenter(lng);
-        map.addOverlay(marker);
+    private void listMeteos(final MapWidget map, final DataMeteo current) {
+        worldMapService.listMeteos(new AsyncCallback<List<DataMeteo>>() {
+            public void onFailure(Throwable caught) {
+                new CurrentYoctoMarker(map, current);
+            }
 
-        createYoctoHub(map, marker);
-        return marker;
+            public void onSuccess(List<DataMeteo> result) {
+                logger.info("yocto-meteo found: " + result.size());
+                for (DataMeteo meteo : result) {
+                    if (!meteo.equals(current)) {
+                        new YoctoMarker(map, meteo);
+                    } else {
+                        new CurrentYoctoMarker(map, meteo);
+                    }
+                }
+            }
+        });
     }
 
-    private void createYoctoHub(final MapWidget map, final Marker marker) throws IOException {
+    private void findYoctoHub(final MapWidget map, final LatLng lng) throws IOException {
 
-        logger.fine("hub created");
         hub.refresh(new RefreshCallback<YoctoHub>() {
             public void onRefresh(YoctoHub hub) throws IOException {
-                logger.fine("refresh successful");
-
                 Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
                 logger.fine("All the meteo objects are" + objects);
                 for (YoctoObject object : objects) {
                     final YoctoMeteo meteo = (YoctoMeteo) object;
                     meteo.refresh(new RefreshCallback() {
                         public void onRefresh(YoctoObject yoctoObject) {
-                            marker.addMarkerClickHandler(new MarkerClickHandler() {
-
-                                public void onClick(MarkerClickEvent event) {
-                                    Widget html = createWidget(marker, meteo);
-                                    map.getInfoWindow().open(marker,
-                                            new InfoWindowContent(html));
-                                }
-                            });
-                            logger.info("The current temperature is: " + meteo.getTemperature().getAdvertisedValue());
-                            logger.info("The current humidity is: " + meteo.getHumidity().getAdvertisedValue());
-                            logger.info("The current pressure is: " + meteo.getPressure().getAdvertisedValue());
-                            logger.info("Calling the RPC");
                             DataMeteo dataMeteo = new DataMeteo(meteo.getSerialNumber(),
-                                    marker.getLatLng().getLongitude(),
-                                    marker.getLatLng().getLatitude(),
+                                    lng.getLongitude(),
+                                    lng.getLatitude(),
                                     meteo.getTemperature().getAdvertisedValue(),
                                     meteo.getPressure().getAdvertisedValue(),
                                     meteo.getHumidity().getAdvertisedValue());
+
+                            logger.info("The current temperature is: " + meteo.getTemperature().getAdvertisedValue());
+                            logger.info("The current humidity is: " + meteo.getHumidity().getAdvertisedValue());
+                            logger.info("The current pressure is: " + meteo.getPressure().getAdvertisedValue());
+
+                            listMeteos(map, dataMeteo);
+
                             worldMapService.addMeteo(dataMeteo, new AsyncCallback<Void>() {
                                 public void onFailure(Throwable caught) {
                                     logger.info("Impossible to store");
@@ -169,10 +164,11 @@ public class WorldMap implements EntryPoint {
                                     logger.info("succesfully stored");
                                 }
                             });
+
                         }
 
                         public void onError(YoctoObject yoctoObject, IOException e) {
-                            //To change body of implemented methods use File | Settings | File Templates.
+                            listMeteos(map, null);
                         }
                     });
 
@@ -186,21 +182,6 @@ public class WorldMap implements EntryPoint {
             }
         });
         logger.info("hub refresh performed");
-
-    }
-
-    private Widget createWidget(Marker marker, YoctoMeteo meteo) {
-        TreeItem root = new TreeItem();
-        root.setText("Yocto-meteo: " + meteo.getSerialNumber());
-        root.addTextItem("Temperature: " + meteo.getTemperature().getAdvertisedValue() + " °C");
-        root.addTextItem("Humidity: " + meteo.getHumidity().getAdvertisedValue() + "%");
-        root.addTextItem("Pressure: " + meteo.getPressure().getAdvertisedValue() + " hPA");
-
-
-        root.setState(true);
-        Tree t = new Tree();
-        t.addItem(root);
-        return t;
 
     }
 
