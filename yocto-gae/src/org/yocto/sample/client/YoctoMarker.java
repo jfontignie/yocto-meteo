@@ -36,7 +36,8 @@ import java.util.logging.Logger;
 class YoctoMarker extends Marker {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    private Widget widget;
+    protected Widget widget;
+    private MapWidget map;
 
     public YoctoMarker(final MapWidget map, DataMeteo meteo) {
         super(LatLng.newInstance(meteo.getLatitude(), meteo.getLongitude()));
@@ -49,11 +50,12 @@ class YoctoMarker extends Marker {
     }
 
     private void init(final MapWidget map, DataMeteo meteo) {
+        this.map = map;
         logger.finer("initializing click listener");
         widget = createWidget(meteo);
         addMarkerClickHandler(new MarkerClickHandler() {
             public void onClick(MarkerClickEvent event) {
-                map.getInfoWindow().open(YoctoMarker.this, new InfoWindowContent(widget));
+                display();
             }
         });
         map.addOverlay(this);
@@ -74,5 +76,9 @@ class YoctoMarker extends Marker {
         t.addItem(root);
         return t;
 
+    }
+
+    public void display() {
+        map.getInfoWindow().open(this, new InfoWindowContent(widget));
     }
 }

@@ -32,11 +32,11 @@ class CurrentYoctoMarker extends YoctoMarker {
         icon.setIconSize(Size.newInstance(20, 34));
         icon.setIconAnchor(Point.newInstance(10, 34));
         icon.setInfoWindowAnchor(Point.newInstance(5, 1));
-
         return MarkerOptions.newInstance(icon);
     }
 
     public CurrentYoctoMarker(final MapWidget map, DataMeteo meteo) {
         super(map, meteo, createOptions());
+        display();
     }
 }
