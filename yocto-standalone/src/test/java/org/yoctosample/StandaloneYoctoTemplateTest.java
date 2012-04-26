@@ -47,16 +47,17 @@ public class StandaloneYoctoTemplateTest {
     @Test
     public void testQuery() throws IOException {
         EasyMock.expect(reader.getContent(new URL(url, "api.json"))).andReturn(
-                RestYoctoMock.latency(100, RestYoctoMock.MAIN_JSON));
+                WebLatency.latency(100, RestYoctoMock.MAIN_JSON));
         EasyMock.replay(reader);
         assertNotNull(yoctoTemplate.query("api.json"));
         EasyMock.verify(reader);
     }
 
+
     @Test
     public void testAsyncQuery() throws IOException, InterruptedException {
         EasyMock.expect(reader.getContent(new URL(url, "api.json"))).andReturn(
-                RestYoctoMock.latency(100, RestYoctoMock.MAIN_JSON));
+                WebLatency.latency(100, RestYoctoMock.MAIN_JSON));
         EasyMock.replay(reader);
         final boolean[] success = {false};
         yoctoTemplate.aSyncQuery("api.json", new YoctoCallback<YoctoMap>() {

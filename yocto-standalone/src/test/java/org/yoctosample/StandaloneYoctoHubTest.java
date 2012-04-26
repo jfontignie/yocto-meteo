@@ -43,9 +43,9 @@ public class StandaloneYoctoHubTest {
         url = new URL("http://127.0.0.1:4444");
         reader = EasyMock.createMock(URLConnectionReader.class);
         EasyMock.expect(reader.getContent(new URL(url, API_JSON))).andReturn(
-                RestYoctoMock.latency(100, RestYoctoMock.MAIN_JSON));
+                WebLatency.latency(100, RestYoctoMock.MAIN_JSON));
         EasyMock.expect(reader.getContent(new URL(url, BY_SERIAL_METEOMK1_0268_C_API_JSON))).andReturn(
-                RestYoctoMock.latency(100, RestYoctoMock.METEO_JSON)).anyTimes();
+                WebLatency.latency(100, RestYoctoMock.METEO_JSON)).anyTimes();
 
 
         YoctoTemplate template = new StandaloneYoctoTemplate(url, reader);

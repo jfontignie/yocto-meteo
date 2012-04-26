@@ -14,18 +14,17 @@
 
 package org.yoctosample;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.easymock.EasyMock;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.yoctosample.common.YoctoMap;
 import org.yoctosample.common.YoctoTemplate;
-import org.yoctosample.utils.StandaloneYoctoMap;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Map;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -38,32 +37,21 @@ public class YoctoHubTest {
     private YoctoTemplate yoctoTemplate;
 
 
-    private final static String CONTENT = "{\n" +
-            "\"module\":{\"productName\":\"VirtualHub\",\"serialNumber\":\"VIRTHUB0-480741bdd3\",\"logicalName\":\"\",\"productId\":0,\"productRelease\":1,\"firmwareRelease\":\"6019\",\"persistentSettings\":0,\"luminosity\":50,\"beacon\":0,\"upTime\":3402559538,\"usbCurrent\":0,\"realmHTTP\":\"YoctoDeviceList\",\"adminPassword\":\"\",\"userPassword\":\"\",\"rebootCountdown\":0,\"usbBandwidth\":0},\n" +
-            "\"services\":{\n" +
-            "\"whitePages\":[\n" +
-            "{\"serialNumber\":\"VIRTHUB0-480741bdd3\",\"logicalName\":\"\",\"productName\":\"VirtualHub\",\"productId\":0,\"networkUrl\":\"/api\",\"beacon\":0,\"index\":0},\n" +
-            "{\"serialNumber\":\"METEOMK1-0268C\",\"logicalName\":\"\",\"productName\":\"Yocto-Meteo\",\"productId\":24,\"networkUrl\":\"/bySerial/METEOMK1-0268C/api\",\"beacon\":0,\"index\":1}],\n" +
-            "\"yellowPages\":{\n" +
-            "\"DataLogger\":[\n" +
-            "{\"hardwareId\":\"METEOMK1-0268C.dataLogger\",\"logicalName\":\"\",\"advertisedValue\":\"OFF\",\"index\":0}],\n" +
-            "\"Temperature\":[\n" +
-            "{\"hardwareId\":\"METEOMK1-0268C.temperature\",\"logicalName\":\"\",\"advertisedValue\":\"20.7\",\"index\":1}],\n" +
-            "\"Pressure\":[\n" +
-            "{\"hardwareId\":\"METEOMK1-0268C.pressure\",\"logicalName\":\"\",\"advertisedValue\":\"945.0\",\"index\":2}],\n" +
-            "\"Humidity\":[\n" +
-            "{\"hardwareId\":\"METEOMK1-0268C.humidity\",\"logicalName\":\"\",\"advertisedValue\":\"53.0\",\"index\":3}]}}}";
-
     @Before
     public void setUp() throws IOException {
         yoctoTemplate = EasyMock.createMock(YoctoTemplate.class);
-        ObjectMapper mapper = new ObjectMapper();
 
-        YoctoMap content = new StandaloneYoctoMap(mapper.readValue(CONTENT, Map.class));
+
+        YoctoMap content = RestYoctoMock.getMap(RestYoctoMock.MAIN_JSON);
         EasyMock.expect(yoctoTemplate.query("/api.json")).andReturn(
                 content);
 
+        content = RestYoctoMock.getMap(RestYoctoMock.COLOR_JSON);
+        EasyMock.expect(yoctoTemplate.query("/bySerial/YRGBLED1-01934/api.json")).andReturn(
+                content);
+
     }
+
 
     @Test
     public void testRefresh() throws Exception {
@@ -87,6 +75,21 @@ public class YoctoHubTest {
         if (objects != null)
             for (YoctoObject object : objects)
                 assertNotNull(hub.findMeteo(object.getLogicalName()));
+    }
+
+    @Test
+    public void testFindAllColor() {
+        EasyMock.replay(yoctoTemplate);
+        YoctoHub hub = new YoctoHub(yoctoTemplate);
+        Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_COLOR);
+        assertEquals(1, objects.size());
+        YoctoColor color = (YoctoColor) objects.iterator().next();
+        color.refresh();
+
+        Assert.assertEquals(color.getColorLed1().getRgbColor(), 0x433d00);
+        Assert.assertEquals(color.getColorLed2().getRgbColor(), 0x006a00);
+
+
     }
 
 

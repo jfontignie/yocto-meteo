@@ -32,23 +32,28 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import org.yoctosample.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
 public class WorldMap implements EntryPoint {
 
-    private Logger logger;
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
     private YoctoHub hub;
 
     private final WorldMapServiceAsync worldMapService = GWT.create(WorldMapService.class);
-    private CurrentYoctoMarker currentMarker;
+
+    private MapWidget map;
+    private List<DataMeteo> localMeteos = null;
 
 
     public void onModuleLoad() {
 
+        localMeteos = new ArrayList<DataMeteo>();
         //Loading page is taken from:
         //http://preloaders.net
+
 
         /*
     * Asynchronously loads the Maps API.
@@ -58,7 +63,6 @@ public class WorldMap implements EntryPoint {
     * application served from localhost.
    */
 
-        logger = Logger.getLogger("main");
 
         //Prepare the JSONP
         //GWTYoctoTemplate template = new GWTYoctoTemplate("http://localhost:8001");
@@ -81,7 +85,7 @@ public class WorldMap implements EntryPoint {
 
         LatLng cartigny = LatLng.newInstance(46.1833, 6.0167);
 
-        final MapWidget map = new MapWidget(cartigny, 2);
+        map = new MapWidget(cartigny, 2);
         map.setSize("100%", "100%");
         // Add some controls for the zoom level
         map.addControl(new LargeMapControl());
@@ -95,7 +99,8 @@ public class WorldMap implements EntryPoint {
 
         location.getCurrentPosition(new Callback<Position, PositionError>() {
             public void onFailure(PositionError reason) {
-                listMeteos(map, null);
+                //In case we do not find the location, let's look for the objects
+                listObjects();
             }
 
             public void onSuccess(Position result) {
@@ -109,7 +114,7 @@ public class WorldMap implements EntryPoint {
     }
 
 
-    private void listMeteos(final MapWidget map, final DataMeteo current) {
+    private void listObjects() {
         worldMapService.listMeteos(new AsyncCallback<List<DataMeteo>>() {
             public void onFailure(Throwable caught) {
                 displayMap();
@@ -118,7 +123,7 @@ public class WorldMap implements EntryPoint {
             public void onSuccess(List<DataMeteo> result) {
                 logger.info("yocto-meteo found: " + result.size());
                 for (DataMeteo meteo : result) {
-                    if (!meteo.equals(current)) {
+                    if (!localMeteos.contains(meteo)) {
                         new YoctoMarker(map, meteo);
                     }
                 }
@@ -131,59 +136,67 @@ public class WorldMap implements EntryPoint {
 
         hub.refresh(new YoctoCallback<YoctoHub>() {
             public void onSuccess(YoctoHub hub) {
-                Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
-                logger.fine("All the meteo objects are" + objects);
-                for (YoctoObject object : objects) {
-                    final YoctoMeteo meteo = (YoctoMeteo) object;
-                    meteo.refresh(new YoctoCallback<YoctoMeteo>() {
-                        public void onSuccess(YoctoMeteo meteo) {
-                            DataMeteo dataMeteo = new DataMeteo(meteo.getSerialNumber(),
-                                    lng.getLongitude(),
-                                    lng.getLatitude(),
-                                    meteo.getTemperature().getAdvertisedValue(),
-                                    meteo.getPressure().getAdvertisedValue(),
-                                    meteo.getHumidity().getAdvertisedValue());
-                            currentMarker = new CurrentYoctoMarker(map, dataMeteo);
-                            logger.info("The current temperature is: " + meteo.getTemperature().getAdvertisedValue());
-                            logger.info("The current humidity is: " + meteo.getHumidity().getAdvertisedValue());
-                            logger.info("The current pressure is: " + meteo.getPressure().getAdvertisedValue());
-
-                            listMeteos(map, dataMeteo);
-
-                            worldMapService.addMeteo(dataMeteo, new AsyncCallback<Void>() {
-                                public void onFailure(Throwable caught) {
-                                    logger.info("Impossible to store");
-                                }
-
-                                public void onSuccess(Void result) {
-                                    logger.info("succesfully stored");
-                                }
-                            });
-
-                        }
-
-                        public void onError(Throwable t) {
-                            listMeteos(map, null);
-                        }
-                    });
-
-                }
-
-
+                localMeteos = new ArrayList<DataMeteo>();
+                listObjects();
+                fillCurrent(hub, lng);
             }
 
             public void onError(Throwable t) {
-                listMeteos(map, null);
+                //if not able to get the devices, at least, let us fill the object
+                listObjects();
             }
         });
         logger.info("hub refresh performed");
 
     }
 
+    private void fillCurrent(YoctoHub hub, final LatLng lng) {
+        Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
+        logger.fine("All the meteo objects are" + objects);
+        for (YoctoObject object : objects) {
+            final YoctoMeteo meteo = (YoctoMeteo) object;
+            meteo.refresh(new YoctoCallback<YoctoMeteo>() {
+                public void onSuccess(YoctoMeteo meteo) {
+                    DataMeteo dataMeteo = new DataMeteo(meteo.getSerialNumber(),
+                            lng.getLongitude(),
+                            lng.getLatitude(),
+                            meteo.getTemperature().getAdvertisedValue(),
+                            meteo.getPressure().getAdvertisedValue(),
+                            meteo.getHumidity().getAdvertisedValue());
+                    localMeteos.add(dataMeteo);
+
+
+                    logger.info("The current temperature is: " + meteo.getTemperature().getAdvertisedValue());
+                    logger.info("The current humidity is: " + meteo.getHumidity().getAdvertisedValue());
+                    logger.info("The current pressure is: " + meteo.getPressure().getAdvertisedValue());
+
+
+                    worldMapService.addMeteo(dataMeteo, new AsyncCallback<Void>() {
+                        public void onFailure(Throwable caught) {
+                            logger.info("Impossible to store");
+                        }
+
+                        public void onSuccess(Void result) {
+                            logger.info("succesfully stored");
+                        }
+                    });
+
+                }
+
+                public void onError(Throwable t) {
+
+                }
+            });
+
+        }
+    }
+
     private void displayMap() {
         DOM.removeChild(RootPanel.getBodyElement(), DOM.getElementById("loading"));
         //DOM.setStyleAttribute(RootPanel.get("worldMap").getElement(), "display", "block");
-        currentMarker.display();
+        for (DataMeteo meteo : localMeteos) {
+            new CurrentYoctoMarker(map, meteo);
+        }
     }
 
 }
