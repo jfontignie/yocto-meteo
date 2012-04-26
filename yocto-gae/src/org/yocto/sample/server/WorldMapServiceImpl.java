@@ -63,7 +63,7 @@ public class WorldMapServiceImpl extends RemoteServiceServlet implements WorldMa
             for (DataMeteo dm : list)
                 result.add(dm);
 
-            createStubValues(result);
+            //createStubValues(result);
             logger.info("Server has fetched: " + list.size());
             return result;
         } finally {
