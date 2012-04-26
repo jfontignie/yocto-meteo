@@ -19,7 +19,6 @@ import org.yoctosample.common.YoctoMap;
 import org.yoctosample.common.YoctoTemplate;
 import org.yoctosample.utils.YoctoDeviceList;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +28,7 @@ import java.util.Map;
  * Date: 4/7/12
  * Time: 11:22 PM
  */
-public class YoctoHub extends YoctoObjectImpl implements YoctoObject {
+public class YoctoHub extends YoctoObjectImpl<YoctoHub> implements YoctoObject {
 
     private YoctoDeviceList yoctoDeviceList;
     private boolean needRefresh;
@@ -43,23 +42,23 @@ public class YoctoHub extends YoctoObjectImpl implements YoctoObject {
     }
 
 
-    public YoctoRelay findRelay(String name) throws IOException {
+    public YoctoRelay findRelay(String name) {
         if (needRefresh) refresh();
         return (YoctoRelay) yoctoDeviceList.get(YoctoProduct.YOCTO_RELAY, name);
     }
 
-    public YoctoMeteo findMeteo(String name) throws IOException {
+    public YoctoMeteo findMeteo(String name) {
         if (needRefresh) refresh();
         return (YoctoMeteo) yoctoDeviceList.get(YoctoProduct.YOCTO_METEO, name);
     }
 
-    public YoctoColor findColor(String name) throws IOException {
+    public YoctoColor findColor(String name) {
         if (needRefresh) refresh();
         return (YoctoColor) yoctoDeviceList.get(YoctoProduct.YOCTO_COLOR, name);
     }
 
 
-    public Collection<YoctoObject> findAll(YoctoProduct product) throws IOException {
+    public Collection<YoctoObject> findAll(YoctoProduct product) {
         if (needRefresh) refresh();
         Map<String, YoctoObject> result = yoctoDeviceList.findAll(product);
         if (result == null) return null;
@@ -80,7 +79,7 @@ public class YoctoHub extends YoctoObjectImpl implements YoctoObject {
         for (int i = 0; i < size; i++) {
             YoctoMap service = whitePages.getMap(i);
             int productId = service.getInt("productId");
-            YoctoProduct product = YoctoProduct.getFromProductId(productId);
+            YoctoProduct product = YoctoProduct.fromProductId(productId);
             YoctoObject object = createObject(product, service);
             serials.put(object.getSerialNumber(), "");
         }
@@ -112,16 +111,8 @@ public class YoctoHub extends YoctoObjectImpl implements YoctoObject {
         return result;
     }
 
-    public String describe() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Collection<YoctoObject> findAll() {
+        if (needRefresh) refresh();
+        return yoctoDeviceList.findAll();
     }
-
-    public boolean isOnline() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void load(int ms) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
 }

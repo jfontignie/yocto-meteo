@@ -33,59 +33,49 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
     private URL url;
     private URLConnectionReader reader;
 
-    public StandaloneYoctoTemplate(URL url) {
-        this(url, new URLConnectionReaderImpl());
-    }
-
     public StandaloneYoctoTemplate(URL url, URLConnectionReader reader) {
         this.url = url;
         this.reader = reader;
     }
 
-    public void setURLConnectionReader(URLConnectionReader reader) {
-        this.reader = reader;
-    }
-
-    public void aSyncQuery(String relativePath, QueryListener listener) throws IOException {
+    public void aSyncQuery(String relativePath, YoctoCallback<YoctoMap> listener) {
         Thread thread = new Thread(new BackgroundQuerier(relativePath, listener));
         thread.start();
     }
 
-    public YoctoMap query(String relativePath) throws IOException {
+    public YoctoMap query(String relativePath) {
         ObjectMapper mapper = new ObjectMapper();
-        URL newUrl = new URL(url, relativePath);
-        String content = reader.getContent(newUrl);
-        if (content == null) throw new IllegalStateException("Content is empty");
         try {
+            URL newUrl = new URL(url, relativePath);
+            String content = reader.getContent(newUrl);
+            if (content == null) throw new IllegalStateException("Content is empty");
             return new StandaloneYoctoMap((Map<String, Object>) mapper.readValue(content, Map.class));
         } catch (IOException e) {
-            System.out.println("Error while reading " + new URL(url, relativePath));
-            throw e;
-        } catch (Exception e) {
-            System.out.println("Error while reading " + new URL(url, relativePath));
-            e.printStackTrace();
-            throw new IOException(e);
+            throw new RuntimeException(e);
         }
+
 
     }
 
     private class BackgroundQuerier implements Runnable {
 
-        private QueryListener listener;
+        private YoctoCallback<YoctoMap> listener;
         private String relativePath;
 
-        public BackgroundQuerier(String relativePath, QueryListener listener) {
+        public BackgroundQuerier(String relativePath, YoctoCallback<YoctoMap> listener) {
             this.relativePath = relativePath;
             this.listener = listener;
         }
 
         public void run() {
+            YoctoMap result;
             try {
-                listener.resultEvent(query(relativePath));
-            } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                result = query(relativePath);
+            } catch (Throwable t) {
+                listener.onError(t);
+                return;
             }
-
+            listener.onSuccess(result);
         }
     }
 

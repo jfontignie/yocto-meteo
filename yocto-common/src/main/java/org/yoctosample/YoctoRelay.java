@@ -8,6 +8,8 @@
  * yocto-meteo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
+ *
+ * For more information: go on http://yocto-meteo.blogspot.com
  */
 
 package org.yoctosample;
@@ -15,32 +17,18 @@ package org.yoctosample;
 import org.yoctosample.common.YoctoMap;
 import org.yoctosample.common.YoctoTemplate;
 
-import java.io.IOException;
-
 /**
  * Created by: Jacques Fontignie
  * Date: 4/7/12
  * Time: 11:41 PM
  */
-public class YoctoRelay extends YoctoObjectImpl implements YoctoObject {
+public class YoctoRelay extends YoctoObjectImpl<YoctoRelay> implements YoctoObject {
 
 
-    public YoctoRelay(YoctoTemplate template, String relativePath) throws IOException {
+    public YoctoRelay(YoctoTemplate template, String relativePath) {
         super(YoctoProduct.YOCTO_RELAY, template, relativePath + ".json");
     }
 
-
-    public String describe() {
-        throw new IllegalStateException("Not IMplemented yet");
-    }
-
-    public boolean isOnline() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void load(int ms) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     public String getLogicalName() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
@@ -48,10 +36,6 @@ public class YoctoRelay extends YoctoObjectImpl implements YoctoObject {
 
     @Override
     protected void refreshObject(YoctoMap result) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void setLogicalName(String name) {
 
     }
 

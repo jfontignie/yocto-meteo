@@ -15,8 +15,8 @@
 package org.yocto.sample.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import org.yocto.sample.client.DataMeteo;
 import org.yocto.sample.client.WorldMapService;
-import org.yocto.sample.client.common.DataMeteo;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;

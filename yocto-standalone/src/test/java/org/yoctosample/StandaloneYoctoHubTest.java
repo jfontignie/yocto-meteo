@@ -32,11 +32,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class StandaloneYoctoHubTest {
 
-    public static final String API_JSON = "api.json";
-    public static final String BY_SERIAL_METEOMK1_0268_C_API_JSON = "/bySerial/METEOMK1-0268C/api.json";
-    YoctoHub hub;
-    URLConnectionReader reader;
-    URL url;
+    private static final String API_JSON = "api.json";
+    private static final String BY_SERIAL_METEOMK1_0268_C_API_JSON = "/bySerial/METEOMK1-0268C/api.json";
+    private YoctoHub hub;
+    private URLConnectionReader reader;
+    private URL url;
 
     @Before
     public void setUp() throws IOException {

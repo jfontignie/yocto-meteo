@@ -8,23 +8,20 @@
  * yocto-meteo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
+ *
+ * For more information: go on http://yocto-meteo.blogspot.com
  */
 
-package org.yoctosample;/**
+package org.yoctosample;
+
+/**
  * Created by: Jacques Fontignie
  * Date: 4/7/12
  * Time: 11:41 PM
  */
 public interface YoctoObject {
-    public String describe();
-
-    public boolean isOnline();
-
-    public void load(int ms);
 
     public String getLogicalName();
-
-    //public void setLogicalName(String name);
 
     public YoctoProduct getProduct();
 

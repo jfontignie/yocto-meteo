@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
-import org.yocto.sample.client.common.DataMeteo;
 
 import java.util.logging.Logger;
 
@@ -34,7 +33,7 @@ import java.util.logging.Logger;
  * Date: 4/26/12
  * Time: 1:25 PM
  */
-public class YoctoMarker extends Marker {
+class YoctoMarker extends Marker {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private Widget widget;
@@ -44,7 +43,7 @@ public class YoctoMarker extends Marker {
         init(map, meteo);
     }
 
-    public YoctoMarker(final MapWidget map, DataMeteo meteo, MarkerOptions options) {
+    YoctoMarker(final MapWidget map, DataMeteo meteo, MarkerOptions options) {
         super(LatLng.newInstance(meteo.getLatitude(), meteo.getLongitude()), options);
         init(map, meteo);
     }

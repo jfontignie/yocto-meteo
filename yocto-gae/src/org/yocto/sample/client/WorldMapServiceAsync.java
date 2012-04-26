@@ -15,7 +15,6 @@
 package org.yocto.sample.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import org.yocto.sample.client.common.DataMeteo;
 
 import java.util.List;
 

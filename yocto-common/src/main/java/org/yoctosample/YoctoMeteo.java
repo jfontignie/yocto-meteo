@@ -22,7 +22,7 @@ import org.yoctosample.common.YoctoTemplate;
  * Date: 4/7/12
  * Time: 11:41 PM
  */
-public class YoctoMeteo extends YoctoObjectImpl implements YoctoObject {
+public class YoctoMeteo extends YoctoObjectImpl<YoctoMeteo> implements YoctoObject {
 
     private YoctoMeteoValue temperature;
     private YoctoMeteoValue humidity;
@@ -31,19 +31,6 @@ public class YoctoMeteo extends YoctoObjectImpl implements YoctoObject {
     public YoctoMeteo(String serialNumber, YoctoTemplate template, String relativePath) {
         super(serialNumber, YoctoProduct.YOCTO_METEO, template, relativePath + ".json");
     }
-
-    public String describe() {
-        throw new IllegalStateException("Not Implemented yet");
-    }
-
-    public boolean isOnline() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void load(int ms) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
 
     public YoctoMeteoValue getTemperature() {
         return temperature;

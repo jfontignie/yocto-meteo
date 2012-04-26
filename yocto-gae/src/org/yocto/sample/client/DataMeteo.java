@@ -12,7 +12,7 @@
  * For more information: go on http://yocto-meteo.blogspot.com
  */
 
-package org.yocto.sample.client.common;
+package org.yocto.sample.client;
 
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -29,6 +29,7 @@ import java.util.Date;
 @PersistenceCapable
 public class DataMeteo implements Serializable {
 
+
     @PrimaryKey
     private String serialNumber;
 
@@ -44,6 +45,10 @@ public class DataMeteo implements Serializable {
 
     private Date date;
 
+    @SuppressWarnings("unused")
+    public DataMeteo() {
+    }
+
     public DataMeteo(String serialNumber, double longitude, double latitude,
                      double temperature, double pressure, double humidity) {
         setSerialNumber(serialNumber);
@@ -53,9 +58,6 @@ public class DataMeteo implements Serializable {
         setTemperature(temperature);
         setPressure(pressure);
         setHumidity(humidity);
-    }
-
-    public DataMeteo() {
     }
 
     public Date getDate() {
@@ -120,11 +122,8 @@ public class DataMeteo implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         DataMeteo dataMeteo = (DataMeteo) o;
+        return !(serialNumber != null ? !serialNumber.equals(dataMeteo.serialNumber) : dataMeteo.serialNumber != null);
 
-        if (serialNumber != null ? !serialNumber.equals(dataMeteo.serialNumber) : dataMeteo.serialNumber != null)
-            return false;
-
-        return true;
     }
 
     @Override

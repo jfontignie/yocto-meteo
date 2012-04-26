@@ -12,39 +12,17 @@
  * For more information: go on http://yocto-meteo.blogspot.com
  */
 
-package org.yocto.sample.client.common;
-
-import com.google.gwt.core.client.JavaScriptObject;
-import org.yoctosample.common.YoctoList;
+package org.yoctosample;
 
 /**
  * Author: Jacques Fontignie
  * Date: 4/24/12
- * Time: 10:37 PM
+ * Time: 10:47 PM
  */
-public class JavascriptYoctoList extends JavaScriptObject implements YoctoList {
-    protected JavascriptYoctoList() {
-    }
+public interface YoctoCallback<T> {
+
+    public void onSuccess(T result);
 
 
-    public final native int size() /*-{
-        return this.length;
-    }-*/;
-
-    public final native String getString(int index) /*-{
-        return this[index];
-    }-*/;
-
-    public final native int getInt(int index) /*-{
-        return this[index];
-    }-*/;
-
-    public final native JavascriptYoctoMap getMap(int index) /*-{
-        return this[index];
-    }-*/;
-
-    public final native JavascriptYoctoList getList(int index) /*-{
-        return this[index];
-    }-*/;
-
+    public void onError(Throwable t);
 }

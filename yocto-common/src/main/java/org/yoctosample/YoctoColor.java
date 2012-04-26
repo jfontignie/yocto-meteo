@@ -22,7 +22,7 @@ import org.yoctosample.common.YoctoTemplate;
  * Date: 4/23/12
  * Time: 11:12 PM
  */
-public class YoctoColor extends YoctoObjectImpl implements YoctoObject {
+public class YoctoColor extends YoctoObjectImpl<YoctoColor> implements YoctoObject {
 
     //api?ctx=colorLed1&rgbColor=0x000000
 
@@ -47,15 +47,4 @@ public class YoctoColor extends YoctoObjectImpl implements YoctoObject {
         return colorLed2;
     }
 
-    public String describe() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public boolean isOnline() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void load(int ms) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 }

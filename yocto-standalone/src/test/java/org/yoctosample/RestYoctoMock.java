@@ -19,7 +19,7 @@ package org.yoctosample;
  * Date: 4/25/12
  * Time: 9:39 AM
  */
-public class RestYoctoMock {
+class RestYoctoMock {
 
     public static final String MAIN_JSON = "{\n" +
             "\"module\":{\"productName\":\"VirtualHub\",\"serialNumber\":\"VIRTHUB0-480741bdd3\",\"logicalName\":\"\",\"productId\":0,\"productRelease\":1,\"firmwareRelease\":\"6019\",\"persistentSettings\":0,\"luminosity\":50,\"beacon\":0,\"upTime\":3402559538,\"usbCurrent\":0,\"realmHTTP\":\"YoctoDeviceList\",\"adminPassword\":\"\",\"userPassword\":\"\",\"rebootCountdown\":0,\"usbBandwidth\":0},\n" +
@@ -48,11 +48,11 @@ public class RestYoctoMock {
         return (String) latency(ms, (Object) result);
     }
 
-    public static Object latency(int ms, Object result) {
+    private static Object latency(int ms, Object result) {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         return result;
     }

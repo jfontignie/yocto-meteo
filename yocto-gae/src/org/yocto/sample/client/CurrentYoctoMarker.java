@@ -19,29 +19,21 @@ import com.google.gwt.maps.client.geom.Point;
 import com.google.gwt.maps.client.geom.Size;
 import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
-import org.yocto.sample.client.common.DataMeteo;
-
-import java.util.logging.Logger;
 
 /**
  * Author: Jacques Fontignie
  * Date: 4/26/12
  * Time: 2:43 PM
  */
-public class CurrentYoctoMarker extends YoctoMarker {
-
-    private static final Logger logger = Logger.getLogger(CurrentYoctoMarker.class.getName());
+class CurrentYoctoMarker extends YoctoMarker {
 
     private static MarkerOptions createOptions() {
         Icon icon = Icon.newInstance("http://maps.google.com/mapfiles/marker_purple.png");
         icon.setIconSize(Size.newInstance(20, 34));
-        //icon.setShadowSize(Size.newInstance(32, 20));
         icon.setIconAnchor(Point.newInstance(10, 34));
         icon.setInfoWindowAnchor(Point.newInstance(5, 1));
 
-        MarkerOptions options = MarkerOptions.newInstance(icon);
-
-        return options;
+        return MarkerOptions.newInstance(icon);
     }
 
     public CurrentYoctoMarker(final MapWidget map, DataMeteo meteo) {

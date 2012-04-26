@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by: Jacques Fontignie
@@ -58,13 +59,14 @@ public class StandaloneYoctoTemplateTest {
                 RestYoctoMock.latency(100, RestYoctoMock.MAIN_JSON));
         EasyMock.replay(reader);
         final boolean[] success = {false};
-        yoctoTemplate.aSyncQuery("api.json", new QueryListener() {
-            public void resultEvent(YoctoMap map) {
+        yoctoTemplate.aSyncQuery("api.json", new YoctoCallback<YoctoMap>() {
+
+            public void onSuccess(YoctoMap map) {
                 success[0] = true;
             }
 
-            public void exceptionEvent(IOException e) {
-                //To change body of implemented methods use File | Settings | File Templates.
+            public void onError(Throwable t) {
+                assertTrue(false);
             }
         });
 

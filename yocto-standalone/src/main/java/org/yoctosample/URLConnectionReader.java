@@ -22,6 +22,6 @@ import java.net.URL;
  * Date: 4/25/12
  * Time: 9:47 AM
  */
-public interface URLConnectionReader {
+interface URLConnectionReader {
     String getContent(URL url) throws IOException;
 }

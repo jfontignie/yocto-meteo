@@ -12,7 +12,7 @@
  * For more information: go on http://yocto-meteo.blogspot.com
  */
 
-package org.yocto.sample.client.common;
+package org.yocto.sample.client;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import org.yoctosample.common.YoctoMap;

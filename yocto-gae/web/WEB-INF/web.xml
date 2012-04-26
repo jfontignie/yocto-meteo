@@ -31,16 +31,6 @@
         <servlet-name>worldMapService</servlet-name>
         <url-pattern>/worldmap/worldmap</url-pattern>
     </servlet-mapping>
-    <!--
-<servlet>
-<servlet-name>greetServlet</servlet-name>
-<servlet-class>com.google.gwt.sample.stockwatcher.server.GreetingServiceImpl</servlet-class>
-</servlet>
-
-<servlet-mapping>
-<servlet-name>greetServlet</servlet-name>
-<url-pattern>/stockwatcher/greet</url-pattern>
-</servlet-mapping>          -->
 
     <!-- Default page to serve -->
     <welcome-file-list>

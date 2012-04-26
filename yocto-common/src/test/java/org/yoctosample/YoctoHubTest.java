@@ -54,14 +54,12 @@ public class YoctoHubTest {
             "\"Humidity\":[\n" +
             "{\"hardwareId\":\"METEOMK1-0268C.humidity\",\"logicalName\":\"\",\"advertisedValue\":\"53.0\",\"index\":3}]}}}";
 
-    private YoctoMap content;
-
     @Before
     public void setUp() throws IOException {
         yoctoTemplate = EasyMock.createMock(YoctoTemplate.class);
         ObjectMapper mapper = new ObjectMapper();
 
-        content = new StandaloneYoctoMap(mapper.readValue(CONTENT, Map.class));
+        YoctoMap content = new StandaloneYoctoMap(mapper.readValue(CONTENT, Map.class));
         EasyMock.expect(yoctoTemplate.query("/api.json")).andReturn(
                 content);
 
@@ -72,7 +70,8 @@ public class YoctoHubTest {
 
         EasyMock.replay(yoctoTemplate);
         YoctoHub hub = new YoctoHub(yoctoTemplate);
-        hub.isOnline();
+        hub.refresh();
+        hub.findAll();
 
         Collection<YoctoObject> list = hub.findAll(YoctoProduct.YOCTO_METEO);
         for (YoctoObject object : list)

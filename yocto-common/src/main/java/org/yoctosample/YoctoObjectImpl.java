@@ -17,14 +17,12 @@ package org.yoctosample;
 import org.yoctosample.common.YoctoMap;
 import org.yoctosample.common.YoctoTemplate;
 
-import java.io.IOException;
-
 /**
  * Created by: Jacques Fontignie
  * Date: 4/19/12
  * Time: 3:27 PM
  */
-abstract class YoctoObjectImpl implements YoctoObject {
+abstract class YoctoObjectImpl<T extends YoctoObject> implements YoctoObject {
     protected YoctoTemplate template;
     private String relativePath;
 
@@ -56,25 +54,20 @@ abstract class YoctoObjectImpl implements YoctoObject {
         return serialNumber;
     }
 
-    public void refresh(final RefreshCallback callback) throws IOException {
-        template.aSyncQuery(relativePath, new QueryListener() {
-            public void resultEvent(YoctoMap map) {
-                internalRefresh(map);
-                try {
-                    callback.onRefresh(YoctoObjectImpl.this);
-                } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
+    public void refresh(final YoctoCallback<T> callback) {
+        template.aSyncQuery(relativePath, new YoctoCallback<YoctoMap>() {
+            public void onSuccess(YoctoMap result) {
+                internalRefresh(result);
+                callback.onSuccess((T) YoctoObjectImpl.this);
             }
 
-            public void exceptionEvent(IOException e) {
-                callback.onError(YoctoObjectImpl.this, e);
+            public void onError(Throwable t) {
+                callback.onError(t);
             }
         });
-
     }
 
-    public void refresh() throws IOException {
+    public void refresh() {
         YoctoMap map = template.query(relativePath);
         internalRefresh(map);
     }

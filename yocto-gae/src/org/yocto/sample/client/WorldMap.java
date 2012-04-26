@@ -30,10 +30,8 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import org.yocto.sample.client.common.DataMeteo;
 import org.yoctosample.*;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
@@ -105,13 +103,7 @@ public class WorldMap implements EntryPoint {
                 Position.Coordinates coordinates = result.getCoordinates();
                 final LatLng lng = LatLng.newInstance(coordinates.getLatitude(), coordinates.getLongitude());
                 map.setCenter(LatLng.newInstance(lng.getLatitude(), lng.getLongitude()));
-                try {
-                    findYoctoHub(map, lng);
-                } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-
-
+                findYoctoHub(map, lng);
             }
         });
 
@@ -137,16 +129,16 @@ public class WorldMap implements EntryPoint {
         });
     }
 
-    private void findYoctoHub(final MapWidget map, final LatLng lng) throws IOException {
+    private void findYoctoHub(final MapWidget map, final LatLng lng) {
 
-        hub.refresh(new RefreshCallback<YoctoHub>() {
-            public void onRefresh(YoctoHub hub) throws IOException {
+        hub.refresh(new YoctoCallback<YoctoHub>() {
+            public void onSuccess(YoctoHub hub) {
                 Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
                 logger.fine("All the meteo objects are" + objects);
                 for (YoctoObject object : objects) {
                     final YoctoMeteo meteo = (YoctoMeteo) object;
-                    meteo.refresh(new RefreshCallback() {
-                        public void onRefresh(YoctoObject yoctoObject) {
+                    meteo.refresh(new YoctoCallback<YoctoMeteo>() {
+                        public void onSuccess(YoctoMeteo meteo) {
                             DataMeteo dataMeteo = new DataMeteo(meteo.getSerialNumber(),
                                     lng.getLongitude(),
                                     lng.getLatitude(),
@@ -172,7 +164,7 @@ public class WorldMap implements EntryPoint {
 
                         }
 
-                        public void onError(YoctoObject yoctoObject, IOException e) {
+                        public void onError(Throwable t) {
                             listMeteos(map, null);
                         }
                     });
@@ -182,8 +174,8 @@ public class WorldMap implements EntryPoint {
 
             }
 
-            public void onError(YoctoHub yoctoObject, IOException e) {
-
+            public void onError(Throwable t) {
+                listMeteos(map, null);
             }
         });
         logger.info("hub refresh performed");

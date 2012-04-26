@@ -42,15 +42,11 @@ public enum YoctoProduct {
         return productName;
     }
 
-    public static YoctoProduct getFromProductId(String productId) {
-        return getFromProductId(Integer.valueOf(productId));
-    }
-
     private boolean matches(int productId) {
         return this.productId == productId;
     }
 
-    public static YoctoProduct getFromProductId(int productId) {
+    public static YoctoProduct fromProductId(int productId) {
         for (YoctoProduct p : YoctoProduct.values()) {
             if (p.matches(productId)) return p;
         }

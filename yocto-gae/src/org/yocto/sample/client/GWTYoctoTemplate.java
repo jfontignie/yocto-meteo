@@ -15,13 +15,10 @@
 package org.yocto.sample.client;
 
 import com.google.gwt.http.client.*;
-import com.google.gwt.jsonp.client.JsonpRequestBuilder;
-import org.yocto.sample.client.common.JavascriptYoctoMap;
-import org.yoctosample.QueryListener;
+import org.yoctosample.YoctoCallback;
 import org.yoctosample.common.YoctoMap;
 import org.yoctosample.common.YoctoTemplate;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
@@ -31,37 +28,25 @@ import java.util.logging.Logger;
  */
 public class GWTYoctoTemplate implements YoctoTemplate {
 
-    Logger logger = Logger.getLogger("yoctoTemplate");
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     private String url;
-    private JsonpRequestBuilder jsonp;
 
     public GWTYoctoTemplate(String url) {
         this.url = url;
-        jsonp = new JsonpRequestBuilder();
     }
 
-    private final native JavascriptYoctoMap asYoctoMap(String json) /*-{
+    private native JavascriptYoctoMap asYoctoMap(String json) /*-{
         eval('var res = ' + json);
         return res;
     }-*/;
 
 
-    public YoctoMap query(String relativePath) throws IOException {
-        aSyncQuery(relativePath, new QueryListener() {
-            public void resultEvent(YoctoMap map) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            public void exceptionEvent(IOException e) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
-
+    public YoctoMap query(String relativePath) {
         throw new IllegalStateException("Not implemented yet");
     }
 
-    public void aSyncQuery(String relativePath, final QueryListener listener) throws IOException {
+    public void aSyncQuery(String relativePath, final YoctoCallback<YoctoMap> listener) {
 
         logger.info("querying the url: " + url + relativePath);
         String newUrl = url + relativePath;
@@ -70,10 +55,11 @@ public class GWTYoctoTemplate implements YoctoTemplate {
         RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, newUrl);
 
         try {
-            Request request = builder.sendRequest(null, new RequestCallback() {
+            builder.sendRequest(null, new RequestCallback() {
                 public void onError(Request request, Throwable exception) {
                     logger.severe("Couldn't retrieve JSON");
                     logger.severe(exception.toString());
+                    listener.onError(exception);
                 }
 
                 public void onResponseReceived(Request request, Response response) {
@@ -81,15 +67,16 @@ public class GWTYoctoTemplate implements YoctoTemplate {
                         logger.info("success");
                         String result = response.getText();
                         JavascriptYoctoMap map = asYoctoMap(result);
-                        listener.resultEvent(map);
+                        listener.onSuccess(map);
                     } else {
-                        logger.severe("Couldn't retrieve JSON (" + response.getStatusCode() + ") (" + response.getStatusText()
-                                + ")");
+                        listener.onError(new IllegalStateException("Couldn't retrieve JSON (" + response.getStatusCode() + ") (" + response.getStatusText()
+                                + ")"));
                     }
                 }
             });
         } catch (RequestException e) {
             logger.severe("Couldn't retrieve JSON");
+            listener.onError(e);
         }
 
 
