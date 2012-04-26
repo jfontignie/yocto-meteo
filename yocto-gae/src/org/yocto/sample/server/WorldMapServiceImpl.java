@@ -38,6 +38,7 @@ public class WorldMapServiceImpl extends RemoteServiceServlet implements WorldMa
     private static final PersistenceManagerFactory PMF =
             JDOHelper.getPersistenceManagerFactory("transactions-optional");
 
+    //
     public void addMeteo(DataMeteo dataMeteo) {
         logger.info("Adding a new meteo in the Database");
         PersistenceManager pm = getPersistenceManager();

@@ -28,7 +28,9 @@ import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
+import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import org.yocto.sample.client.common.DataMeteo;
@@ -113,7 +115,13 @@ public class WorldMap implements EntryPoint {
     }
 
     private Marker createMarker(final MapWidget map, LatLng lng) throws IOException {
-        final Marker marker = new Marker(lng);
+        MarkerOptions options = MarkerOptions.newInstance();
+        Icon icon = Icon.newInstance();
+        icon.setImageURL("http://www.google.com/mapfiles/ms/micons/blue-dot.png");
+        //TODO: the url is not at the correct location
+        options.setIcon(icon);
+        final Marker marker = new Marker(lng, options);
+
         map.setCenter(lng);
         map.addOverlay(marker);
 
@@ -146,7 +154,13 @@ public class WorldMap implements EntryPoint {
                             logger.info("The current humidity is: " + meteo.getHumidity().getAdvertisedValue());
                             logger.info("The current pressure is: " + meteo.getPressure().getAdvertisedValue());
                             logger.info("Calling the RPC");
-                            worldMapService.addMeteo(new DataMeteo(marker, meteo), new AsyncCallback<Void>() {
+                            DataMeteo dataMeteo = new DataMeteo(meteo.getSerialNumber(),
+                                    marker.getLatLng().getLongitude(),
+                                    marker.getLatLng().getLatitude(),
+                                    meteo.getTemperature().getAdvertisedValue(),
+                                    meteo.getPressure().getAdvertisedValue(),
+                                    meteo.getHumidity().getAdvertisedValue());
+                            worldMapService.addMeteo(dataMeteo, new AsyncCallback<Void>() {
                                 public void onFailure(Throwable caught) {
                                     logger.info("Impossible to store");
                                 }

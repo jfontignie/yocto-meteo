@@ -14,9 +14,9 @@
 
 package org.yocto.sample.client.common;
 
-import com.google.gwt.maps.client.overlay.Marker;
-import org.yoctosample.YoctoMeteo;
 
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.PrimaryKey;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,8 +25,10 @@ import java.util.Date;
  * Date: 4/25/12
  * Time: 9:25 PM
  */
+@PersistenceCapable
 public class DataMeteo implements Serializable {
 
+    @PrimaryKey
     private String serialNumber;
 
     private double longitude;
@@ -41,13 +43,15 @@ public class DataMeteo implements Serializable {
 
     private Date date;
 
-    public DataMeteo(Marker marker, YoctoMeteo meteo) {
+    public DataMeteo(String serialNumber, double longitude, double latitude,
+                     double temperature, double pressure, double humidity) {
+        setSerialNumber(serialNumber);
         setDate(new Date());
-        setLongitude(marker.getLatLng().getLongitude());
-        setLatitude(marker.getLatLng().getLatitude());
-        setTemperature(meteo.getTemperature().getAdvertisedValue());
-        setPressure(meteo.getPressure().getAdvertisedValue());
-        setHumidity(meteo.getHumidity().getAdvertisedValue());
+        setLongitude(longitude);
+        setLatitude(latitude);
+        setTemperature(temperature);
+        setPressure(pressure);
+        setHumidity(humidity);
     }
 
     public DataMeteo() {
