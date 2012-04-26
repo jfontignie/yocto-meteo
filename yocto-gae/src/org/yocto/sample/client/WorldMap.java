@@ -26,6 +26,7 @@ import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -46,6 +47,10 @@ public class WorldMap implements EntryPoint {
 
 
     public void onModuleLoad() {
+
+        //Loading page is taken from:
+        //http://preloaders.net
+
         /*
     * Asynchronously loads the Maps API.
     *
@@ -53,7 +58,7 @@ public class WorldMap implements EntryPoint {
     * application on a public server, but a blank key will work for an
     * application served from localhost.
    */
-        //
+
         logger = Logger.getLogger("main");
 
         //Prepare the JSONP
@@ -117,6 +122,7 @@ public class WorldMap implements EntryPoint {
         worldMapService.listMeteos(new AsyncCallback<List<DataMeteo>>() {
             public void onFailure(Throwable caught) {
                 new CurrentYoctoMarker(map, current);
+                displayMap();
             }
 
             public void onSuccess(List<DataMeteo> result) {
@@ -124,10 +130,9 @@ public class WorldMap implements EntryPoint {
                 for (DataMeteo meteo : result) {
                     if (!meteo.equals(current)) {
                         new YoctoMarker(map, meteo);
-                    } else {
-                        new CurrentYoctoMarker(map, meteo);
                     }
                 }
+                displayMap();
             }
         });
     }
@@ -148,7 +153,7 @@ public class WorldMap implements EntryPoint {
                                     meteo.getTemperature().getAdvertisedValue(),
                                     meteo.getPressure().getAdvertisedValue(),
                                     meteo.getHumidity().getAdvertisedValue());
-
+                            new CurrentYoctoMarker(map, dataMeteo);
                             logger.info("The current temperature is: " + meteo.getTemperature().getAdvertisedValue());
                             logger.info("The current humidity is: " + meteo.getHumidity().getAdvertisedValue());
                             logger.info("The current pressure is: " + meteo.getPressure().getAdvertisedValue());
@@ -185,5 +190,10 @@ public class WorldMap implements EntryPoint {
 
     }
 
+    private void displayMap() {
+        DOM.removeChild(RootPanel.getBodyElement(), DOM.getElementById("loading"));
+        //DOM.setStyleAttribute(RootPanel.get("worldMap").getElement(), "display", "block");
+
+    }
 
 }

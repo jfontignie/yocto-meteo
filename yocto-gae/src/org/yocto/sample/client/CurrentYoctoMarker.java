@@ -34,12 +34,6 @@ public class CurrentYoctoMarker extends YoctoMarker {
 
     private static MarkerOptions createOptions() {
         Icon icon = Icon.newInstance("http://maps.google.com/mapfiles/marker_purple.png");
-        //Default size is: 20:34
-//        icon.setIconSize(Size.newInstance(12, 20));
-//        icon.setShadowSize(Size.newInstance(22, 20));
-//        icon.setIconAnchor(Point.newInstance(6, 20));
-//        icon.setInfoWindowAnchor(Point.newInstance(5, 1));
-
         icon.setIconSize(Size.newInstance(20, 34));
         //icon.setShadowSize(Size.newInstance(32, 20));
         icon.setIconAnchor(Point.newInstance(10, 34));

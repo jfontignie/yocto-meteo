@@ -18,5 +18,8 @@
 <module rename-to='yoctopuce'>
     <source path="org"/>
 
+    <set-property name="gwt.logging.logLevel" value="SEVERE"/>
+    <set-property name="gwt.logging.enabled" value="FALSE"/>
+    <set-property name="gwt.logging.consoleHandler" value="DISABLED"/>
 </module>
 
