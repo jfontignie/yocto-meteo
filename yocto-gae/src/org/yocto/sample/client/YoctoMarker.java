@@ -14,12 +14,14 @@
 
 package org.yocto.sample.client;
 
+import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.event.MarkerClickHandler;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
@@ -62,6 +64,8 @@ public class YoctoMarker extends Marker {
         logger.finer("initializing widget");
         TreeItem root = new TreeItem();
         root.setText("Yocto-meteo: " + meteo.getSerialNumber());
+        root.addItem(new HTML("<small><i>last updated:" +
+                DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM).format(meteo.getDate()) + "</i></small>"));
         root.addTextItem("Temperature: " + meteo.getTemperature() + " °C");
         root.addTextItem("Humidity: " + meteo.getHumidity() + "%");
         root.addTextItem("Pressure: " + meteo.getPressure() + " hPA");
