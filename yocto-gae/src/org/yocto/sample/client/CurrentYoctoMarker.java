@@ -41,8 +41,8 @@ public class CurrentYoctoMarker extends YoctoMarker {
 //        icon.setInfoWindowAnchor(Point.newInstance(5, 1));
 
         icon.setIconSize(Size.newInstance(20, 34));
-        icon.setShadowSize(Size.newInstance(32, 20));
-        //icon.setIconAnchor(Point.newInstance(10, 34));
+        //icon.setShadowSize(Size.newInstance(32, 20));
+        icon.setIconAnchor(Point.newInstance(10, 34));
         icon.setInfoWindowAnchor(Point.newInstance(5, 1));
 
         MarkerOptions options = MarkerOptions.newInstance(icon);
