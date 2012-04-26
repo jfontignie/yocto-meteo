@@ -12,7 +12,6 @@
       </configuration>
       <facet type="google-app-engine" name="Google App Engine">
         <configuration>
-          <password>dfc5dfd8dfc3dfcddfc3dfc4df9bdf93df92df9a</password>
           <files-to-enhance>
             <file path="$MODULE_DIR$/src" />
           </files-to-enhance>
