@@ -8,6 +8,13 @@
           <element id="module-output" name="yocto-gae" />
           <element id="module-output" name="yocto-common" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="AppEngine API" />
+          <element id="library" level="project" name="AppEngine ORM" />
+          <element id="library" level="project" name="gwt-maps-1.1" />
+          <element id="file-copy" path="$USER_HOME$/programs/gwt-2.4.0/gwt-servlet.jar" />
+          <element id="library" level="project" name="Maven: org.easymock:easymock:2.0" />
+        </element>
       </element>
       <element id="gwt-compiler-output" facet="yocto-gae/gwt/GWT" />
     </root>

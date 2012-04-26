@@ -14,8 +14,8 @@
 
 package org.yocto.sample.client;
 
+import com.google.gwt.http.client.*;
 import com.google.gwt.jsonp.client.JsonpRequestBuilder;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.yocto.sample.client.common.JavascriptYoctoMap;
 import org.yoctosample.QueryListener;
 import org.yoctosample.common.YoctoMap;
@@ -41,6 +41,12 @@ public class GWTYoctoTemplate implements YoctoTemplate {
         jsonp = new JsonpRequestBuilder();
     }
 
+    private final native JavascriptYoctoMap asYoctoMap(String json) /*-{
+        eval('var res = ' + json);
+        return res;
+    }-*/;
+
+
     public YoctoMap query(String relativePath) throws IOException {
         aSyncQuery(relativePath, new QueryListener() {
             public void resultEvent(YoctoMap map) {
@@ -60,16 +66,44 @@ public class GWTYoctoTemplate implements YoctoTemplate {
         logger.info("querying the url: " + url + relativePath);
         String newUrl = url + relativePath;
 
-        jsonp.requestObject(newUrl, new AsyncCallback<JavascriptYoctoMap>() {
-            public void onFailure(Throwable caught) {
-                logger.severe("Impossible to get json object: " + caught);
-            }
+        // Send request to server and catch any errors.
+        RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, newUrl);
 
-            public void onSuccess(JavascriptYoctoMap result) {
-                logger.info("Received the result from json");
-                listener.resultEvent(result);
-            }
+        try {
+            Request request = builder.sendRequest(null, new RequestCallback() {
+                public void onError(Request request, Throwable exception) {
+                    logger.severe("Couldn't retrieve JSON");
+                    logger.severe(exception.toString());
+                }
 
-        });
+                public void onResponseReceived(Request request, Response response) {
+                    if (200 == response.getStatusCode()) {
+                        logger.info("success");
+                        String result = response.getText();
+                        JavascriptYoctoMap map = asYoctoMap(result);
+                        listener.resultEvent(map);
+                    } else {
+                        logger.severe("Couldn't retrieve JSON (" + response.getStatusCode() + ") (" + response.getStatusText()
+                                + ")");
+                    }
+                }
+            });
+        } catch (RequestException e) {
+            logger.severe("Couldn't retrieve JSON");
+        }
+
+
+//
+//        jsonp.requestObject(newUrl, new AsyncCallback<JavascriptYoctoMap>() {
+//            public void onFailure(Throwable caught) {
+//                logger.severe("Impossible to get json object: " + caught);
+//            }
+//
+//            public void onSuccess(JavascriptYoctoMap result) {
+//                logger.info("Received the result from json");
+//                listener.resultEvent(result);
+//            }
+//
+//        });
     }
 }

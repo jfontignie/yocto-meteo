@@ -45,6 +45,7 @@ public class WorldMap implements EntryPoint {
 
     private final WorldMapServiceAsync worldMapService = GWT.create(WorldMapService.class);
 
+
     public void onModuleLoad() {
         /*
     * Asynchronously loads the Maps API.
@@ -57,7 +58,8 @@ public class WorldMap implements EntryPoint {
         logger = Logger.getLogger("main");
 
         //Prepare the JSONP
-        GWTYoctoTemplate template = new GWTYoctoTemplate("http://localhost:8001");
+        //GWTYoctoTemplate template = new GWTYoctoTemplate("http://localhost:8001");
+        GWTYoctoTemplate template = new GWTYoctoTemplate("http://localhost:4444");
 
         hub = new YoctoHub(template);
 
@@ -67,7 +69,6 @@ public class WorldMap implements EntryPoint {
             }
         });
 
-
     }
 
     private void buildUi() {
@@ -75,7 +76,6 @@ public class WorldMap implements EntryPoint {
         logger.info("Build UI");
         Geolocation location = Geolocation.getIfSupported();
 
-        // Open a map centered on Cawker City, KS USA
         LatLng cartigny = LatLng.newInstance(46.1833, 6.0167);
 
         final MapWidget map = new MapWidget(cartigny, 2);
