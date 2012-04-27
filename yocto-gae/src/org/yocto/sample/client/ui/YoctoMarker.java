@@ -10,9 +10,10 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
-package org.yocto.sample.client;
+package org.yocto.sample.client.ui;
 
 import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.maps.client.InfoWindowContent;
@@ -25,6 +26,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
+import org.yocto.sample.client.dto.DataMeteo;
 
 import java.util.logging.Logger;
 
@@ -33,19 +35,19 @@ import java.util.logging.Logger;
  * Date: 4/26/12
  * Time: 1:25 PM
  */
-class YoctoMarker extends Marker {
+public class YoctoMarker extends Marker {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
     protected Widget widget;
     private MapWidget map;
 
     public YoctoMarker(final MapWidget map, DataMeteo meteo) {
-        super(LatLng.newInstance(meteo.getLatitude(), meteo.getLongitude()));
+        super(LatLng.newInstance(0, 0));
         init(map, meteo);
     }
 
     YoctoMarker(final MapWidget map, DataMeteo meteo, MarkerOptions options) {
-        super(LatLng.newInstance(meteo.getLatitude(), meteo.getLongitude()), options);
+        super(LatLng.newInstance(0, 0), options);
         init(map, meteo);
     }
 

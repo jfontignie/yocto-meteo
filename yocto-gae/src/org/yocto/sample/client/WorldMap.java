@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yocto.sample.client;
@@ -26,62 +27,193 @@ import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import org.yoctosample.*;
+import org.yocto.sample.client.dto.DataColor;
+import org.yocto.sample.client.dto.DataHub;
+import org.yocto.sample.client.dto.DataMeteo;
+import org.yocto.sample.client.functions.Color;
+import org.yocto.sample.client.functions.FunctionFactory;
+import org.yocto.sample.client.functions.Hub;
+import org.yocto.sample.client.functions.Meteo;
+import org.yocto.sample.client.ui.MarkerFactory;
+import org.yoctosample.YoctoCallback;
+import org.yoctosample.YoctoHub;
+import org.yoctosample.YoctoObject;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Display a worldmap with all the yoctohub found and all their objects.
+ * In order to go faster some calls are made at the same time
+ * <p/>
+ * 1) get the location
+ * 2) get the currentHub
+ * 3) get the DB
+ */
 public class WorldMap implements EntryPoint {
 
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
-    private YoctoHub hub;
+    private static final Logger logger = Logger.getLogger(WorldMap.class.getName());
 
     private final WorldMapServiceAsync worldMapService = GWT.create(WorldMapService.class);
 
     private MapWidget map;
-    private List<DataMeteo> localMeteos = null;
+
+    private Hub currentHub = null;
+    private HashMap<String, Hub> hubs;
+    private static LatLng latLng = null;
+    private Marker currentMarker = null;
 
 
     public void onModuleLoad() {
 
-        localMeteos = new ArrayList<DataMeteo>();
+        hubs = new HashMap<String, Hub>();
+
         //Loading page is taken from:
-        //http://preloaders.net
 
 
-        /*
-    * Asynchronously loads the Maps API.
-    *
-    * The first parameter should be a valid Maps API Key to deploy this
-    * application on a public server, but a blank key will work for an
-    * application served from localhost.
-   */
-
-
-        //Prepare the JSONP
-        //GWTYoctoTemplate template = new GWTYoctoTemplate("http://localhost:8001");
+        //Let's initialize the currentHub and template.
+        //The values taken are the default values
         GWTYoctoTemplate template = new GWTYoctoTemplate("http://localhost:4444");
+        currentHub = new Hub(new YoctoHub(template));
 
-        hub = new YoctoHub(template);
-
+        //Load the Map
         Maps.loadMapsApi("", "2", false, new Runnable() {
             public void run() {
                 buildUi();
             }
         });
 
+
+    }
+
+    private void createCallbacks() {
+        SequentialCallback callback = new SequentialCallback();
+
+
+        //noinspection unchecked
+        getLatLng(callback.createCallback(
+                new AsyncCallback<LatLng>() {
+                    public void onFailure(Throwable caught) {
+                        logger.warning("Imposible to retrieve location: " + caught);
+                    }
+
+                    public void onSuccess(LatLng result) {
+                        logger.info("Location has been found at: " + result);
+                        currentMarker = MarkerFactory.getInstance().getEmptyMarker(result.getLongitude(), result.getLatitude());
+                        map.addOverlay(currentMarker);
+                    }
+                }));
+
+
+        //noinspection unchecked
+        currentHub.refresh(callback.createCallback(new YoctoCallback<Hub>() {
+            public void onSuccess(Hub hub) {
+                logger.info("Hub with serial number: " + hub.getYocto().getSerialNumber() + " has been found");
+                if (latLng != null) {
+
+                    hub.getDto().setLatitude(latLng.getLatitude());
+                    hub.getDto().setLongitude(latLng.getLongitude());
+                    map.removeOverlay(currentMarker);
+                    currentMarker = MarkerFactory.getInstance().getYoctoMarker(map, hub);
+                    map.addOverlay(currentMarker);
+
+
+                    //Now let's save the hub in DB
+                    worldMapService.addHub(hub.getDto(), new AsyncCallback<Void>() {
+                        public void onFailure(Throwable caught) {
+                            logger.severe("Impossible to save hub: " + caught);
+                        }
+
+                        public void onSuccess(Void result) {
+                            logger.fine("Hub successfully saved");
+                        }
+                    });
+
+                    refreshHub(hub);
+                }
+            }
+
+            public void onError(Throwable t) {
+                logger.warning("Imposible to retrieve current Hub: " + t);
+            }
+        }));
+
+        //noinspection unchecked
+        worldMapService.listHubs(callback.createCallback(new AsyncCallback<List<DataHub>>() {
+            public void onFailure(Throwable caught) {
+                logger.warning("Impossible to retrieve the hubs from the database: " + caught);
+                setLoaded();
+            }
+
+            public void onSuccess(List<DataHub> result) {
+                logger.info("hubs in DB found: " + result.size());
+                for (DataHub hub : result) {
+                    Hub newHub = new Hub(hub);
+                    if (!newHub.matches(currentHub) || latLng == null) {
+                        map.addOverlay(MarkerFactory.getInstance().getDBMarker(map, newHub));
+                        hubs.put(newHub.getDto().getSerialNumber(), newHub);
+                    }
+
+                }
+                fillHubs();
+                setLoaded();
+            }
+        }));
+    }
+
+    private void fillHubs() {
+        worldMapService.listMeteos(new AsyncCallback<List<DataMeteo>>() {
+            public void onFailure(Throwable caught) {
+                logger.severe("Impossible to retrieve the meteos: " + caught);
+            }
+
+            public void onSuccess(List<DataMeteo> result) {
+                logger.info("meteos found: " + result.size());
+                for (DataMeteo meteo : result) {
+                    Hub current = hubs.get(meteo.getDataHub());
+                    if (current != null)
+                        current.add(new Meteo(meteo));
+                }
+            }
+        });
+
+        worldMapService.listColors(new AsyncCallback<List<DataColor>>() {
+            public void onFailure(Throwable caught) {
+                logger.severe("Impossible to retrieve the meteos: " + caught);
+            }
+
+            public void onSuccess(List<DataColor> result) {
+                logger.info("colors found: " + result.size());
+                for (DataColor color : result) {
+                    Hub current = hubs.get(color.getDataHub());
+                    if (current != null)
+                        current.add(new Color(color));
+                }
+            }
+        });
+    }
+
+    private void refreshHub(Hub hub) {
+        YoctoHub yHub = hub.getYocto();
+        for (YoctoObject yObject : yHub.findAll()) {
+            if (!hub.getYocto().equals(yObject))
+                hub.add(FunctionFactory.create(yObject));
+        }
     }
 
     private void buildUi() {
 
         logger.info("Build UI");
-        Geolocation location = Geolocation.getIfSupported();
+
+        //Note: that in order to get locations and markers: the MAP api must be loaded first.
+        createCallbacks();
+
 
         LatLng cartigny = LatLng.newInstance(46.1833, 6.0167);
 
@@ -97,106 +229,30 @@ public class WorldMap implements EntryPoint {
         RootPanel.get("worldMap").add(dock);
         // Add the map to the HTML host page
 
-        location.getCurrentPosition(new Callback<Position, PositionError>() {
-            public void onFailure(PositionError reason) {
-                //In case we do not find the location, let's look for the objects
-                listObjects();
-            }
-
-            public void onSuccess(Position result) {
-                Position.Coordinates coordinates = result.getCoordinates();
-                final LatLng lng = LatLng.newInstance(coordinates.getLatitude(), coordinates.getLongitude());
-                map.setCenter(LatLng.newInstance(lng.getLatitude(), lng.getLongitude()));
-                findYoctoHub(map, lng);
-            }
-        });
-
     }
 
-
-    private void listObjects() {
-        worldMapService.listMeteos(new AsyncCallback<List<DataMeteo>>() {
-            public void onFailure(Throwable caught) {
-                displayMap();
-            }
-
-            public void onSuccess(List<DataMeteo> result) {
-                logger.info("yocto-meteo found: " + result.size());
-                for (DataMeteo meteo : result) {
-                    if (!localMeteos.contains(meteo)) {
-                        new YoctoMarker(map, meteo);
-                    }
-                }
-                displayMap();
-            }
-        });
+    private void setLoaded() {
+        DOM.removeChild(RootPanel.getBodyElement(), DOM.getElementById("loading"));
     }
 
-    private void findYoctoHub(final MapWidget map, final LatLng lng) {
+    public synchronized static void getLatLng(final AsyncCallback<LatLng> callback) {
 
-        hub.refresh(new YoctoCallback<YoctoHub>() {
-            public void onSuccess(YoctoHub hub) {
-                localMeteos = new ArrayList<DataMeteo>();
-                listObjects();
-                fillCurrent(hub, lng);
-            }
-
-            public void onError(Throwable t) {
-                //if not able to get the devices, at least, let us fill the object
-                listObjects();
-            }
-        });
-        logger.info("hub refresh performed");
-
-    }
-
-    private void fillCurrent(YoctoHub hub, final LatLng lng) {
-        Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
-        logger.fine("All the meteo objects are" + objects);
-        for (YoctoObject object : objects) {
-            final YoctoMeteo meteo = (YoctoMeteo) object;
-            meteo.refresh(new YoctoCallback<YoctoMeteo>() {
-                public void onSuccess(YoctoMeteo meteo) {
-                    DataMeteo dataMeteo = new DataMeteo(meteo.getSerialNumber(),
-                            lng.getLongitude(),
-                            lng.getLatitude(),
-                            meteo.getTemperature().getAdvertisedValue(),
-                            meteo.getPressure().getAdvertisedValue(),
-                            meteo.getHumidity().getAdvertisedValue());
-                    localMeteos.add(dataMeteo);
-
-
-                    logger.info("The current temperature is: " + meteo.getTemperature().getAdvertisedValue());
-                    logger.info("The current humidity is: " + meteo.getHumidity().getAdvertisedValue());
-                    logger.info("The current pressure is: " + meteo.getPressure().getAdvertisedValue());
-
-
-                    worldMapService.addMeteo(dataMeteo, new AsyncCallback<Void>() {
-                        public void onFailure(Throwable caught) {
-                            logger.info("Impossible to store");
-                        }
-
-                        public void onSuccess(Void result) {
-                            logger.info("succesfully stored");
-                        }
-                    });
-
+        if (latLng == null) {
+            Geolocation location = Geolocation.getIfSupported();
+            location.getCurrentPosition(new Callback<Position, PositionError>() {
+                public void onFailure(PositionError reason) {
+                    callback.onFailure(reason);
                 }
 
-                public void onError(Throwable t) {
-
+                public void onSuccess(Position result) {
+                    logger.info("Location found at: " + result);
+                    latLng = LatLng.newInstance(result.getCoordinates().getLatitude(),
+                            result.getCoordinates().getLongitude());
+                    callback.onSuccess(latLng);
                 }
             });
-
+        } else {
+            callback.onSuccess(latLng);
         }
     }
-
-    private void displayMap() {
-        DOM.removeChild(RootPanel.getBodyElement(), DOM.getElementById("loading"));
-        //DOM.setStyleAttribute(RootPanel.get("worldMap").getElement(), "display", "block");
-        for (DataMeteo meteo : localMeteos) {
-            new CurrentYoctoMarker(map, meteo);
-        }
-    }
-
 }

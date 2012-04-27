@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yoctosample;
@@ -22,25 +23,22 @@ import org.yoctosample.common.YoctoTemplate;
  * Date: 4/19/12
  * Time: 3:27 PM
  */
-abstract class YoctoObjectImpl<T extends YoctoObject> implements YoctoObject {
+abstract class YoctoObjectImpl<T extends YoctoObject> implements YoctoObject<T> {
     protected YoctoTemplate template;
     private String relativePath;
 
     private String logicalName;
     private YoctoProduct product;
     private String serialNumber;
+    private YoctoHub hub;
 
-    public YoctoObjectImpl(YoctoProduct product, YoctoTemplate template, String relativePath) {
+    public YoctoObjectImpl(YoctoHub hub, String serialNumber, YoctoProduct product, YoctoTemplate template, String relativePath) {
         this.template = template;
         this.relativePath = relativePath;
         this.product = product;
-    }
-
-    public YoctoObjectImpl(String serialNumber, YoctoProduct product, YoctoTemplate template, String relativePath) {
-        this(product, template, relativePath);
         this.serialNumber = serialNumber;
+        this.hub = hub;
     }
-
 
     public String getLogicalName() {
         return logicalName;
@@ -86,5 +84,8 @@ abstract class YoctoObjectImpl<T extends YoctoObject> implements YoctoObject {
 
     protected abstract void refreshObject(YoctoMap map);
 
+    public YoctoHub getHub() {
+        return hub;
+    }
 
 }

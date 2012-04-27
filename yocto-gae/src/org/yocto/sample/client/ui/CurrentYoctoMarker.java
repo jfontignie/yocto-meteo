@@ -10,22 +10,24 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
-package org.yocto.sample.client;
+package org.yocto.sample.client.ui;
 
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.geom.Point;
 import com.google.gwt.maps.client.geom.Size;
 import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
+import org.yocto.sample.client.dto.DataMeteo;
 
 /**
  * Author: Jacques Fontignie
  * Date: 4/26/12
  * Time: 2:43 PM
  */
-class CurrentYoctoMarker extends YoctoMarker {
+public class CurrentYoctoMarker extends YoctoMarker {
 
     private static MarkerOptions createOptions() {
         Icon icon = Icon.newInstance("http://maps.google.com/mapfiles/marker_purple.png");

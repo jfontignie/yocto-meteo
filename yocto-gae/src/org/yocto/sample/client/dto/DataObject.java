@@ -13,32 +13,21 @@
  * For the demo: yocto-meteo.appspot.com
  */
 
-package org.yoctosample;
+package org.yocto.sample.client.dto;
 
-import org.yoctosample.common.YoctoMap;
-import org.yoctosample.common.YoctoTemplate;
+import java.util.Date;
 
 /**
- * Created by: Jacques Fontignie
- * Date: 4/7/12
- * Time: 11:41 PM
+ * Author: Jacques Fontignie
+ * Date: 4/27/12
+ * Time: 9:01 AM
  */
-public class YoctoRelay extends YoctoObjectImpl<YoctoRelay> {
+public interface DataObject {
 
-
-    public YoctoRelay(YoctoHub hub, String serialNumber, YoctoTemplate template, String relativePath) {
-        super(hub, serialNumber, YoctoProduct.YOCTO_RELAY, template, relativePath + ".json");
-    }
-
-
-    public String getLogicalName() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public String getSerialNumber();
 
     @Override
-    protected void refreshObject(YoctoMap result) {
+    public boolean equals(Object o);
 
-    }
-
-
+    public Date getDate();
 }

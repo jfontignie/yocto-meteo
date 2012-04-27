@@ -13,32 +13,26 @@
  * For the demo: yocto-meteo.appspot.com
  */
 
-package org.yoctosample;
+package org.yocto.sample.client.functions;
 
-import org.yoctosample.common.YoctoMap;
-import org.yoctosample.common.YoctoTemplate;
+import org.yocto.sample.client.dto.DataObject;
+import org.yocto.sample.client.dto.DataUnknown;
+import org.yoctosample.YoctoObject;
 
 /**
- * Created by: Jacques Fontignie
- * Date: 4/7/12
- * Time: 11:41 PM
+ * Author: Jacques Fontignie
+ * Date: 4/27/12
+ * Time: 3:37 PM
  */
-public class YoctoRelay extends YoctoObjectImpl<YoctoRelay> {
+public class Unknwon extends AbstractFunction {
 
 
-    public YoctoRelay(YoctoHub hub, String serialNumber, YoctoTemplate template, String relativePath) {
-        super(hub, serialNumber, YoctoProduct.YOCTO_RELAY, template, relativePath + ".json");
-    }
-
-
-    public String getLogicalName() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Unknwon(YoctoObject yObject) {
+        super(null, yObject);
     }
 
     @Override
-    protected void refreshObject(YoctoMap result) {
-
+    protected DataObject createDTO(YoctoObject result) {
+        return new DataUnknown(result.getSerialNumber());
     }
-
-
 }

@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yoctosample;
@@ -28,13 +29,13 @@ import java.util.Map;
  * Date: 4/7/12
  * Time: 11:22 PM
  */
-public class YoctoHub extends YoctoObjectImpl<YoctoHub> implements YoctoObject {
+public class YoctoHub extends YoctoObjectImpl<YoctoHub> {
 
     private YoctoDeviceList yoctoDeviceList;
     private boolean needRefresh;
 
     public YoctoHub(YoctoTemplate template) {
-        super(YoctoProduct.YOCTO_HUB, template, "/api.json");
+        super(null, null, YoctoProduct.YOCTO_HUB, template, "/api.json");
         if (template == null) {
             throw new IllegalStateException("Template is null");
         }
@@ -98,10 +99,10 @@ public class YoctoHub extends YoctoObjectImpl<YoctoHub> implements YoctoObject {
                     result = this;
                     break;
                 case YOCTO_METEO:
-                    result = new YoctoMeteo(serialNumber, template, networkUrl);
+                    result = new YoctoMeteo(this, serialNumber, template, networkUrl);
                     break;
                 case YOCTO_COLOR:
-                    result = new YoctoColor(serialNumber, template, networkUrl);
+                    result = new YoctoColor(this, serialNumber, template, networkUrl);
                     break;
                 default:
                     throw new IllegalStateException("Not implemented yet");

@@ -11,6 +11,7 @@
   ~ You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
   ~
   ~ For more information: go on http://yocto-meteo.blogspot.com
+  ~ For the demo: yocto-meteo.appspot.com
   -->
 
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.6.2//EN"
@@ -31,8 +32,10 @@
     <inherits name="yoctopuce"/>
 
     <set-property name="gwt.logging.logLevel" value="FINE"/>
-    <set-property name="gwt.logging.enabled" value="FALSE"/>
+    <set-property name="gwt.logging.enabled" value="TRUE"/>
     <set-property name="gwt.logging.consoleHandler" value="DISABLED"/>
+
+    <set-configuration-property name="document.compatMode" value="BackCompat"/>
 
     <!-- Other module inherits                                      -->
 

@@ -13,32 +13,46 @@
  * For the demo: yocto-meteo.appspot.com
  */
 
-package org.yoctosample;
+package org.yocto.sample.client.dto;
 
-import org.yoctosample.common.YoctoMap;
-import org.yoctosample.common.YoctoTemplate;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.PrimaryKey;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
- * Created by: Jacques Fontignie
- * Date: 4/7/12
- * Time: 11:41 PM
+ * Author: Jacques Fontignie
+ * Date: 4/27/12
+ * Time: 3:40 PM
  */
-public class YoctoRelay extends YoctoObjectImpl<YoctoRelay> {
+@PersistenceCapable
+public class DataUnknown implements Serializable, DataObject {
 
+    @PrimaryKey
+    private String serialNumber;
+    private Date date;
 
-    public YoctoRelay(YoctoHub hub, String serialNumber, YoctoTemplate template, String relativePath) {
-        super(hub, serialNumber, YoctoProduct.YOCTO_RELAY, template, relativePath + ".json");
+    public void setSerialNumber(String serialNumber) {
+        setSerialNumber(serialNumber);
+        setDate(new Date());
     }
 
-
-    public String getLogicalName() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    @Override
-    protected void refreshObject(YoctoMap result) {
+    public String getSerialNumber() {
 
+        return serialNumber;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public DataUnknown(String serialNumber) {
+        this.serialNumber = serialNumber;
+
+    }
 
 }

@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yoctosample;
@@ -22,15 +23,15 @@ import org.yoctosample.common.YoctoTemplate;
  * Date: 4/23/12
  * Time: 11:12 PM
  */
-public class YoctoColor extends YoctoObjectImpl<YoctoColor> implements YoctoObject {
+public class YoctoColor extends YoctoObjectImpl<YoctoColor> {
 
     //api?ctx=colorLed1&rgbColor=0x000000
 
     private YoctoColorValue colorLed1;
     private YoctoColorValue colorLed2;
 
-    public YoctoColor(String serialNumber, YoctoTemplate template, String relativePath) {
-        super(serialNumber, YoctoProduct.YOCTO_COLOR, template, relativePath + ".json");
+    public YoctoColor(YoctoHub yoctoHub, String serialNumber, YoctoTemplate template, String relativePath) {
+        super(yoctoHub, serialNumber, YoctoProduct.YOCTO_COLOR, template, relativePath + ".json");
     }
 
     @Override

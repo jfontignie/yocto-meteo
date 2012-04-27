@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yoctosample;
@@ -42,11 +43,11 @@ public class YoctoColorValue {
     }
 
     public int getRgbColor() {
-        return Integer.valueOf(service.getString("rgbColor"));
+        return service.getInt("rgbColor");
     }
 
     public int getHslColor() {
-        return Integer.valueOf(service.getString("hslColor"));
+        return service.getInt("hslColor");
     }
 
     public ColorMove getRgbMove() {

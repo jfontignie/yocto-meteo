@@ -13,32 +13,26 @@
  * For the demo: yocto-meteo.appspot.com
  */
 
-package org.yoctosample;
+package org.yocto.sample.client.functions;
 
-import org.yoctosample.common.YoctoMap;
-import org.yoctosample.common.YoctoTemplate;
+import org.yoctosample.YoctoColor;
+import org.yoctosample.YoctoHub;
+import org.yoctosample.YoctoMeteo;
+import org.yoctosample.YoctoObject;
 
 /**
- * Created by: Jacques Fontignie
- * Date: 4/7/12
- * Time: 11:41 PM
+ * Author: Jacques Fontignie
+ * Date: 4/27/12
+ * Time: 2:40 PM
  */
-public class YoctoRelay extends YoctoObjectImpl<YoctoRelay> {
-
-
-    public YoctoRelay(YoctoHub hub, String serialNumber, YoctoTemplate template, String relativePath) {
-        super(hub, serialNumber, YoctoProduct.YOCTO_RELAY, template, relativePath + ".json");
+public class FunctionFactory {
+    public static AbstractFunction create(YoctoObject yObject) {
+        if (yObject instanceof YoctoMeteo)
+            return new Meteo((YoctoMeteo) yObject);
+        if (yObject instanceof YoctoHub)
+            return new Hub((YoctoHub) yObject);
+        if (yObject instanceof YoctoColor)
+            return new Color((YoctoColor) yObject);
+        return new Unknwon(yObject);
     }
-
-
-    public String getLogicalName() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    protected void refreshObject(YoctoMap result) {
-
-    }
-
-
 }

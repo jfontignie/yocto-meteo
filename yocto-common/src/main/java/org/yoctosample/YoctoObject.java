@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yoctosample;
@@ -19,12 +20,18 @@ package org.yoctosample;
  * Date: 4/7/12
  * Time: 11:41 PM
  */
-public interface YoctoObject {
+public interface YoctoObject<T extends YoctoObject> {
 
     public String getLogicalName();
 
     public YoctoProduct getProduct();
 
     public String getSerialNumber();
+
+    public void refresh();
+
+    public void refresh(final YoctoCallback<T> callback);
+
+    public YoctoHub getHub();
 
 }

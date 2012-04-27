@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yoctosample;
@@ -22,14 +23,14 @@ import org.yoctosample.common.YoctoTemplate;
  * Date: 4/7/12
  * Time: 11:41 PM
  */
-public class YoctoMeteo extends YoctoObjectImpl<YoctoMeteo> implements YoctoObject {
+public class YoctoMeteo extends YoctoObjectImpl<YoctoMeteo> {
 
     private YoctoMeteoValue temperature;
     private YoctoMeteoValue humidity;
     private YoctoMeteoValue pressure;
 
-    public YoctoMeteo(String serialNumber, YoctoTemplate template, String relativePath) {
-        super(serialNumber, YoctoProduct.YOCTO_METEO, template, relativePath + ".json");
+    public YoctoMeteo(YoctoHub hub, String serialNumber, YoctoTemplate template, String relativePath) {
+        super(hub, serialNumber, YoctoProduct.YOCTO_METEO, template, relativePath + ".json");
     }
 
     public YoctoMeteoValue getTemperature() {

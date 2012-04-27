@@ -13,33 +13,49 @@
  * For the demo: yocto-meteo.appspot.com
  */
 
-package org.yocto.sample.client;
+package org.yocto.sample.client.functions;
 
-import com.google.gwt.user.client.rpc.RemoteService;
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import org.yocto.sample.client.dto.DataColor;
 import org.yocto.sample.client.dto.DataHub;
-import org.yocto.sample.client.dto.DataMeteo;
+import org.yoctosample.YoctoHub;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Author: Jacques Fontignie
- * Date: 4/25/12
- * Time: 9:19 PM
+ * Date: 4/27/12
+ * Time: 9:03 AM
  */
-@RemoteServiceRelativePath("worldmap")
-public interface WorldMapService extends RemoteService {
+public class Hub extends AbstractFunction<Hub, DataHub, YoctoHub> {
 
-    public void addMeteo(DataMeteo dataMeteo);
 
-    public List<DataMeteo> listMeteos();
+    private ArrayList<AbstractFunction> list;
 
-    public void addHub(DataHub dataHub);
+    public Hub(DataHub dataHub, YoctoHub hub) {
+        super(dataHub, hub);
+        this.list = new ArrayList<AbstractFunction>();
+    }
 
-    public List<DataHub> listHubs();
+    @Override
+    protected DataHub createDTO(final YoctoHub result) {
+        DataHub newHub = new DataHub(result.getSerialNumber(), 0, 0, new Date());
+        return newHub;
+    }
 
-    public List<DataColor> listColors();
+    public Hub(YoctoHub hub) {
+        this(null, hub);
+    }
 
-    public void addColor(DataColor color);
+    public Hub(DataHub hub) {
+        this(hub, null);
+    }
+
+    public void add(AbstractFunction function) {
+        list.add(function);
+    }
+
+    public List<AbstractFunction> getChildren() {
+        return list;
+    }
 }

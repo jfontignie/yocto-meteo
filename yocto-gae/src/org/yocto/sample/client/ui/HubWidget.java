@@ -13,32 +13,37 @@
  * For the demo: yocto-meteo.appspot.com
  */
 
-package org.yoctosample;
+package org.yocto.sample.client.ui;
 
-import org.yoctosample.common.YoctoMap;
-import org.yoctosample.common.YoctoTemplate;
+import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.Widget;
+import org.yocto.sample.client.functions.Hub;
 
 /**
- * Created by: Jacques Fontignie
- * Date: 4/7/12
- * Time: 11:41 PM
+ * Author: Jacques Fontignie
+ * Date: 4/27/12
+ * Time: 2:08 PM
  */
-public class YoctoRelay extends YoctoObjectImpl<YoctoRelay> {
+public class HubWidget {
 
+    private Hub hub;
+    private Widget widget;
 
-    public YoctoRelay(YoctoHub hub, String serialNumber, YoctoTemplate template, String relativePath) {
-        super(hub, serialNumber, YoctoProduct.YOCTO_RELAY, template, relativePath + ".json");
+    public HubWidget(Hub hub) {
+        this.hub = hub;
+        widget = null;
     }
 
-
-    public String getLogicalName() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Widget getWidget(boolean refresh) {
+        if (refresh || widget == null) {
+            Tree t = new Tree();
+            t.addItem(WidgetFactory.createWidget(hub));
+            widget = t;
+        }
+        return widget;
     }
 
-    @Override
-    protected void refreshObject(YoctoMap result) {
-
+    public Widget getWidget() {
+        return getWidget(false);
     }
-
-
 }

@@ -10,10 +10,10 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
-package org.yocto.sample.client;
-
+package org.yocto.sample.client.dto;
 
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
@@ -22,42 +22,60 @@ import java.util.Date;
 
 /**
  * Author: Jacques Fontignie
- * Date: 4/25/12
- * Time: 9:25 PM
+ * Date: 4/27/12
+ * Time: 4:40 PM
  */
 //(identityType = IdentityType.APPLICATION, detachable="true")
 @PersistenceCapable
-public class DataMeteo implements Serializable {
-
+public class DataColor implements Serializable, DataObject {
 
     @PrimaryKey
     private String serialNumber;
 
-    private double longitude;
-
-    private double latitude;
-
-    private double temperature;
-
-    private double pressure;
-
-    private double humidity;
+    private int color1;
+    private int color2;
 
     private Date date;
 
+    private String dataHub;
+
     @SuppressWarnings("unused")
-    public DataMeteo() {
+    public DataColor() {
     }
 
-    public DataMeteo(String serialNumber, double longitude, double latitude,
-                     double temperature, double pressure, double humidity) {
+    public DataColor(String serialNumber, int color1, int color2,
+                     String dataHub) {
         setSerialNumber(serialNumber);
         setDate(new Date());
-        setLongitude(longitude);
-        setLatitude(latitude);
-        setTemperature(temperature);
-        setPressure(pressure);
-        setHumidity(humidity);
+        setColor1(color1);
+        setColor2(color2);
+        setDataHub(dataHub);
+    }
+
+
+    public String getSerialNumber() {
+
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public int getColor1() {
+        return color1;
+    }
+
+    public void setColor1(int color1) {
+        this.color1 = color1;
+    }
+
+    public int getColor2() {
+        return color2;
+    }
+
+    public void setColor2(int color2) {
+        this.color2 = color2;
     }
 
     public Date getDate() {
@@ -68,52 +86,12 @@ public class DataMeteo implements Serializable {
         this.date = date;
     }
 
-    public String getSerialNumber() {
-        return serialNumber;
+    public String getDataHub() {
+        return dataHub;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
-    }
-
-    public double getPressure() {
-        return pressure;
-    }
-
-    public void setPressure(double pressure) {
-        this.pressure = pressure;
-    }
-
-    public double getHumidity() {
-        return humidity;
-    }
-
-    public void setHumidity(double humidity) {
-        this.humidity = humidity;
+    public void setDataHub(String dataHub) {
+        this.dataHub = dataHub;
     }
 
     @Override
@@ -121,9 +99,12 @@ public class DataMeteo implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DataMeteo dataMeteo = (DataMeteo) o;
-        return !(serialNumber != null ? !serialNumber.equals(dataMeteo.serialNumber) : dataMeteo.serialNumber != null);
+        DataColor dataColor = (DataColor) o;
 
+        if (serialNumber != null ? !serialNumber.equals(dataColor.serialNumber) : dataColor.serialNumber != null)
+            return false;
+
+        return true;
     }
 
     @Override
