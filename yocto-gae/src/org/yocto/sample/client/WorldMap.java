@@ -35,10 +35,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import org.yocto.sample.client.dto.DataColor;
 import org.yocto.sample.client.dto.DataHub;
 import org.yocto.sample.client.dto.DataMeteo;
-import org.yocto.sample.client.functions.Color;
-import org.yocto.sample.client.functions.FunctionFactory;
-import org.yocto.sample.client.functions.Hub;
-import org.yocto.sample.client.functions.Meteo;
+import org.yocto.sample.client.functions.*;
 import org.yocto.sample.client.ui.MarkerFactory;
 import org.yoctosample.YoctoCallback;
 import org.yoctosample.YoctoHub;
@@ -202,8 +199,19 @@ public class WorldMap implements EntryPoint {
     private void refreshHub(Hub hub) {
         YoctoHub yHub = hub.getYocto();
         for (YoctoObject yObject : yHub.findAll()) {
-            if (!hub.getYocto().equals(yObject))
-                hub.add(FunctionFactory.create(yObject));
+            if (!hub.getYocto().equals(yObject)) {
+                AbstractFunction function = FunctionFactory.create(yObject);
+                function.refresh(new YoctoCallback() {
+                    public void onSuccess(Object result) {
+                        logger.info("Successfully read!");
+                    }
+
+                    public void onError(Throwable t) {
+                        logger.severe("Impossible to read device: " + t);
+                    }
+                });
+                hub.add(function);
+            }
         }
     }
 

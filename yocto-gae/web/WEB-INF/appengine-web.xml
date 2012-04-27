@@ -11,11 +11,12 @@
   ~ You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
   ~
   ~ For more information: go on http://yocto-meteo.blogspot.com
+  ~ For the demo: yocto-meteo.appspot.com
   -->
 
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
     <application>yocto-meteo</application>
-    <version>2</version>
+    <version>3</version>
     <static-files>
         <!-- Do not serve these files publicly. -->
         <exclude path="**/*.gwt.rpc"/>
