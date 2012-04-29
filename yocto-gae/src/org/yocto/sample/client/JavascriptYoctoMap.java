@@ -45,4 +45,25 @@ public class JavascriptYoctoMap extends JavaScriptObject implements YoctoMap {
         return this[name];
     }-*/;
 
+    public final native int size() /*-{
+        if (this[name] != null)
+            return Object.keys(this).length - 1;
+        return Object.keys(this).length;
+    }-*/;
+
+    public final native String getString(int index) /*-{
+        return this[Object.keys(this)[index]];
+    }-*/;
+
+    public final native int getInt(int index) /*-{
+        return this[Object.keys(this)[index]];
+    }-*/;
+
+    public final native JavascriptYoctoMap getMap(int index) /*-{
+        return this[Object.keys(this)[index]];
+    }-*/;
+
+    public final native JavascriptYoctoList getList(int index) /*-{
+        return this[Object.keys(this)[index]];
+    }-*/;
 }
