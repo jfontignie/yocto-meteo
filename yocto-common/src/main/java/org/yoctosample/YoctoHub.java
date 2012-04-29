@@ -42,12 +42,6 @@ public class YoctoHub extends YoctoObjectImpl {
         needRefresh = true;
     }
 
-
-    public YoctoRelay findRelay(String name) {
-        if (needRefresh) refresh();
-        return (YoctoRelay) yoctoDeviceList.get(YoctoProduct.YOCTO_RELAY, name);
-    }
-
     public YoctoMeteo findMeteo(String name) {
         if (needRefresh) refresh();
         return (YoctoMeteo) yoctoDeviceList.get(YoctoProduct.YOCTO_METEO, name);

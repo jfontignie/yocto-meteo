@@ -151,15 +151,6 @@ public class YoctoHubTest {
 
 
     @Test
-    public void testFindRelay() throws IOException {
-        EasyMock.replay(yoctoTemplate);
-        YoctoHub hub = new YoctoHub(yoctoTemplate);
-        YoctoRelay object = hub.findRelay("test");
-        assertNull(object);
-    }
-
-
-    @Test
     public void testFindColor() throws IOException {
         String serial = "YRGBLED1-01934";
         EasyMock.replay(yoctoTemplate);
@@ -180,13 +171,13 @@ public class YoctoHubTest {
 
 
     @Test
-    public void testFindAllRelay() throws IOException {
+    public void testFindAllMeteos() throws IOException {
         EasyMock.replay(yoctoTemplate);
         YoctoHub hub = new YoctoHub(yoctoTemplate);
         Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_RELAY);
         if (objects != null)
             for (YoctoObject object : objects)
-                assertNotNull(hub.findRelay(object.getLogicalName()));
+                assertNotNull(hub.findMeteo(object.getSerialNumber()));
     }
 
 }
