@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yoctosample.utils;
@@ -28,6 +29,7 @@ import java.util.Map;
 public class StandaloneYoctoMap implements YoctoMap {
 
     private Map<String, Object> map;
+    private Object[] values;
 
     public StandaloneYoctoMap(Map<String, Object> stringObjectMap) {
         if (stringObjectMap == null) throw new IllegalStateException("the content is empty");
@@ -48,5 +50,35 @@ public class StandaloneYoctoMap implements YoctoMap {
 
     public YoctoList getList(String name) {
         return new StandaloneYoctoList((List) map.get(name));
+    }
+
+    public int size() {
+        return map.size();
+    }
+
+    public String getString(int index) {
+        checkValues();
+        return values[index].toString();
+    }
+
+    public int getInt(int index) {
+        checkValues();
+        return Integer.valueOf(values[index].toString());
+    }
+
+    public YoctoMap getMap(int index) {
+        checkValues();
+        return new StandaloneYoctoMap((Map<String, Object>) values[index]);
+    }
+
+    public YoctoList getList(int index) {
+        checkValues();
+        return new StandaloneYoctoList((List) values[index]);
+    }
+
+    private void checkValues() {
+        if (values == null) {
+            values = map.values().toArray();
+        }
     }
 }

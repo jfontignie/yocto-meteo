@@ -13,22 +13,35 @@
  * For the demo: yocto-meteo.appspot.com
  */
 
-package org.yoctosample.common;
+package org.yoctosample;
+
+import org.easymock.EasyMock;
+import org.junit.Before;
+import org.junit.Test;
+import org.yoctosample.common.YoctoMap;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Author: Jacques Fontignie
- * Date: 4/24/12
- * Time: 9:55 PM
+ * Date: 4/29/12
+ * Time: 8:49 PM
  */
-public interface YoctoMap extends YoctoList {
+public class AdvertisedValueTest {
 
-    public YoctoMap getMap(String name);
+    private YoctoMap map;
 
-    public String getString(String name);
+    @Before
+    public void setUp() {
+        map = EasyMock.createMock(YoctoMap.class);
+        EasyMock.expect(map.getString("advertisedValue")).andReturn("OFF");
+    }
 
-    public int getInt(String name);
-
-    public YoctoList getList(String name);
-
-
+    @Test
+    public void testGetAdvertisedValue() {
+        EasyMock.replay(map);
+        AdvertisedValue value = new AdvertisedValue(map);
+        assertEquals("OFF", value.getAdvertisedValue());
+        EasyMock.verify(map);
+    }
 }

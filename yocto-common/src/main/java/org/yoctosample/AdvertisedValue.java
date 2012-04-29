@@ -13,22 +13,36 @@
  * For the demo: yocto-meteo.appspot.com
  */
 
-package org.yoctosample.common;
+package org.yoctosample;
+
+import org.yoctosample.common.YoctoMap;
 
 /**
  * Author: Jacques Fontignie
- * Date: 4/24/12
- * Time: 9:55 PM
+ * Date: 4/29/12
+ * Time: 8:40 PM
  */
-public interface YoctoMap extends YoctoList {
+public class AdvertisedValue {
+    private YoctoMap service;
 
-    public YoctoMap getMap(String name);
+    public AdvertisedValue(YoctoMap service) {
+        this.service = service;
+    }
 
-    public String getString(String name);
+    public String getHardwareId() {
+        return service.getString("hardwareId");
+    }
 
-    public int getInt(String name);
+    public String getLogicalName() {
+        return service.getString("logicalName");
+    }
 
-    public YoctoList getList(String name);
+    public String getAdvertisedValue() {
+        return service.getString("advertisedValue");
+    }
 
+    public int getIndex() {
+        return service.getInt("index");
+    }
 
 }

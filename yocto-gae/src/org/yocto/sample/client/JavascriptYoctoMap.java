@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yocto.sample.client;
@@ -42,5 +43,25 @@ public class JavascriptYoctoMap extends JavaScriptObject implements YoctoMap {
 
     public final native JavascriptYoctoList getList(String name) /*-{
         return this[name];
+    }-*/;
+
+    public final native int size() /*-{
+        return this.length;
+    }-*/;
+
+    public final native String getString(int index) /*-{
+        return this[index];
+    }-*/;
+
+    public final native int getInt(int index) /*-{
+        return this[index];
+    }-*/;
+
+    public final native JavascriptYoctoMap getMap(int index) /*-{
+        return this[index];
+    }-*/;
+
+    public final native JavascriptYoctoList getList(int index) /*-{
+        return this[index];
     }-*/;
 }
