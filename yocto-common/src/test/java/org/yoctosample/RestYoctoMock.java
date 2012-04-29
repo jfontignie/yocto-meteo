@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yoctosample;
@@ -61,9 +62,13 @@ class RestYoctoMock {
             "\"colorLed2\":{\"logicalName\":\"\",\"advertisedValue\":\"006a00\",\"rgbColor\":27136,\"hslColor\":5635893,\"rgbMove\":{\"moving\":0,\"target\":0,\"ms\":0},\"hslMove\":{\"moving\":0,\"target\":0,\"ms\":0},\"rgbColorAtPowerOn\":0}}";
 
 
-    public static YoctoMap getMap(String content) throws IOException {
+    public static YoctoMap getMap(String content) {
         ObjectMapper mapper = new ObjectMapper();
-        return new StandaloneYoctoMap(mapper.readValue(content, Map.class));
+        try {
+            return new StandaloneYoctoMap(mapper.readValue(content, Map.class));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
