@@ -39,7 +39,6 @@ public class Meteo extends AbstractFunction<Meteo, DataMeteo, YoctoMeteo> {
         this(null, yocto);
     }
 
-
     @Override
     protected DataMeteo createDTO(final YoctoMeteo result) {
         DataMeteo meteo = new DataMeteo(result.getSerialNumber(),

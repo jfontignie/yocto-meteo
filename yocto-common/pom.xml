@@ -9,6 +9,9 @@
   ~ yocto-meteo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
+  ~
+  ~ For more information: go on http://yocto-meteo.blogspot.com
+  ~ For the demo: yocto-meteo.appspot.com
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -31,24 +34,24 @@
 
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>jenkins</id>
-            <activation>
-                <property>
-                    <name>env.BUILD_NUMBER</name>
-                </property>
-            </activation>
-            <reporting>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>cobertura-maven-plugin</artifactId>
-                        <version>2.5.1</version>
-                    </plugin>
-                </plugins>
-            </reporting>
-        </profile>
-    </profiles>
+    <!--<profiles>-->
+    <!--<profile>-->
+    <!--<id>jenkins</id>-->
+    <!--<activation>-->
+    <!--<property>-->
+    <!--<name>env.BUILD_NUMBER</name>-->
+    <!--</property>-->
+    <!--</activation>-->
+    <!--<reporting>-->
+    <!--<plugins>-->
+    <!--<plugin>-->
+    <!--<groupId>org.codehaus.mojo</groupId>-->
+    <!--<artifactId>cobertura-maven-plugin</artifactId>-->
+    <!--<version>2.5.1</version>-->
+    <!--</plugin>-->
+    <!--</plugins>-->
+    <!--</reporting>-->
+    <!--</profile>-->
+    <!--</profiles>-->
 
 </project>

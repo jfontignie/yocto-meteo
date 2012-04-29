@@ -11,6 +11,7 @@
   ~ You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
   ~
   ~ For more information: go on http://yocto-meteo.blogspot.com
+  ~ For the demo: yocto-meteo.appspot.com
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -81,20 +82,6 @@
                 </pluginManagement>
 
                 <plugins>
-
-                    <!--<plugin>-->
-                    <!--<groupId>org.apache.maven.plugins</groupId>-->
-                    <!--<artifactId>maven-checkstyle-plugin</artifactId>-->
-                    <!--<version>2.9.1</version>-->
-                    <!--<executions>-->
-                    <!--<execution>-->
-                    <!--<phase>package</phase>-->
-                    <!--<goals>-->
-                    <!--<goal>checkstyle</goal>-->
-                    <!--</goals>-->
-                    <!--</execution>-->
-                    <!--</executions>-->
-                    <!--</plugin>-->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>findbugs-maven-plugin</artifactId>
@@ -115,11 +102,6 @@
 
     <reporting>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.9.1</version>
-            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
