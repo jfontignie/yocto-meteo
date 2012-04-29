@@ -30,6 +30,7 @@ public class StandaloneYoctoMap implements YoctoMap {
 
     private Map<String, Object> map;
     private Object[] values;
+    private Object[] keys;
 
     public StandaloneYoctoMap(Map<String, Object> stringObjectMap) {
         if (stringObjectMap == null) throw new IllegalStateException("the content is empty");
@@ -79,6 +80,11 @@ public class StandaloneYoctoMap implements YoctoMap {
     private void checkValues() {
         if (values == null) {
             values = map.values().toArray();
+            keys = map.keySet().toArray();
         }
+    }
+
+    public String getKey(int index) {
+        return keys[index].toString();
     }
 }

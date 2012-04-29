@@ -24,8 +24,14 @@ import org.yoctosample.common.YoctoMap;
  */
 public class AdvertisedValue {
     private YoctoMap service;
+    private String type;
 
     public AdvertisedValue(YoctoMap service) {
+        this.service = service;
+    }
+
+    public AdvertisedValue(String name, YoctoMap service) {
+        this.type = name;
         this.service = service;
     }
 
@@ -43,6 +49,10 @@ public class AdvertisedValue {
 
     public int getIndex() {
         return service.getInt("index");
+    }
+
+    public String getType() {
+        return type;
     }
 
 }
