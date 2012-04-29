@@ -23,7 +23,7 @@ import org.yoctosample.common.YoctoTemplate;
  * Date: 4/7/12
  * Time: 11:41 PM
  */
-public class YoctoMeteo extends YoctoObjectImpl<YoctoMeteo> {
+public class YoctoMeteo extends YoctoObjectImpl {
 
     private YoctoMeteoValue temperature;
     private YoctoMeteoValue humidity;

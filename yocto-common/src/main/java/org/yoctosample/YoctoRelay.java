@@ -23,7 +23,7 @@ import org.yoctosample.common.YoctoTemplate;
  * Date: 4/7/12
  * Time: 11:41 PM
  */
-public class YoctoRelay extends YoctoObjectImpl<YoctoRelay> {
+public class YoctoRelay extends YoctoObjectImpl {
 
 
     public YoctoRelay(YoctoHub hub, String serialNumber, YoctoTemplate template, String relativePath) {

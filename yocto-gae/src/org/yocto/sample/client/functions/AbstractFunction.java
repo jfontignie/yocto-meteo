@@ -70,9 +70,9 @@ public abstract class AbstractFunction<X extends AbstractFunction, T extends Dat
     public void refresh(final YoctoCallback<X> callback) {
         if (yocto == null) callback.onError(new NullPointerException("YoctoObject does not exist"));
 
-        yocto.refresh(new YoctoCallback<S>() {
-            public void onSuccess(S result) {
-                dto = createDTO(result);
+        yocto.refresh(new YoctoCallback<Void>() {
+            public void onSuccess(Void result) {
+                dto = createDTO(yocto);
                 callback.onSuccess((X) AbstractFunction.this);
             }
 

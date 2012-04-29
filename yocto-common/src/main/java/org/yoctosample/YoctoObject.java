@@ -20,7 +20,7 @@ package org.yoctosample;
  * Date: 4/7/12
  * Time: 11:41 PM
  */
-public interface YoctoObject<T extends YoctoObject> {
+public interface YoctoObject {
 
     public String getLogicalName();
 
@@ -30,7 +30,7 @@ public interface YoctoObject<T extends YoctoObject> {
 
     public void refresh();
 
-    public void refresh(final YoctoCallback<T> callback);
+    public void refresh(final YoctoCallback<Void> callback);
 
     public YoctoHub getHub();
 

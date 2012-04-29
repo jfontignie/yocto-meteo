@@ -29,7 +29,7 @@ import java.util.Map;
  * Date: 4/7/12
  * Time: 11:22 PM
  */
-public class YoctoHub extends YoctoObjectImpl<YoctoHub> {
+public class YoctoHub extends YoctoObjectImpl {
 
     private YoctoDeviceList yoctoDeviceList;
     private boolean needRefresh;

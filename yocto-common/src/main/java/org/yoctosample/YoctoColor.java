@@ -23,7 +23,7 @@ import org.yoctosample.common.YoctoTemplate;
  * Date: 4/23/12
  * Time: 11:12 PM
  */
-public class YoctoColor extends YoctoObjectImpl<YoctoColor> {
+public class YoctoColor extends YoctoObjectImpl {
 
     //api?ctx=colorLed1&rgbColor=0x000000
 

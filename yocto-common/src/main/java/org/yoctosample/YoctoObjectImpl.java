@@ -23,7 +23,7 @@ import org.yoctosample.common.YoctoTemplate;
  * Date: 4/19/12
  * Time: 3:27 PM
  */
-abstract class YoctoObjectImpl<T extends YoctoObject> implements YoctoObject<T> {
+abstract class YoctoObjectImpl implements YoctoObject {
     protected YoctoTemplate template;
     private String relativePath;
 
@@ -52,11 +52,11 @@ abstract class YoctoObjectImpl<T extends YoctoObject> implements YoctoObject<T> 
         return serialNumber;
     }
 
-    public void refresh(final YoctoCallback<T> callback) {
+    public void refresh(final YoctoCallback<Void> callback) {
         template.aSyncQuery(relativePath, new YoctoCallback<YoctoMap>() {
             public void onSuccess(YoctoMap result) {
                 internalRefresh(result);
-                callback.onSuccess((T) YoctoObjectImpl.this);
+                callback.onSuccess(null);
             }
 
             public void onError(Throwable t) {
