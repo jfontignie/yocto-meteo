@@ -20,7 +20,7 @@ package org.yoctosample.common;
  * Date: 4/24/12
  * Time: 9:55 PM
  */
-public interface YoctoMap extends YoctoList {
+public interface YoctoMap {
 
     public YoctoMap getMap(String name);
 
