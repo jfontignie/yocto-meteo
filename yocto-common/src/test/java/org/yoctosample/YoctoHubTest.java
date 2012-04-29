@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -76,7 +77,7 @@ public class YoctoHubTest {
         Collection<YoctoObject> objects = hub.findAll(YoctoProduct.YOCTO_METEO);
         if (objects != null)
             for (YoctoObject object : objects)
-                assertNotNull(hub.findMeteo(object.getLogicalName()));
+                assertNotNull(hub.findMeteo(object.getSerialNumber()));
     }
 
     @Test
@@ -141,6 +142,40 @@ public class YoctoHubTest {
                 //To change body of implemented methods use File | Settings | File Templates.
             }
         });
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testEmptyHub() {
+        new YoctoHub(null);
+    }
+
+
+    @Test
+    public void testFindRelay() throws IOException {
+        EasyMock.replay(yoctoTemplate);
+        YoctoHub hub = new YoctoHub(yoctoTemplate);
+        YoctoRelay object = hub.findRelay("test");
+        assertNull(object);
+    }
+
+
+    @Test
+    public void testFindColor() throws IOException {
+        String serial = "YRGBLED1-01934";
+        EasyMock.replay(yoctoTemplate);
+        YoctoHub hub = new YoctoHub(yoctoTemplate);
+        hub.refresh();
+        YoctoColor object = hub.findColor(serial);
+        assertEquals(new YoctoColor(hub, serial, yoctoTemplate, null), object);
+    }
+
+
+    @Test
+    public void testFindMeteo() throws IOException {
+        EasyMock.replay(yoctoTemplate);
+        YoctoHub hub = new YoctoHub(yoctoTemplate);
+        YoctoMeteo object = hub.findMeteo("test");
+        assertNull(object);
     }
 
 

@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yoctosample.utils;
@@ -49,7 +50,7 @@ public class YoctoDeviceList implements Iterable<YoctoObject> {
             objects = new HashMap<String, YoctoObject>();
             map.put(object.getProduct(), objects);
         }
-        objects.put(object.getLogicalName(), object);
+        objects.put(object.getSerialNumber(), object);
     }
 
 

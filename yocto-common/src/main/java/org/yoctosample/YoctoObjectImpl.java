@@ -88,4 +88,20 @@ abstract class YoctoObjectImpl implements YoctoObject {
         return hub;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof YoctoObjectImpl)) return false;
+
+        YoctoObjectImpl that = (YoctoObjectImpl) o;
+
+        if (serialNumber != null ? !serialNumber.equals(that.serialNumber) : that.serialNumber != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return serialNumber != null ? serialNumber.hashCode() : 0;
+    }
 }
