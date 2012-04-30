@@ -46,8 +46,9 @@ public class JavascriptYoctoMap extends JavaScriptObject implements YoctoMap {
     }-*/;
 
     public final native int size() /*-{
-        if (this["__gwt_ObjectId"] != null)
+        if ('__gwt_ObjectId' in this) {
             return Object.keys(this).length - 1;
+        }
         return Object.keys(this).length;
     }-*/;
 

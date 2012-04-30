@@ -83,17 +83,17 @@ public class YoctoHub extends YoctoObjectImpl {
         }
         //TODO remove the objects which are in yoctoDeviceList but not in serials...
 
-//        YoctoMap yelloPages = services.getMap("yellowPages");
-//        size = yelloPages.size();
-//        for (int i = 0; i < size; i++) {
-//            YoctoList function = yelloPages.getList(i);
-//            String name = yelloPages.getKey(i);
-//            for (int j = 0; j < function.size(); j++) {
-//                YoctoMap service = function.getMap(j);
-//                AdvertisedValue value = new AdvertisedValue(name,service);
-//                advertisedValues.put(value.getHardwareId(), value);
-//            }
-//        }
+        YoctoMap yelloPages = services.getMap("yellowPages");
+        size = yelloPages.size();
+        for (int i = 0; i < size; i++) {
+            YoctoList function = yelloPages.getList(i);
+            String name = yelloPages.getKey(i);
+            for (int j = 0; j < function.size(); j++) {
+                YoctoMap service = function.getMap(j);
+                AdvertisedValue value = new AdvertisedValue(name, service);
+                advertisedValues.put(value.getHardwareId(), value);
+            }
+        }
     }
 
     private YoctoObject createObject(YoctoProduct product, YoctoMap service) {
@@ -120,15 +120,15 @@ public class YoctoHub extends YoctoObjectImpl {
         return result;
     }
 
-//    public Collection<AdvertisedValue> findAllAdvertisedValues() {
-//        if (needRefresh) refresh();
-//        return advertisedValues.values();
-//    }
-//
-//    public AdvertisedValue getAdvertisedValue(String name) {
-//        if (needRefresh) refresh();
-//        return advertisedValues.get(name);
-//    }
+    public Collection<AdvertisedValue> findAllAdvertisedValues() {
+        if (needRefresh) refresh();
+        return advertisedValues.values();
+    }
+
+    public AdvertisedValue getAdvertisedValue(String name) {
+        if (needRefresh) refresh();
+        return advertisedValues.get(name);
+    }
 
     public Collection<YoctoObject> findAll() {
         if (needRefresh) refresh();

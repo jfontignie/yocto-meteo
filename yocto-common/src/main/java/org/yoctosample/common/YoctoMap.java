@@ -30,15 +30,15 @@ public interface YoctoMap {
 
     public YoctoList getList(String name);
 
-//    public int size();
-//
-//    public String getString(int index);
-//
-//    public int getInt(int index);
-//
-//    public YoctoMap getMap(int index);
-//
-//    public YoctoList getList(int index);
-//
-//    public String getKey(int index);
+    public int size();
+
+    public String getString(int index);
+
+    public int getInt(int index);
+
+    public YoctoMap getMap(int index);
+
+    public YoctoList getList(int index);
+
+    public String getKey(int index);
 }
