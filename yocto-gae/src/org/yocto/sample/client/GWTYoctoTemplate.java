@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yocto.sample.client;
@@ -26,6 +27,7 @@ import java.util.logging.Logger;
  * Date: 4/24/12
  * Time: 7:12 PM
  */
+
 public class GWTYoctoTemplate implements YoctoTemplate {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
@@ -78,19 +80,5 @@ public class GWTYoctoTemplate implements YoctoTemplate {
             logger.severe("Couldn't retrieve JSON");
             listener.onError(e);
         }
-
-
-//
-//        jsonp.requestObject(newUrl, new AsyncCallback<JavascriptYoctoMap>() {
-//            public void onFailure(Throwable caught) {
-//                logger.severe("Impossible to get json object: " + caught);
-//            }
-//
-//            public void onSuccess(JavascriptYoctoMap result) {
-//                logger.info("Received the result from json");
-//                listener.resultEvent(result);
-//            }
-//
-//        });
     }
 }

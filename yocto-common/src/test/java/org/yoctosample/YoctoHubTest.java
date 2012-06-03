@@ -38,7 +38,6 @@ public class YoctoHubTest {
 
     private YoctoTemplate yoctoTemplate;
 
-
     @Before
     public void setUp() throws IOException {
         yoctoTemplate = EasyMock.createMock(YoctoTemplate.class);
@@ -50,7 +49,7 @@ public class YoctoHubTest {
 
         content = RestYoctoMock.getMap(RestYoctoMock.COLOR_JSON);
         EasyMock.expect(yoctoTemplate.query("/bySerial/YRGBLED1-01934/api.json")).andReturn(
-                content).once();
+                content).anyTimes();
 
 
     }
@@ -68,6 +67,7 @@ public class YoctoHubTest {
         for (YoctoObject object : list)
             System.out.println(object);
 
+        EasyMock.verify(yoctoTemplate);
     }
 
     @Test

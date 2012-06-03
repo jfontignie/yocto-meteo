@@ -36,6 +36,7 @@ import java.util.logging.Logger;
  * Date: 4/25/12
  * Time: 9:18 PM
  */
+
 public class WorldMapServiceImpl extends RemoteServiceServlet implements WorldMapService {
 
 
@@ -63,6 +64,35 @@ public class WorldMapServiceImpl extends RemoteServiceServlet implements WorldMa
     public List<DataMeteo> listMeteos() {
         logger.info("Listing all the meteos");
         return meteoDAO.list(DataMeteo.class);
+    }
+
+    //
+    private class DAO<T> {
+        public List<T> list(Class clazz) {
+            PersistenceManager pm = getPersistenceManager();
+            List<T> list;
+            try {
+                Query q = pm.newQuery(clazz);
+                list = (List<T>) q.execute();
+
+                List<T> result = new ArrayList<T>();
+                for (T dto : list)
+                    result.add(dto);
+                logger.info("Server has fetched: " + result.size());
+                return result;
+            } finally {
+                pm.close();
+            }
+        }
+
+        public void add(T dto) {
+            PersistenceManager pm = getPersistenceManager();
+            try {
+                pm.makePersistent(dto);
+            } finally {
+                pm.close();
+            }
+        }
     }
 
 
@@ -102,32 +132,5 @@ public class WorldMapServiceImpl extends RemoteServiceServlet implements WorldMa
         return PMF.getPersistenceManager();
     }
 
-    //
-    private class DAO<T> {
-        public List<T> list(Class clazz) {
-            PersistenceManager pm = getPersistenceManager();
-            List<T> list;
-            try {
-                Query q = pm.newQuery(clazz);
-                list = (List<T>) q.execute();
 
-                List<T> result = new ArrayList<T>();
-                for (T dto : list)
-                    result.add(dto);
-                logger.info("Server has fetched: " + result.size());
-                return result;
-            } finally {
-                pm.close();
-            }
-        }
-
-        public void add(T dto) {
-            PersistenceManager pm = getPersistenceManager();
-            try {
-                pm.makePersistent(dto);
-            } finally {
-                pm.close();
-            }
-        }
-    }
 }

@@ -23,6 +23,7 @@ import org.yoctosample.common.YoctoMap;
  * Date: 4/24/12
  * Time: 10:25 PM
  */
+
 public class JavascriptYoctoMap extends JavaScriptObject implements YoctoMap {
 
 

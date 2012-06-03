@@ -28,6 +28,7 @@ import java.util.List;
  * Date: 4/25/12
  * Time: 9:19 PM
  */
+
 @RemoteServiceRelativePath("worldmap")
 public interface WorldMapService extends RemoteService {
 

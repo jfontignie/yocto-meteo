@@ -30,6 +30,7 @@ import java.util.logging.Logger;
  * <p/>
  * Make sure that the different callbacks are triggered in a certain order...
  */
+
 public class SequentialCallback {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());

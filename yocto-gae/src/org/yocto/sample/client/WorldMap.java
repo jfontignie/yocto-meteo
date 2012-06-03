@@ -89,6 +89,30 @@ public class WorldMap implements EntryPoint {
 
     }
 
+    private void buildUi() {
+
+        logger.info("Build UI");
+
+        //Note: that in order to get locations and markers: the MAP api must be loaded first.
+        createCallbacks();
+
+
+        LatLng cartigny = LatLng.newInstance(46.1833, 6.0167);
+
+        map = new MapWidget(cartigny, 2);
+        map.setSize("100%", "100%");
+        // Add some controls for the zoom level
+        map.addControl(new LargeMapControl());
+
+        final DockLayoutPanel dock = new DockLayoutPanel(Style.Unit.PX);
+
+        dock.addNorth(map, 500);
+
+        RootPanel.get("worldMap").add(dock);
+        // Add the map to the HTML host page
+
+    }
+
     private void createCallbacks() {
         SequentialCallback callback = new SequentialCallback();
 
@@ -215,29 +239,6 @@ public class WorldMap implements EntryPoint {
         }
     }
 
-    private void buildUi() {
-
-        logger.info("Build UI");
-
-        //Note: that in order to get locations and markers: the MAP api must be loaded first.
-        createCallbacks();
-
-
-        LatLng cartigny = LatLng.newInstance(46.1833, 6.0167);
-
-        map = new MapWidget(cartigny, 2);
-        map.setSize("100%", "100%");
-        // Add some controls for the zoom level
-        map.addControl(new LargeMapControl());
-
-        final DockLayoutPanel dock = new DockLayoutPanel(Style.Unit.PX);
-
-        dock.addNorth(map, 500);
-
-        RootPanel.get("worldMap").add(dock);
-        // Add the map to the HTML host page
-
-    }
 
     private void setLoaded() {
         DOM.removeChild(RootPanel.getBodyElement(), DOM.getElementById("loading"));

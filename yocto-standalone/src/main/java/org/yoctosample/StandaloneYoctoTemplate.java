@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Public License along with yocto-meteo. If not, see http://www.gnu.org/licenses/.
  *
  * For more information: go on http://yocto-meteo.blogspot.com
+ * For the demo: yocto-meteo.appspot.com
  */
 
 package org.yoctosample;
@@ -38,10 +39,6 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
         this.reader = reader;
     }
 
-    public void aSyncQuery(String relativePath, YoctoCallback<YoctoMap> listener) {
-        Thread thread = new Thread(new BackgroundQuerier(relativePath, listener));
-        thread.start();
-    }
 
     public YoctoMap query(String relativePath) {
         ObjectMapper mapper = new ObjectMapper();
@@ -53,8 +50,11 @@ public class StandaloneYoctoTemplate implements YoctoTemplate {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
-
+    public void aSyncQuery(String relativePath, YoctoCallback<YoctoMap> listener) {
+        Thread thread = new Thread(new BackgroundQuerier(relativePath, listener));
+        thread.start();
     }
 
     private class BackgroundQuerier implements Runnable {
