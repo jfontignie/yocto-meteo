@@ -138,6 +138,8 @@ public class WorldMap implements EntryPoint {
                 logger.info("Hub with serial number: " + hub.getYocto().getSerialNumber() + " has been found");
                 if (latLng != null) {
 
+                    refreshHub(hub);
+
                     hub.getDto().setLatitude(latLng.getLatitude());
                     hub.getDto().setLongitude(latLng.getLongitude());
                     map.removeOverlay(currentMarker);
@@ -156,7 +158,7 @@ public class WorldMap implements EntryPoint {
                         }
                     });
 
-                    refreshHub(hub);
+
                 }
             }
 
@@ -220,14 +222,15 @@ public class WorldMap implements EntryPoint {
         });
     }
 
-    private void refreshHub(Hub hub) {
+    private void refreshHub(final Hub hub) {
         YoctoHub yHub = hub.getYocto();
         for (YoctoObject yObject : yHub.findAll()) {
             if (!hub.getYocto().equals(yObject)) {
-                AbstractFunction function = FunctionFactory.create(yObject);
+                final AbstractFunction function = FunctionFactory.create(yObject);
                 function.refresh(new YoctoCallback() {
                     public void onSuccess(Object result) {
                         logger.info("Successfully read!");
+
                     }
 
                     public void onError(Throwable t) {
